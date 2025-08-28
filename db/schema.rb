@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_08_28_183155) do
+ActiveRecord::Schema[7.2].define(version: 2025_08_28_184430) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -66,6 +66,14 @@ ActiveRecord::Schema[7.2].define(version: 2025_08_28_183155) do
     t.index ["word_id"], name: "index_synonym_relations_on_word_id"
   end
 
+  create_table "translations", force: :cascade do |t|
+    t.string "text", null: false
+    t.string "language", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["text", "language"], name: "index_translations_on_text_and_language", unique: true
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "username", null: false
     t.string "firstname"
@@ -92,6 +100,16 @@ ActiveRecord::Schema[7.2].define(version: 2025_08_28_183155) do
     t.index ["word_id"], name: "index_word_roots_on_word_id"
   end
 
+  create_table "word_translations", force: :cascade do |t|
+    t.bigint "word_id", null: false
+    t.bigint "translation_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["translation_id"], name: "index_word_translations_on_translation_id"
+    t.index ["word_id", "translation_id"], name: "index_word_translations_on_word_id_and_translation_id", unique: true
+    t.index ["word_id"], name: "index_word_translations_on_word_id"
+  end
+
   create_table "words", force: :cascade do |t|
     t.bigint "lexeme_id", null: false
     t.string "type"
@@ -116,6 +134,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_08_28_183155) do
   add_foreign_key "synonym_relations", "words", column: "synonym_id"
   add_foreign_key "word_roots", "roots"
   add_foreign_key "word_roots", "words"
+  add_foreign_key "word_translations", "translations"
+  add_foreign_key "word_translations", "words"
   add_foreign_key "words", "lexemes"
   add_foreign_key "words", "words", column: "origin_word_id"
 end

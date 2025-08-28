@@ -36,6 +36,8 @@ class Word < ApplicationRecord
   has_many :roots, through: :word_roots
   has_many :inverse_synonym_relations, class_name: "SynonymRelation", foreign_key: "synonym_id", dependent: :destroy
   has_many :inverse_synonyms, through: :inverse_synonym_relations, source: :word
+  has_many :word_translations, dependent: :destroy
+  has_many :translations, through: :word_translations
 
 
   delegate :language, :spelling, to: :lexeme
