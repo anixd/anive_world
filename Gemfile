@@ -36,6 +36,8 @@ gem "bootsnap", require: false
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
 
+gem 'seedbank', '~> 0.5.0'
+
 # features
 gem 'anike-slugify', github: 'anixd/anike-slugify', tag: 'v1.0.1'
 # gem 'aws-sdk-s3', require: false
