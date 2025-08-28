@@ -39,6 +39,8 @@ gem "bootsnap", require: false
 # features
 gem 'anike-slugify', github: 'anixd/anike-slugify', tag: 'v1.0.1'
 # gem 'aws-sdk-s3', require: false
+gem 'discard', '~> 1.4'
+gem 'paper_trail', '~> 16.0'
 gem 'redcarpet', '~> 3.5'
 gem 'will_paginate', '~> 3.3'
 

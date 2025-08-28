@@ -110,6 +110,8 @@ GEM
       reline (>= 0.3.8)
     debug_inspector (1.2.0)
     diff-lcs (1.6.2)
+    discard (1.4.0)
+      activerecord (>= 4.2, < 9.0)
     drb (2.2.3)
     erb (5.0.2)
     error_highlight (0.7.0)
@@ -170,6 +172,9 @@ GEM
       racc (~> 1.4)
     nokogiri (1.18.9-x86_64-linux-musl)
       racc (~> 1.4)
+    paper_trail (16.0.0)
+      activerecord (>= 6.1)
+      request_store (~> 1.4)
     parallel (1.27.0)
     parser (3.3.9.0)
       ast (~> 2.4.1)
@@ -241,6 +246,8 @@ GEM
     regexp_parser (2.11.2)
     reline (0.6.2)
       io-console (~> 0.5)
+    request_store (1.7.0)
+      rack (>= 1.4)
     rouge (4.6.0)
     rspec-core (3.13.5)
       rspec-support (~> 3.13.0)
@@ -337,9 +344,11 @@ DEPENDENCIES
   brakeman
   cssbundling-rails
   debug
+  discard (~> 1.4)
   error_highlight (~> 0.7.0)
   jbuilder
   jsbundling-rails
+  paper_trail (~> 16.0)
   pg (~> 1.5)
   propshaft
   puma (>= 5.0)
