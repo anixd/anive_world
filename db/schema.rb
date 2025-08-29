@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_08_28_211414) do
+ActiveRecord::Schema[7.2].define(version: 2025_08_29_102106) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -49,6 +49,15 @@ ActiveRecord::Schema[7.2].define(version: 2025_08_28_211414) do
     t.index ["parent_location_id"], name: "index_content_entries_on_parent_location_id"
     t.index ["slug"], name: "index_content_entries_on_slug", unique: true, where: "(discarded_at IS NULL)"
     t.index ["type"], name: "index_content_entries_on_type"
+  end
+
+  create_table "etymologies", force: :cascade do |t|
+    t.bigint "word_id", null: false
+    t.text "explanation", null: false
+    t.text "comment"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["word_id"], name: "index_etymologies_on_word_id", unique: true
   end
 
   create_table "languages", force: :cascade do |t|
@@ -138,6 +147,17 @@ ActiveRecord::Schema[7.2].define(version: 2025_08_28_211414) do
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
+  create_table "versions", force: :cascade do |t|
+    t.bigint "whodunnit"
+    t.datetime "created_at"
+    t.bigint "item_id", null: false
+    t.string "item_type", null: false
+    t.string "event", null: false
+    t.text "object"
+    t.text "object_changes"
+    t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
+  end
+
   create_table "word_roots", force: :cascade do |t|
     t.bigint "word_id", null: false
     t.bigint "root_id", null: false
@@ -179,6 +199,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_08_28_211414) do
   add_foreign_key "content_entries", "content_entries", column: "parent_location_id"
   add_foreign_key "content_entries", "languages"
   add_foreign_key "content_entries", "users", column: "author_id"
+  add_foreign_key "etymologies", "words"
   add_foreign_key "languages", "languages", column: "parent_language_id"
   add_foreign_key "lexemes", "languages"
   add_foreign_key "notes", "users", column: "author_id"
