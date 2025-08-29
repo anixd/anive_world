@@ -127,6 +127,7 @@
     <orderEntry type="library" scope="PROVIDED" name="rubocop-rails-omakase (v1.1.0, RVM: ruby-3.3.3 [anive_world]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="ruby-progressbar (v1.13.0, RVM: ruby-3.3.3 [anive_world]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="securerandom (v0.4.1, RVM: ruby-3.3.3 [anive_world]) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="seedbank (v0.5.0, RVM: ruby-3.3.3 [anive_world]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="stimulus-rails (v1.3.4, RVM: ruby-3.3.3 [anive_world]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="stringio (v3.1.7, RVM: ruby-3.3.3 [anive_world]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="thor (v1.4.0, RVM: ruby-3.3.3 [anive_world]) [gem]" level="application" />

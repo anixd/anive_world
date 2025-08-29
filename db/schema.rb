@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_08_28_184430) do
+ActiveRecord::Schema[7.2].define(version: 2025_08_28_211414) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -23,6 +23,32 @@ ActiveRecord::Schema[7.2].define(version: 2025_08_28_184430) do
     t.datetime "updated_at", null: false
     t.index ["language_id"], name: "index_affixes_on_language_id"
     t.index ["text", "language_id", "affix_type"], name: "index_affixes_on_text_and_language_id_and_affix_type", unique: true
+  end
+
+  create_table "content_entries", force: :cascade do |t|
+    t.string "type", null: false
+    t.string "title", null: false
+    t.text "body"
+    t.bigint "author_id", null: false
+    t.string "slug", null: false
+    t.datetime "published_at"
+    t.datetime "discarded_at"
+    t.string "world_date"
+    t.integer "timeline_position"
+    t.string "life_status"
+    t.string "birth_date"
+    t.string "death_date"
+    t.bigint "parent_location_id"
+    t.string "rule_code"
+    t.bigint "language_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["author_id"], name: "index_content_entries_on_author_id"
+    t.index ["discarded_at"], name: "index_content_entries_on_discarded_at"
+    t.index ["language_id"], name: "index_content_entries_on_language_id"
+    t.index ["parent_location_id"], name: "index_content_entries_on_parent_location_id"
+    t.index ["slug"], name: "index_content_entries_on_slug", unique: true, where: "(discarded_at IS NULL)"
+    t.index ["type"], name: "index_content_entries_on_type"
   end
 
   create_table "languages", force: :cascade do |t|
@@ -46,6 +72,18 @@ ActiveRecord::Schema[7.2].define(version: 2025_08_28_184430) do
     t.index ["spelling", "language_id"], name: "index_lexemes_on_spelling_and_language_id", unique: true
   end
 
+  create_table "notes", force: :cascade do |t|
+    t.string "title", null: false
+    t.text "body"
+    t.bigint "author_id", null: false
+    t.boolean "is_public_for_team", default: false, null: false
+    t.datetime "discarded_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["author_id"], name: "index_notes_on_author_id"
+    t.index ["discarded_at"], name: "index_notes_on_discarded_at"
+  end
+
   create_table "roots", force: :cascade do |t|
     t.string "text"
     t.bigint "language_id", null: false
@@ -54,6 +92,17 @@ ActiveRecord::Schema[7.2].define(version: 2025_08_28_184430) do
     t.datetime "updated_at", null: false
     t.index ["language_id"], name: "index_roots_on_language_id"
     t.index ["text", "language_id"], name: "index_roots_on_text_and_language_id", unique: true
+  end
+
+  create_table "shares", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "shareable_type", null: false
+    t.bigint "shareable_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["shareable_type", "shareable_id"], name: "index_shares_on_shareable"
+    t.index ["user_id", "shareable_id", "shareable_type"], name: "index_shares_on_user_and_shareable", unique: true
+    t.index ["user_id"], name: "index_shares_on_user_id"
   end
 
   create_table "synonym_relations", force: :cascade do |t|
@@ -127,9 +176,14 @@ ActiveRecord::Schema[7.2].define(version: 2025_08_28_184430) do
   end
 
   add_foreign_key "affixes", "languages"
+  add_foreign_key "content_entries", "content_entries", column: "parent_location_id"
+  add_foreign_key "content_entries", "languages"
+  add_foreign_key "content_entries", "users", column: "author_id"
   add_foreign_key "languages", "languages", column: "parent_language_id"
   add_foreign_key "lexemes", "languages"
+  add_foreign_key "notes", "users", column: "author_id"
   add_foreign_key "roots", "languages"
+  add_foreign_key "shares", "users"
   add_foreign_key "synonym_relations", "words"
   add_foreign_key "synonym_relations", "words", column: "synonym_id"
   add_foreign_key "word_roots", "roots"
