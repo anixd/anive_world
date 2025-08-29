@@ -6,14 +6,13 @@ Rails.application.routes.draw do
   delete "/logout", to: "auth#destroy", as: :logout
 
   namespace :forge do
-    root "dashboard#index" # Главная страница админки
+    root "dashboard#index"
 
     resources :languages
     resources :roots
 
-    # Вложенные ресурсы для слов и их значений
     resources :lexemes do
-      resources :words, shallow: true # shallow: true - очень удобная опция
+      resources :words, shallow: true
     end
 
     # ... другие ресурсы ...

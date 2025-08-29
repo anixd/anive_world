@@ -29,6 +29,8 @@ class Word < ApplicationRecord
   belongs_to :lexeme
   belongs_to :origin_word, class_name: "Word", optional: true
 
+  has_one :etymology, dependent: :destroy
+
   has_many :synonym_relations, dependent: :destroy
   has_many :synonyms, through: :synonym_relations, source: :synonym
   has_many :descendant_words, class_name: "Word", foreign_key: "origin_word_id"
@@ -41,6 +43,8 @@ class Word < ApplicationRecord
 
 
   delegate :language, :spelling, to: :lexeme
+
+  accepts_nested_attributes_for :etymology, allow_destroy: true
 
   def all_synonyms
     synonyms + inverse_synonyms
