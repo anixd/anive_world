@@ -44,7 +44,7 @@ gem 'anike-slugify', github: 'anixd/anike-slugify', tag: 'v1.0.1'
 gem 'discard', '~> 1.4'
 gem 'paper_trail', '~> 16.0'
 gem 'redcarpet', '~> 3.5'
-gem 'will_paginate', '~> 3.3'
+gem 'will_paginate', '~> 4.0'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
