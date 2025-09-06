@@ -6,6 +6,10 @@ import { application } from "./application"
 
 import DependentSelectController from "./dependent_select_controller"
 import AutosubmitController from "./autosubmit_controller"
+import AutoHidePaginationController from "./auto_hide_pagination_controller"
+import PerPageController from "./per_page_controller"
 
 application.register("dependent-select", DependentSelectController)
 application.register("autosubmit", AutosubmitController)
+application.register("auto-hide-pagination", AutoHidePaginationController)
+application.register("per-page", PerPageController)

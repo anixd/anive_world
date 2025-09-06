@@ -1,2 +1,24 @@
 @import "tailwindcss";
 @import"@tailwindcss/typography";
+@tailwind utilities;
+
+@layer components {
+    .pagy-nav {
+        @apply isolate inline-flex -space-x-px rounded-lg shadow-sm;
+    }
+    .pagy-nav .page a,
+    .pagy-nav .page span {
+        @apply relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20;
+    }
+    .pagy-nav .page.active a,
+    .pagy-nav .page.active span {
+        @apply relative z-10 inline-flex items-center bg-blue-600 px-4 py-2 text-sm font-semibold text-white focus:z-20;
+    }
+    .pagy-nav .page.disabled a,
+    .pagy-nav .page.disabled span {
+        @apply relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-400 ring-1 ring-inset ring-gray-300 cursor-not-allowed;
+    }
+    .pagy-nav .gap {
+        @apply relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-700 ring-1 ring-inset ring-gray-300;
+    }
+}

@@ -1,8 +1,8 @@
 <div class="p-6">
   <div class="flex justify-between items-center mb-6">
     <div>
-      <h1 class="text-3xl font-bold"><%= @lexeme.spelling %></h1>
-      <p class="text-gray-500 text-lg"><%= @lexeme.language.name %></p>
+      <h1 class="text-3xl font-bold">Lexeme: <%= @lexeme.spelling %></h1>
+      <p class="text-xl text-gray-500 font-normal">Lang: <%= @lexeme.language.name %></p>
     </div>
     <div>
       <%= link_to 'Add Meaning (Homonym)', new_forge_lexeme_word_path(@lexeme), class: 'text-xs font-bold inline-block border bg-green-400 border-green-600 hover:bg-green-300 rounded py-2 px-4' %>
@@ -18,12 +18,14 @@
         <div class="bg-white shadow rounded-lg p-4 border relative">
           <div class="absolute top-2 right-2">
             <%= link_to 'Edit', edit_forge_word_path(word), class: 'text-xs inline-block px-3 py-1 border border-blue-600 bg-blue-100 hover:bg-blue-300 rounded mt-3' %>
+            <span class="mx-1 text-gray-600">|</span>
             <%= link_to 'Delete', forge_word_path(word), data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: 'text-xs inline-block px-3 py-1 border bg-red-100 hover:bg-red-300 rounded mt-3' %>
           </div>
 
-          <p class="font-semibold text-lg"><%= word.definition %></p>
-          <p class="text-gray-600">[<%= word.transcription %>]</p>
-          <p class="text-sm text-gray-500 mt-2 italic"><%= word.parts_of_speech.map(&:code).join(', ') %></p>
+          <p class="text-gray-600 text-basem my-1">[<%= word.transcription %>]</p>
+          <p class="text-sm text-gray-500 my-1 italic"><%= word.parts_of_speech.map(&:code).join(', ') %></p>
+          <p class="font-semibold text-lg mt-2"><%= render_markdown(word.definition) %></p>
+
 
           <div class="mt-4 pt-4 border-t">
             <% if word.etymology.present? %>
@@ -31,7 +33,6 @@
                 <summary class="list-none flex items-center justify-between p-3 cursor-pointer font-semibold text-gray-700 hover:bg-slate-300 rounded-lg">
                   Etymology
 
-                  <%# Кастомная стрелка-маркер %>
                   <span class="transition group-open:rotate-90">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
                       <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />

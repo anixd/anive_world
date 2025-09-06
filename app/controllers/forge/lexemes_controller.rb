@@ -4,31 +4,22 @@ class Forge::LexemesController < Forge::BaseController
 
   def index
     @languages = Language.order(:name)
-
     target_code = params.fetch(:lang, Language::DEFAULT_CODE)
+    @current_language = @languages.find { |l| l.code == target_code } || @languages.first
 
-    @current_language = @languages.find { |l| l.code == target_code }
-    @current_language ||= @languages.find { |l| l.code == Language::DEFAULT_CODE }
+    scope = if @current_language
+              Lexeme.where(language: @current_language)
+                    .left_joins(:words)
+                    .group('lexemes.id')
+                    .order(spelling: :asc)
+                    .select('lexemes.*, COUNT(words.id) AS words_count')
+                    .preload(words: :parts_of_speech)
+            else
+              Lexeme.none
+            end
 
-    # Финальная подстраховка, если даже дефолтного языка нет в БД
-    @current_language ||= @languages.first
-
-    if @current_language.nil?
-      @lexemes = Lexeme.none
-      return
-    end
-
-    per_page = params.fetch(:per_page, 50).to_i
-    per_page = [per_page, 200].min
-
-    @lexemes = Lexeme.where(language: @current_language)
-                     .left_joins(:words)
-                     .group('lexemes.id')
-                     .order(spelling: :asc)
-                     .select('lexemes.*, COUNT(words.id) as words_count')
-                     .page(params[:page])
-                     .per_page(per_page)
-                     .preload(words: :parts_of_speech)
+    limit = params[:limit].present? ? params[:limit].to_i : Pagy::DEFAULT[:limit]
+    @pagy, @lexemes = pagy(scope, limit: limit)
   end
 
   def show

@@ -116,6 +116,14 @@ GEM
     erb (5.0.2)
     error_highlight (0.7.0)
     erubi (1.13.1)
+    ffi (1.17.2-aarch64-linux-gnu)
+    ffi (1.17.2-aarch64-linux-musl)
+    ffi (1.17.2-arm-linux-gnu)
+    ffi (1.17.2-arm-linux-musl)
+    ffi (1.17.2-arm64-darwin)
+    ffi (1.17.2-x86_64-darwin)
+    ffi (1.17.2-x86_64-linux-gnu)
+    ffi (1.17.2-x86_64-linux-musl)
     globalid (1.2.1)
       activesupport (>= 6.1)
     i18n (1.14.7)
@@ -133,6 +141,9 @@ GEM
     json (2.13.2)
     language_server-protocol (3.17.0.5)
     lint_roller (1.1.0)
+    listen (3.9.0)
+      rb-fsevent (~> 0.10, >= 0.10.3)
+      rb-inotify (~> 0.9, >= 0.9.10)
     logger (1.7.0)
     loofah (2.24.1)
       crass (~> 1.0.2)
@@ -172,6 +183,7 @@ GEM
       racc (~> 1.4)
     nokogiri (1.18.9-x86_64-linux-musl)
       racc (~> 1.4)
+    pagy (9.4.0)
     paper_trail (16.0.0)
       activerecord (>= 6.1)
       request_store (~> 1.4)
@@ -241,6 +253,9 @@ GEM
       zeitwerk (~> 2.6)
     rainbow (3.1.1)
     rake (13.3.0)
+    rb-fsevent (0.11.2)
+    rb-inotify (0.11.1)
+      ffi (~> 1.0)
     rdoc (6.14.2)
       erb
       psych (>= 4.0.0)
@@ -323,7 +338,6 @@ GEM
       base64
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
-    will_paginate (3.3.1)
     zeitwerk (2.7.3)
 
 PLATFORMS
@@ -352,6 +366,8 @@ DEPENDENCIES
   error_highlight (~> 0.7.0)
   jbuilder
   jsbundling-rails
+  listen (~> 3.9)
+  pagy
   paper_trail (~> 16.0)
   pg (~> 1.5)
   propshaft
@@ -366,7 +382,6 @@ DEPENDENCIES
   turbo-rails
   tzinfo-data
   web-console
-  will_paginate (~> 3.3)
 
 RUBY VERSION
    ruby 3.3.3p89
