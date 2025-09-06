@@ -36,7 +36,7 @@
     <%= form.fields_for :etymology do |etymology_form| %>
       <div>
         <%= etymology_form.label :explanation, "Explanation", class: "block font-bold mb-1" %>
-        <%= etymology_form.text_area :explanation, rows: 20, class: "border rounded w-full p-2" %>
+        <%= etymology_form.text_area :explanation, rows: 20, placeholder: "asdfasdfasdfasdfasdfasdfasdf", class: "border rounded w-full p-2" %>
         <p class="text-xs text-gray-500 mt-1">Main text of the etymological note. Markdown is supported.</p>
       </div>
       <div>

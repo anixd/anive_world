@@ -13,7 +13,7 @@ export default class extends Controller {
         this.targetTarget.disabled = true
 
         if (!selectedLanguageId) {
-            this.targetTarget.innerHTML = "<option>Сначала выберите язык</option>"
+            this.targetTarget.innerHTML = "<option>Select language first</option>"
             return
         }
 
