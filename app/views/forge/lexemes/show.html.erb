@@ -1,0 +1,52 @@
+<div class="p-6">
+  <div class="flex justify-between items-center mb-6">
+    <div>
+      <h1 class="text-3xl font-bold"><%= @lexeme.spelling %></h1>
+      <p class="text-gray-500 text-lg"><%= @lexeme.language.name %></p>
+    </div>
+    <div>
+      <%= link_to 'Add Meaning (Homonym)', new_forge_lexeme_word_path(@lexeme), class: 'bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded' %>
+      <%= link_to 'Back to List', forge_lexemes_path, class: 'ml-2 text-blue-600' %>
+    </div>
+  </div>
+
+  <h2 class="text-xl font-semibold mb-4">Meanings:</h2>
+
+  <% if @words.any? %>
+    <div class="space-y-6">
+      <% @words.each do |word| %>
+        <div class="bg-white shadow rounded-lg p-4 border relative">
+          <div class="absolute top-2 right-2">
+            <%= link_to 'Edit', edit_forge_word_path(word), class: 'text-sm text-indigo-600' %>
+            <%= link_to 'Delete', forge_word_path(word), data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: 'text-sm text-red-600 ml-3' %>
+          </div>
+
+          <p class="font-semibold text-lg"><%= word.definition %></p>
+          <p class="text-gray-600">[<%= word.transcription %>]</p>
+          <p class="text-sm text-gray-500 mt-2 italic"><%= word.parts_of_speech.map(&:code).join(', ') %></p>
+
+          <div class="mt-4 pt-4 border-t">
+            <% if word.etymology.present? %>
+              <details>
+                <summary class="cursor-pointer font-semibold text-gray-700">Etymology</summary>
+                <div class="prose max-w-none mt-2 text-gray-800">
+                  <%= word.etymology.explanation %>
+                  <% if word.etymology.comment.present? %>
+                    <p class="text-sm italic text-gray-500 mt-2"><%= word.etymology.comment %></p>
+                  <% end %>
+                </div>
+              </details>
+            <% else %>
+              <p class="text-sm text-gray-400 italic">No etymology has been added. You can add one by editing this meaning.</p>
+            <% end %>
+          </div>
+
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="bg-white shadow rounded-lg p-6 text-center text-gray-500 italic">
+      <p>This lexeme currently has no meanings.</p>
+    </div>
+  <% end %>
+</div>

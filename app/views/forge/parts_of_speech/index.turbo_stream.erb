@@ -1,0 +1,8 @@
+<%= turbo_stream.update "parts-of-speech-container" do %>
+  <% fake_lexeme_for_form = Lexeme.new(language_id: @language.id) %>
+  <%= fields_for :lexeme, fake_lexeme_for_form do |form| %>
+    <%= fields_for "lexeme[words_attributes][0]", Word.new do |word_form| %>
+      <%= render 'forge/lexemes/parts_of_speech_checkboxes', form: word_form, lexeme: fake_lexeme_for_form %>
+    <% end %>
+  <% end %>
+<% end %>

@@ -4,5 +4,8 @@
 
 import { application } from "./application"
 
-import HelloController from "./hello_controller"
-application.register("hello", HelloController)
+import DependentSelectController from "./dependent_select_controller"
+import AutosubmitController from "./autosubmit_controller"
+
+application.register("dependent-select", DependentSelectController)
+application.register("autosubmit", AutosubmitController)

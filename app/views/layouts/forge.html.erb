@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Forge | AniveWorld</title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
+</head>
+<body class="bg-gray-100">
+<nav class="bg-white shadow p-4 mb-8">
+  <div class="container mx-auto">
+    <%= link_to "Dashboard", forge_dashboard_path, class: "font-bold" %>
+    <%= link_to "Языки", forge_languages_path, class: "ml-4" %>
+  </div>
+</nav>
+<main class="container mx-auto">
+  <%= yield %>
+</main>
+</body>
+</html>

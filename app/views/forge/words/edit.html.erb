@@ -1,0 +1,9 @@
+<div class="p-6">
+  <div class="mb-6">
+    <h1 class="text-2xl font-bold">Редактирование значения для слова «<%= @word.spelling %>»</h1>
+    <p class="text-gray-500"><%= @word.language.name %></p>
+  </div>
+  <div class="bg-white rounded-lg shadow p-6">
+    <%= render 'form', model: @word, url: forge_word_path(@word) %>
+  </div>
+</div>

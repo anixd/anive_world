@@ -1,0 +1,22 @@
+<div class="flex items-center">
+  <%# Левая часть: дропдаун %>
+  <div>
+    <%= form_with url: url_for(only_path: true), method: :get, data: { controller: "autosubmit" } do |form| %>
+      <div class="flex items-center gap-2 text-sm">
+        <label for="per_page" class="text-gray-600">Show per page:</label>
+        <%= form.select :per_page, options_for_select([20, 50, 100, 200, 500], params[:per_page] || 50),
+                        {},
+                        {
+                          data: { action: "change->autosubmit#submit" },
+                          class: "h-8 rounded-lg border-gray-300 shadow-sm text-sm focus:ring-blue-500 focus:border-blue-500"
+                        } %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="flex-grow">
+    <div class="flex justify-center">
+      <%= will_paginate collection, renderer: WillPaginate::ActionView::TailwindRenderer %>
+    </div>
+  </div>
+</div>

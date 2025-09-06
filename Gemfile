@@ -63,6 +63,7 @@ group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'error_highlight', '~> 0.7.0'
+  gem 'rack-mini-profiler'
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
 end

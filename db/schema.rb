@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_08_29_102106) do
+ActiveRecord::Schema[7.2].define(version: 2025_09_05_202822) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -18,9 +18,13 @@ ActiveRecord::Schema[7.2].define(version: 2025_08_29_102106) do
     t.string "text"
     t.string "affix_type"
     t.bigint "language_id", null: false
+    t.bigint "author_id", null: false
     t.text "meaning"
+    t.datetime "discarded_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["author_id"], name: "index_affixes_on_author_id"
+    t.index ["discarded_at"], name: "index_affixes_on_discarded_at"
     t.index ["language_id"], name: "index_affixes_on_language_id"
     t.index ["text", "language_id", "affix_type"], name: "index_affixes_on_text_and_language_id_and_affix_type", unique: true
   end
@@ -53,10 +57,14 @@ ActiveRecord::Schema[7.2].define(version: 2025_08_29_102106) do
 
   create_table "etymologies", force: :cascade do |t|
     t.bigint "word_id", null: false
+    t.bigint "author_id", null: false
     t.text "explanation", null: false
     t.text "comment"
+    t.datetime "discarded_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["author_id"], name: "index_etymologies_on_author_id"
+    t.index ["discarded_at"], name: "index_etymologies_on_discarded_at"
     t.index ["word_id"], name: "index_etymologies_on_word_id", unique: true
   end
 
@@ -65,9 +73,13 @@ ActiveRecord::Schema[7.2].define(version: 2025_08_29_102106) do
     t.string "code", null: false
     t.text "description"
     t.bigint "parent_language_id"
+    t.bigint "author_id", null: false
+    t.datetime "discarded_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["author_id"], name: "index_languages_on_author_id"
     t.index ["code"], name: "index_languages_on_code", unique: true
+    t.index ["discarded_at"], name: "index_languages_on_discarded_at"
     t.index ["name"], name: "index_languages_on_name", unique: true
     t.index ["parent_language_id"], name: "index_languages_on_parent_language_id"
   end
@@ -75,10 +87,16 @@ ActiveRecord::Schema[7.2].define(version: 2025_08_29_102106) do
   create_table "lexemes", force: :cascade do |t|
     t.string "spelling"
     t.bigint "language_id", null: false
+    t.bigint "author_id", null: false
+    t.string "slug", null: false
+    t.datetime "discarded_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["author_id"], name: "index_lexemes_on_author_id"
+    t.index ["discarded_at"], name: "index_lexemes_on_discarded_at"
     t.index ["language_id"], name: "index_lexemes_on_language_id"
-    t.index ["spelling", "language_id"], name: "index_lexemes_on_spelling_and_language_id", unique: true
+    t.index ["slug", "language_id"], name: "index_lexemes_on_slug_and_language_id", unique: true, where: "(discarded_at IS NULL)"
+    t.index ["spelling", "language_id"], name: "index_lexemes_on_spelling_and_language_id", unique: true, where: "(discarded_at IS NULL)"
   end
 
   create_table "notes", force: :cascade do |t|
@@ -93,12 +111,38 @@ ActiveRecord::Schema[7.2].define(version: 2025_08_29_102106) do
     t.index ["discarded_at"], name: "index_notes_on_discarded_at"
   end
 
+  create_table "parts_of_speech", force: :cascade do |t|
+    t.string "code", null: false
+    t.string "name", null: false
+    t.text "explanation"
+    t.bigint "author_id", null: false
+    t.datetime "discarded_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "language_id", null: false
+    t.index ["author_id"], name: "index_parts_of_speech_on_author_id"
+    t.index ["code"], name: "index_parts_of_speech_on_code", unique: true
+    t.index ["discarded_at"], name: "index_parts_of_speech_on_discarded_at"
+    t.index ["language_id"], name: "index_parts_of_speech_on_language_id"
+  end
+
+  create_table "parts_of_speech_words", id: false, force: :cascade do |t|
+    t.bigint "word_id", null: false
+    t.bigint "part_of_speech_id", null: false
+    t.index ["part_of_speech_id", "word_id"], name: "index_parts_of_speech_words_on_part_of_speech_id_and_word_id"
+    t.index ["word_id", "part_of_speech_id"], name: "index_parts_of_speech_words_on_word_id_and_part_of_speech_id"
+  end
+
   create_table "roots", force: :cascade do |t|
     t.string "text"
     t.bigint "language_id", null: false
+    t.bigint "author_id", null: false
     t.text "meaning"
+    t.datetime "discarded_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["author_id"], name: "index_roots_on_author_id"
+    t.index ["discarded_at"], name: "index_roots_on_discarded_at"
     t.index ["language_id"], name: "index_roots_on_language_id"
     t.index ["text", "language_id"], name: "index_roots_on_text_and_language_id", unique: true
   end
@@ -127,8 +171,12 @@ ActiveRecord::Schema[7.2].define(version: 2025_08_29_102106) do
   create_table "translations", force: :cascade do |t|
     t.string "text", null: false
     t.string "language", null: false
+    t.bigint "author_id", null: false
+    t.datetime "discarded_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["author_id"], name: "index_translations_on_author_id"
+    t.index ["discarded_at"], name: "index_translations_on_discarded_at"
     t.index ["text", "language"], name: "index_translations_on_text_and_language", unique: true
   end
 
@@ -162,8 +210,12 @@ ActiveRecord::Schema[7.2].define(version: 2025_08_29_102106) do
     t.bigint "word_id", null: false
     t.bigint "root_id", null: false
     t.integer "position"
+    t.datetime "discarded_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "author_id", null: false
+    t.index ["author_id"], name: "index_word_roots_on_author_id"
+    t.index ["discarded_at"], name: "index_word_roots_on_discarded_at"
     t.index ["root_id"], name: "index_word_roots_on_root_id"
     t.index ["word_id", "root_id"], name: "index_word_roots_on_word_id_and_root_id", unique: true
     t.index ["word_id"], name: "index_word_roots_on_word_id"
@@ -184,33 +236,46 @@ ActiveRecord::Schema[7.2].define(version: 2025_08_29_102106) do
     t.string "type"
     t.text "definition"
     t.string "transcription"
-    t.string "part_of_speech"
     t.text "comment"
     t.bigint "origin_type", default: 0
     t.bigint "origin_word_id"
+    t.bigint "author_id", null: false
+    t.datetime "discarded_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["author_id"], name: "index_words_on_author_id"
+    t.index ["discarded_at"], name: "index_words_on_discarded_at"
     t.index ["lexeme_id"], name: "index_words_on_lexeme_id"
     t.index ["origin_word_id"], name: "index_words_on_origin_word_id"
     t.index ["type"], name: "index_words_on_type"
   end
 
   add_foreign_key "affixes", "languages"
+  add_foreign_key "affixes", "users", column: "author_id"
   add_foreign_key "content_entries", "content_entries", column: "parent_location_id"
   add_foreign_key "content_entries", "languages"
   add_foreign_key "content_entries", "users", column: "author_id"
+  add_foreign_key "etymologies", "users", column: "author_id"
   add_foreign_key "etymologies", "words"
   add_foreign_key "languages", "languages", column: "parent_language_id"
+  add_foreign_key "languages", "users", column: "author_id"
   add_foreign_key "lexemes", "languages"
+  add_foreign_key "lexemes", "users", column: "author_id"
   add_foreign_key "notes", "users", column: "author_id"
+  add_foreign_key "parts_of_speech", "languages"
+  add_foreign_key "parts_of_speech", "users", column: "author_id"
   add_foreign_key "roots", "languages"
+  add_foreign_key "roots", "users", column: "author_id"
   add_foreign_key "shares", "users"
   add_foreign_key "synonym_relations", "words"
   add_foreign_key "synonym_relations", "words", column: "synonym_id"
+  add_foreign_key "translations", "users", column: "author_id"
   add_foreign_key "word_roots", "roots"
+  add_foreign_key "word_roots", "users", column: "author_id"
   add_foreign_key "word_roots", "words"
   add_foreign_key "word_translations", "translations"
   add_foreign_key "word_translations", "words"
   add_foreign_key "words", "lexemes"
+  add_foreign_key "words", "users", column: "author_id"
   add_foreign_key "words", "words", column: "origin_word_id"
 end

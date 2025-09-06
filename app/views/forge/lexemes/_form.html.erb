@@ -1,0 +1,65 @@
+<%= form_with(model: [:forge, lexeme], class: "space-y-6") do |form| %>
+  <% if lexeme.errors.any? %>
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+      <h2 class="font-bold mb-2"><%= pluralize(lexeme.errors.count, "error") %> prohibited this from being saved:</h2>
+      <ul class="list-disc list-inside">
+        <% lexeme.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div data-controller="dependent-select">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <%= form.label :language_id, "Язык", class: "block font-bold mb-1" %>
+        <%= form.collection_select :language_id, @languages, :id, :name,
+                                   { prompt: "Выберите язык" },
+                                   { class: "border rounded w-full p-2",
+                                     data: {
+                                       dependent_select_target: "source",
+                                       action: "change->dependent-select#update"
+                                     }
+                                   } %>
+      </div>
+      <div>
+        <%= form.label :spelling, "Написание (Spelling)", class: "block font-bold mb-1" %>
+        <%= form.text_field :spelling, class: "border rounded w-full p-2" %>
+      </div>
+    </div>
+
+  <hr class="my-6 border-gray-300" />
+  <h3 class="text-xl font-semibold mb-3">Первое значение (Word)</h3>
+
+<%# Вложенная форма для первого Word %>
+    <%= form.fields_for :words do |word_form| %>
+      <div class="space-y-4 bg-gray-50 p-4 rounded-lg">
+        <div>
+          <%= word_form.label :definition, "Определение/Перевод", class: "block font-bold mb-1" %>
+          <%= word_form.text_area :definition, rows: 3, class: "border rounded w-full p-2" %>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <%= word_form.label :transcription, "Транскрипция", class: "block font-bold mb-1" %>
+            <%= word_form.text_field :transcription, class: "border rounded w-full p-2" %>
+          </div>
+
+          <div>
+            <%= word_form.label :part_of_speech_ids, "Части речи", class: "block font-bold mb-1" %>
+
+            <div id="parts-of-speech-container" data-dependent-select-target="target">
+              <%= render 'forge/lexemes/parts_of_speech_checkboxes', form: word_form, lexeme: lexeme %>
+            </div>
+          </div>
+
+        </div>
+        <hr class="h-px my-8 bg-green-800">
+      </div>
+    <% end %>
+
+  <div class="actions mt-6">
+    <%= form.submit "Сохранить", class: "bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded cursor-pointer" %>
+  </div>
+<% end %>
+</div>

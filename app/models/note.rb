@@ -21,7 +21,7 @@
 #  fk_rails_...  (author_id => users.id)
 #
 class Note < ApplicationRecord
-  belongs_to :author, class_name: "User"
+  include Authored
 
   # Здесь же в будущем появится связь has_many :shares, as: :shareable
   # для гранулярного контроля доступа.

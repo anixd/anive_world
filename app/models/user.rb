@@ -20,6 +20,7 @@
 #  index_users_on_username  (username) UNIQUE
 #
 class User < ApplicationRecord
+  # enum role: { admin: 0, owner: 1, editor: 2 }, _suffix: :role
 
   attr_accessor :remember_token
 
@@ -33,4 +34,32 @@ class User < ApplicationRecord
   scope :active, -> { where(active: true) }
   scope :inactive, -> { where(active: false) }
 
+  def remember_me
+    self.remember_token = SecureRandom.urlsafe_base64
+    update_column :remember_token_digest, digest(remember_token)
+  end
+
+  def forget_me
+    update_column :remember_token_digest, nil
+    self.remember_token = nil
+  end
+
+  def remember_token_authenticated?(remember_token)
+    return false unless remember_token_digest.present?
+
+    BCrypt::Password.new(remember_token_digest).is_password?(remember_token)
+  end
+
+  def can_login?
+    return false unless active?
+
+    true
+  end
+
+  private
+
+  def digest(string)
+    cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST : BCrypt::Engine.cost
+    BCrypt::Password.create(string, cost:)
+  end
 end

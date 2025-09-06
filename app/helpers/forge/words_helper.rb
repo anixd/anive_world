@@ -1,0 +1,2 @@
+module Forge::WordsHelper
+end
