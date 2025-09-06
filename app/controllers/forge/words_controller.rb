@@ -19,6 +19,7 @@ class Forge::WordsController < Forge::BaseController
   end
 
   def edit
+    @word.build_etymology if @word.etymology.nil?
   end
 
   def update
@@ -53,6 +54,11 @@ class Forge::WordsController < Forge::BaseController
   end
 
   def word_params
-    params.require(:word).permit(:definition, :transcription, :comment, :part_of_speech_id)
+    params.require(:word).permit(
+      :definition,
+             :transcription,
+             :comment,
+             part_of_speech_ids: [],
+             etymology_attributes: [:id, :explanation, :comment, :_destroy])
   end
 end

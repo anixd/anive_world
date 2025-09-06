@@ -5,8 +5,8 @@
       <p class="text-gray-500 text-lg"><%= @lexeme.language.name %></p>
     </div>
     <div>
-      <%= link_to 'Add Meaning (Homonym)', new_forge_lexeme_word_path(@lexeme), class: 'bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded' %>
-      <%= link_to 'Back to List', forge_lexemes_path, class: 'ml-2 text-blue-600' %>
+      <%= link_to 'Add Meaning (Homonym)', new_forge_lexeme_word_path(@lexeme), class: 'text-xs font-bold inline-block border bg-green-400 border-green-600 hover:bg-green-300 rounded py-2 px-4' %>
+      <%= link_to 'Back to List', forge_lexemes_path, class: 'text-xs font-bold inline-block border bg-blue-400 border-blue-600 hover:bg-blue-300 rounded py-2 px-4' %>
     </div>
   </div>
 
@@ -17,8 +17,8 @@
       <% @words.each do |word| %>
         <div class="bg-white shadow rounded-lg p-4 border relative">
           <div class="absolute top-2 right-2">
-            <%= link_to 'Edit', edit_forge_word_path(word), class: 'text-sm text-indigo-600' %>
-            <%= link_to 'Delete', forge_word_path(word), data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: 'text-sm text-red-600 ml-3' %>
+            <%= link_to 'Edit', edit_forge_word_path(word), class: 'text-xs inline-block px-3 py-1 border border-blue-600 bg-blue-100 hover:bg-blue-300 rounded mt-3' %>
+            <%= link_to 'Delete', forge_word_path(word), data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: 'text-xs inline-block px-3 py-1 border bg-red-100 hover:bg-red-300 rounded mt-3' %>
           </div>
 
           <p class="font-semibold text-lg"><%= word.definition %></p>
@@ -27,12 +27,24 @@
 
           <div class="mt-4 pt-4 border-t">
             <% if word.etymology.present? %>
-              <details>
-                <summary class="cursor-pointer font-semibold text-gray-700">Etymology</summary>
-                <div class="prose max-w-none mt-2 text-gray-800">
-                  <%= word.etymology.explanation %>
+              <details class="group bg-slate-100 rounded-lg">
+                <summary class="list-none flex items-center justify-between p-3 cursor-pointer font-semibold text-gray-700 hover:bg-slate-300 rounded-lg">
+                  Etymology
+
+                  <%# Кастомная стрелка-маркер %>
+                  <span class="transition group-open:rotate-90">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                    </svg>
+                  </span>
+                </summary>
+
+                <div class="prose max-w-none text-gray-800 p-3 pt-0">
+                  <%= render_markdown(word.etymology.explanation) %>
                   <% if word.etymology.comment.present? %>
-                    <p class="text-sm italic text-gray-500 mt-2"><%= word.etymology.comment %></p>
+                    <p class="text-sm italic text-gray-500 mt-2">
+                      <%= render_markdown(word.etymology.comment) %>
+                    </p>
                   <% end %>
                 </div>
               </details>

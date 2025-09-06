@@ -11,28 +11,28 @@
   <% end %>
 
   <div class="mb-4">
-    <%= form.label :name, "Название", class: "block font-bold mb-1" %>
+    <%= form.label :name, "Name", class: "block font-bold mb-1" %>
     <%= form.text_field :name, class: "border rounded w-full p-2" %>
   </div>
 
   <div class="mb-4">
-    <%= form.label :code, "Системный код", class: "block font-bold mb-1" %>
+    <%= form.label :code, "System code", class: "block font-bold mb-1" %>
     <%= form.text_field :code, class: "border rounded w-full p-2" %>
-    <p class="text-xs text-gray-600">Короткое имя латиницей, используется в системе (например, 'anike').</p>
+    <p class="text-xs text-gray-600">Short name in Latin, for system needs (for example, 'anike').</p>
   </div>
 
   <div class="mb-4">
-    <%= form.label :parent_language_id, "Родительский язык", class: "block font-bold mb-1" %>
-    <%= form.collection_select :parent_language_id, @parent_language_options, :id, :name, { include_blank: 'Нет (корневой язык)' }, { class: "border rounded w-full p-2" } %>
-    <p class="text-xs text-gray-600">Укажи, если это диалект или язык-потомок.</p>
+    <%= form.label :parent_language_id, "Parent lang", class: "block font-bold mb-1" %>
+    <%= form.collection_select :parent_language_id, @parent_language_options, :id, :name, { include_blank: 'None (root lang)' }, { class: "border rounded w-full p-2" } %>
+    <p class="text-xs text-gray-600">Please indicate if this is a dialect or a descendant language.</p>
   </div>
 
   <div class="mb-4">
-    <%= form.label :description, "Описание", class: "block font-bold mb-1" %>
+    <%= form.label :description, "Description", class: "block font-bold mb-1" %>
     <%= form.text_area :description, rows: 4, class: "border rounded w-full p-2" %>
   </div>
 
   <div class="actions">
-    <%= form.submit "Сохранить", class: "bg-blue-500 text-white font-bold py-2 px-4 rounded cursor-pointer" %>
+    <%= form.submit "Save", class: "bg-blue-500 text-white font-bold py-2 px-4 rounded cursor-pointer" %>
   </div>
 <% end %>
