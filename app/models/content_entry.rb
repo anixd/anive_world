@@ -37,8 +37,12 @@
 #  fk_rails_...  (parent_location_id => content_entries.id)
 #
 class ContentEntry < ApplicationRecord
-  belongs_to :author, class_name: "User"
+  include Authored
+
+  has_paper_trail
 
   # for Location
   belongs_to :parent_location, class_name: "Location", optional: true
 end
+
+# Dir[Rails.root.join("app/models/content_entries/*.rb")].each { |f| require_dependency f }

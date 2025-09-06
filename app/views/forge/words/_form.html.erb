@@ -1,0 +1,55 @@
+<%= form_with(model: model, scope: :word, url: url, class: "space-y-6") do |form| %>
+  <%# ... вывод ошибок ... %>
+
+  <div class="space-y-4 bg-gray-50 p-4 rounded-lg border">
+    <h3 class="font-semibold text-lg border-b pb-2 mb-4">Meaning Details</h3>
+    <div>
+      <%= form.label :definition, "Definition/Translation", class: "block font-bold mb-1" %>
+      <%= form.text_area :definition, rows: 3, class: "border rounded w-full p-2" %>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <%= form.label :transcription, "Transcription", class: "block font-bold mb-1" %>
+        <%= form.text_field :transcription, class: "border rounded w-full p-2" %>
+      </div>
+      <div>
+        <%= form.label :part_of_speech_ids, "Parts of Speech", class: "block font-bold mb-1" %>
+        <div class="border rounded p-2 grid grid-cols-2 md:grid-cols-3 gap-2 bg-white h-32 overflow-y-auto">
+          <% if @parts_of_speech.any? %>
+            <%= form.collection_check_boxes :part_of_speech_ids, @parts_of_speech, :id, :name do |b| %>
+              <label class="flex items-center space-x-2">
+                <%= b.check_box(class: "rounded") %>
+                <span><%= b.text %></span>
+              </label>
+            <% end %>
+          <% else %>
+            <p class="text-gray-500 text-sm col-span-full">No parts of speech defined for this language.</p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%# --- НОВЫЙ БЛОК ДЛЯ ФОРМЫ ЭТИМОЛОГИИ --- %>
+  <div class="space-y-4 bg-gray-50 p-4 rounded-lg border">
+    <h3 class="font-semibold text-lg border-b pb-2 mb-4">Etymology</h3>
+    <%= form.fields_for :etymology do |etymology_form| %>
+      <div>
+        <%= etymology_form.label :explanation, "Explanation", class: "block font-bold mb-1" %>
+        <%= etymology_form.text_area :explanation, rows: 20, class: "border rounded w-full p-2" %>
+        <p class="text-xs text-gray-500 mt-1">Main text of the etymological note. Markdown is supported.</p>
+      </div>
+      <div>
+        <%= etymology_form.label :comment, "Comment", class: "block font-bold mb-1" %>
+        <%= etymology_form.text_area :comment, rows: 8, class: "border rounded w-full p-2" %>
+        <p class="text-xs text-gray-500 mt-1">Optional internal comment.</p>
+      </div>
+    <% end %>
+  </div>
+  <%# --- КОНЕЦ НОВОГО БЛОКА --- %>
+
+
+  <div class="actions mt-6">
+    <%= form.submit "Save Meaning", class: "bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded cursor-pointer" %>
+  </div>
+<% end %>

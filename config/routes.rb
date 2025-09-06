@@ -5,18 +5,38 @@ Rails.application.routes.draw do
   post "/auth", to: "auth#create", as: :auth
   delete "/logout", to: "auth#destroy", as: :logout
 
-  namespace :forge do
-    root "dashboard#index"
+  forge_routes = -> do
+    root "dashboard#index", as: :dashboard
 
-    resources :languages
+    # Лингвистическое ядро
+    resources :languages do
+      resources :parts_of_speech, only: [:index]
+    end
     resources :roots
+    resources :affixes
+    resources :translations, only: [:index, :show] # Предполагаем, что переводы создаются через Word
 
     resources :lexemes do
-      resources :words, shallow: true
+      # Вложенные роуты для создания нового значения (омонима) для лексемы
+      resources :words, only: [:new, :create]
     end
+    # "Плоские" роуты для управления уже созданными значениями
+    resources :words, only: [:show, :edit, :update, :destroy]
 
-    # ... другие ресурсы ...
+    # Контентное ядро (наследники ContentEntry)
+    resources :articles
+    resources :history_entries
+    resources :characters
+    resources :locations
+    resources :grammar_rules
+    resources :phonology_articles
+
+    resources :notes
   end
+
+  namespace :forge, &forge_routes
+
+  scope path: "/f", module: "forge", as: :f, &forge_routes # alias `/f`
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.

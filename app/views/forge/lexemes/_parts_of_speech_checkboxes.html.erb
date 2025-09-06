@@ -1,0 +1,15 @@
+<%# Загружаем части речи, релевантные для текущего выбранного языка %>
+<% parts_of_speech = lexeme.language_id ? Language.find(lexeme.language_id).parts_of_speech.order(:name) : [] %>
+
+<div class="border rounded p-2 grid grid-cols-2 md:grid-cols-3 gap-2">
+  <% if parts_of_speech.any? %>
+    <%= form.collection_check_boxes :part_of_speech_ids, parts_of_speech, :id, :name do |b| %>
+      <label class="flex items-center space-x-2 border-b-solid">
+        <%= b.check_box(class: "rounded") %>
+        <span><%= b.text %></span> <%# Оборачиваем текст в span %>
+      </label>
+    <% end %>
+  <% else %>
+    <p class="text-gray-500 text-sm col-span-full">Сначала выберите язык</p>
+  <% end %>
+</div>

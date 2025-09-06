@@ -20,6 +20,8 @@
 #  fk_rails_...  (word_id => words.id)
 #
 class WordTranslation < ApplicationRecord
+  include Authored
+
   belongs_to :word
   belongs_to :translation
 end

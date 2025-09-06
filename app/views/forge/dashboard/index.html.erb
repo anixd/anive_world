@@ -1,0 +1,40 @@
+<div class="p-6">
+  <h1 class="text-3xl font-bold mb-4">Панель управления "Forge"</h1>
+  <p class="text-gray-600 mb-8">Добро пожаловать в центр управления миром Anive.</p>
+
+  <h2 class="text-xl font-semibold mb-4 border-b pb-2">Основные разделы</h2>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+    <%# Лингвистическое ядро %>
+    <div class="bg-white rounded-lg shadow p-6">
+      <h3 class="font-semibold text-lg mb-3">Лингвистическое ядро</h3>
+      <ul class="space-y-2 text-blue-600">
+        <li><%= link_to "Языки", forge_languages_path, class: "hover:underline" %></li>
+        <li><%= link_to "Лексемы (Словарь)", forge_lexemes_path, class: "hover:underline" %></li>
+        <li><%= link_to "Корни", "#", class: "text-gray-400 cursor-not-allowed" %></li>
+        <li><%= link_to "Аффиксы", "#", class: "text-gray-400 cursor-not-allowed" %></li>
+      </ul>
+    </div>
+
+    <%# Контентное ядро %>
+    <div class="bg-white rounded-lg shadow p-6">
+      <h3 class="font-semibold text-lg mb-3">Энциклопедия (Лор)</h3>
+      <ul class="space-y-2 text-blue-600">
+        <li><%= link_to "Статьи", "#", class: "text-gray-400 cursor-not-allowed" %></li>
+        <li><%= link_to "Исторические события", "#", class: "text-gray-400 cursor-not-allowed" %></li>
+        <li><%= link_to "Персонажи", "#", class: "text-gray-400 cursor-not-allowed" %></li>
+        <li><%= link_to "Локации", "#", class: "text-gray-400 cursor-not-allowed" %></li>
+      </ul>
+    </div>
+
+    <%# Инструменты %>
+    <div class="bg-white rounded-lg shadow p-6">
+      <h3 class="font-semibold text-lg mb-3">Инструменты</h3>
+      <ul class="space-y-2 text-blue-600">
+        <li><%= link_to "Мои заметки", "#", class: "text-gray-400 cursor-not-allowed" %></li>
+      </ul>
+    </div>
+
+  </div>
+</div>

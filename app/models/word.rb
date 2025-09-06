@@ -5,29 +5,42 @@
 #  id             :bigint           not null, primary key
 #  comment        :text
 #  definition     :text
+#  discarded_at   :datetime
 #  origin_type    :bigint           default(0)
-#  part_of_speech :string
 #  transcription  :string
 #  type           :string
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
+#  author_id      :bigint           not null
 #  lexeme_id      :bigint           not null
 #  origin_word_id :bigint
 #
 # Indexes
 #
+#  index_words_on_author_id       (author_id)
+#  index_words_on_discarded_at    (discarded_at)
 #  index_words_on_lexeme_id       (lexeme_id)
 #  index_words_on_origin_word_id  (origin_word_id)
 #  index_words_on_type            (type)
 #
 # Foreign Keys
 #
+#  fk_rails_...  (author_id => users.id)
 #  fk_rails_...  (lexeme_id => lexemes.id)
 #  fk_rails_...  (origin_word_id => words.id)
 #
 class Word < ApplicationRecord
+  include Discard::Model
+  include Authored
+  include ApostropheNormalizer
+
+  has_paper_trail
+
+  before_validation :set_sti_type, on: :create
+
   belongs_to :lexeme
   belongs_to :origin_word, class_name: "Word", optional: true
+  has_and_belongs_to_many :parts_of_speech, class_name: "PartOfSpeech"
 
   has_one :etymology, dependent: :destroy
 
@@ -48,5 +61,19 @@ class Word < ApplicationRecord
 
   def all_synonyms
     synonyms + inverse_synonyms
+  end
+
+  private
+
+  def normalize_apostrophes
+    normalize_field(:transcription, rule: :strict)
+
+    normalize_field(:definition, rule: :safe)
+    normalize_field(:comment, rule: :safe)
+  end
+
+  def set_sti_type
+    # `self.type` будет установлен, только если он еще не задан
+    self.type ||= "#{lexeme.language.code.capitalize}Word" if lexeme&.language.present?
   end
 end

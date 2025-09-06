@@ -1,0 +1,51 @@
+<div class="p-6">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold"><%= @language.name %></h1>
+    <div>
+      <%= link_to 'Редактировать', edit_forge_language_path(@language), class: 'bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded' %>
+      <%= link_to 'Назад к списку', forge_languages_path, class: 'ml-2 text-blue-600' %>
+    </div>
+  </div>
+
+  <div class="bg-white shadow rounded-lg p-6">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="md:col-span-2">
+        <h3 class="text-lg font-semibold mb-2">Описание</h3>
+        <div class="prose max-w-none">
+          <%= @language.description.presence || content_tag(:p, "Описание отсутствует.", class: "text-gray-500 italic") %>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="text-lg font-semibold mb-2">Детали</h3>
+        <dl class="space-y-2 text-sm">
+          <dt class="font-medium text-gray-500">Системный код:</dt>
+          <dd class="font-mono text-gray-800"><%= @language.code %></dd>
+
+          <dt class="font-medium text-gray-500">Родительский язык:</dt>
+          <dd>
+            <% if @language.parent_language %>
+              <%= link_to @language.parent_language.name, forge_language_path(@language.parent_language), class: "text-blue-600 hover:underline" %>
+            <% else %>
+              <span class="text-gray-800">Нет (корневой язык)</span>
+            <% end %>
+          </dd>
+
+          <dt class="font-medium text-gray-500">Автор:</dt>
+          <dd class="text-gray-800"><%= @language.author.displayname %></dd>
+        </dl>
+      </div>
+    </div>
+
+    <% if @language.child_languages.any? %>
+      <div class="mt-6 pt-6 border-t">
+        <h3 class="text-lg font-semibold mb-2">Языки-потомки / Диалекты</h3>
+        <ul class="list-disc list-inside text-blue-600">
+          <% @language.child_languages.each do |child| %>
+            <li><%= link_to child.name, forge_language_path(child), class: "hover:underline" %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+  </div>
+</div>

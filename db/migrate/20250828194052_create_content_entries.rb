@@ -8,7 +8,7 @@ class CreateContentEntries < ActiveRecord::Migration[7.2]
       t.references :author, null: false, foreign_key: { to_table: :users }
       t.string :slug, null: false
       t.datetime :published_at
-      t.datetime :discarded_at
+      t.datetime :discarded_at, default: nil
 
       # СПЕЦИФИЧНЫЕ ПОЛЯ ДЛЯ НАСЛЕДНИКОВ
 
