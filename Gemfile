@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-ruby '3.3.3'
+ruby "3.3.3"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.2.2", ">= 7.2.2.2"
@@ -36,15 +36,15 @@ gem "bootsnap", require: false
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
 
-gem 'seedbank', '~> 0.5.0'
+gem "seedbank", "~> 0.5.0"
 
 # features
-gem 'anike-slugify', github: 'anixd/anike-slugify', tag: 'v1.0.1'
+gem "anike-slugify", github: "anixd/anike-slugify", tag: "v1.0.1"
 # gem 'aws-sdk-s3', require: false
-gem 'discard', '~> 1.4'
-gem 'paper_trail', '~> 16.0'
-gem 'redcarpet', '~> 3.5'
-gem 'will_paginate', '~> 3.3'
+gem "discard", "~> 1.4"
+gem "pagy"
+gem "paper_trail", "~> 16.0"
+gem "redcarpet", "~> 3.5"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -59,11 +59,12 @@ group :development, :test do
 end
 
 group :development do
-  gem 'annotate'
-  gem 'better_errors'
-  gem 'binding_of_caller'
-  gem 'error_highlight', '~> 0.7.0'
-  gem 'rack-mini-profiler'
+  gem "annotate"
+  gem "better_errors"
+  gem "binding_of_caller"
+  gem "error_highlight", "~> 0.7.0"
+  gem "listen", "~> 3.9"
+  gem "rack-mini-profiler"
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
 end

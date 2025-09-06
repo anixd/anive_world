@@ -1,0 +1,18 @@
+<% opts  = local_assigns[:options] || [25, 50, 100, 200, 500] %>
+<% label = local_assigns[:label]   || "Show per page:" %>
+
+<div class="flex items-center gap-3">
+  <label class="text-gray-600"><%= label %></label>
+
+  <%= form_with url: request.path, method: :get, local: true, html: { class: "inline" } do %>
+    <% request.query_parameters.except("page","per","per_page").each do |k,v| %>
+      <%= hidden_field_tag k, v %>
+    <% end %>
+    <%= hidden_field_tag :page, 1 %>
+
+    <%= select_tag :per,
+                   options_for_select(opts.map { |o| [o, o] }, per_page),
+                   onchange: "this.form.requestSubmit()",
+                   class: "px-3 py-2 rounded-xl border border-gray-200 bg-white shadow-sm" %>
+  <% end %>
+</div>
