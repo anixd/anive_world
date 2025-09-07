@@ -1,0 +1,46 @@
+<div class="p-6">
+  <div class="flex justify-between items-start mb-4">
+    <div>
+      <h1 class="text-2xl font-bold">Parts of Speech</h1>
+      <% if @current_language %>
+        <h2 class="text-xl text-gray-500 font-normal">Language: <%= @current_language.name %></h2>
+      <% end %>
+    </div>
+    <% if @current_language %>
+      <%= link_to 'New Part of Speech', new_forge_language_part_of_speech_path(@current_language), class: 'bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded flex-shrink-0' %>
+    <% end %>
+  </div>
+
+  <%# Переключатель языков %>
+  <div class="flex items-center gap-4 mb-6 border-b pb-3">
+    <span class="text-sm font-medium text-gray-600">Languages:</span>
+    <% @languages.each do |language| %>
+      <% active_class = (language == @current_language) ? "bg-blue-100 text-blue-800 font-semibold" : "bg-gray-100 text-gray-700 hover:bg-gray-200" %>
+      <%= link_to language.name, forge_language_parts_of_speech_path(language, lang: language.code), class: "px-3 py-1 rounded-full text-sm #{active_class}" %>
+    <% end %>
+  </div>
+
+  <div class="bg-white shadow rounded-lg overflow-hidden">
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead class="bg-gray-50">
+      <tr>
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">System Code</th>
+        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+      </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-200">
+      <% @parts_of_speech.each do |part_of_speech| %>
+        <tr>
+          <td class="px-6 py-4 whitespace-nowrap font-semibold"><%= part_of_speech.name %></td>
+          <td class="px-6 py-4 whitespace-nowrap font-mono text-sm text-gray-500"><%= part_of_speech.code %></td>
+          <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+            <%= link_to 'Edit', edit_forge_language_part_of_speech_path(@current_language, part_of_speech), class: 'text-indigo-600 hover:text-indigo-900 mr-3' %>
+            <%= link_to 'Archive', forge_language_part_of_speech_path(@current_language, part_of_speech), data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: 'text-red-600 hover:text-red-900' %>
+          </td>
+        </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

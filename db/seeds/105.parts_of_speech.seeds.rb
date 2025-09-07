@@ -1,12 +1,10 @@
-# db/seeds/105.parts_of_speech.seeds.rb
-
 author = User.first
 unless author
   puts "❌ Не найден ни один пользователь. Пожалуйста, создайте админа перед запуском сидов."
-  return # Используем return вместо exit для большей безопасности
+  return
 end
 
-json_file_path = Rails.root.join('db', 'word_types_export.json')
+json_file_path = Rails.root.join('db', 'import_data', 'veltari_word_types_export.json')
 
 unless File.exist?(json_file_path)
   puts "❌ Файл для импорта не найден: #{json_file_path}"
@@ -28,7 +26,6 @@ word_types_data.each do |attrs|
     next
   end
 
-  # Используем find_or_initialize_by для безопасного многократного запуска
   pos = PartOfSpeech.find_or_initialize_by(code: attrs['code'], language: language)
   pos.name = attrs['name']
   pos.explanation = attrs['explanation']

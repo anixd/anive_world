@@ -38,6 +38,7 @@ class Language < ApplicationRecord
 
   has_many :lexemes
   has_many :roots
+  has_many :affixes
 
   private
 
