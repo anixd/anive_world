@@ -32,6 +32,9 @@ class Affix < ApplicationRecord
   has_paper_trail
 
   belongs_to :language
+  has_one :etymology, as: :etymologizable, dependent: :destroy
+  accepts_nested_attributes_for :etymology, allow_destroy: true
+
 
   enum affix_type: { prefix: "prefix", suffix: "suffix", infix: "infix" }
 

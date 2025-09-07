@@ -12,7 +12,7 @@ class Forge::WordsController < Forge::BaseController
     @word.author = current_user
 
     if @word.save
-      redirect_to forge_lexeme_path(@lexeme), notice: "Новое значение добавлено."
+      redirect_to forge_lexeme_path(@lexeme), notice: "Etymology was created."
     else
       render :new, status: :unprocessable_content
     end
@@ -23,8 +23,15 @@ class Forge::WordsController < Forge::BaseController
   end
 
   def update
-    if @word.update(word_params)
-      redirect_to forge_lexeme_path(@word.lexeme), notice: "Значение обновлено."
+    attributes = word_params
+
+    etymology_attrs = attributes[:etymology_attributes]
+    if etymology_attrs.present? && etymology_attrs[:id].blank?
+      etymology_attrs.merge!(author: current_user)
+    end
+
+    if @word.update(attributes)
+      redirect_to forge_lexeme_path(@word.lexeme), notice: "Etymology was updated."
     else
       render :edit, status: :unprocessable_content
     end
@@ -33,7 +40,7 @@ class Forge::WordsController < Forge::BaseController
   def destroy
     lexeme = @word.lexeme
     @word.discard
-    redirect_to forge_lexeme_path(lexeme), notice: "Значение удалено."
+    redirect_to forge_lexeme_path(lexeme), notice: "Etymology was deleted."
   end
 
   private
@@ -47,9 +54,7 @@ class Forge::WordsController < Forge::BaseController
   end
 
   def set_form_options
-    # Устанавливаем язык из лексемы для редактирования или из родительской лексемы для нового
     language = @word&.language || @lexeme.language
-    # Загружаем части речи ТОЛЬКО для этого языка
     @parts_of_speech = PartOfSpeech.where(language: language).order(:name)
   end
 

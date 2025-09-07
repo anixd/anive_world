@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_09_07_101119) do
+ActiveRecord::Schema[7.2].define(version: 2025_09_07_131539) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -56,16 +56,16 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_07_101119) do
   end
 
   create_table "etymologies", force: :cascade do |t|
-    t.bigint "word_id", null: false
     t.bigint "author_id", null: false
     t.text "explanation", null: false
     t.text "comment"
     t.datetime "discarded_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "etymologizable_id"
+    t.string "etymologizable_type"
     t.index ["author_id"], name: "index_etymologies_on_author_id"
     t.index ["discarded_at"], name: "index_etymologies_on_discarded_at"
-    t.index ["word_id"], name: "index_etymologies_on_word_id", unique: true
   end
 
   create_table "languages", force: :cascade do |t|
@@ -256,7 +256,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_07_101119) do
   add_foreign_key "content_entries", "languages"
   add_foreign_key "content_entries", "users", column: "author_id"
   add_foreign_key "etymologies", "users", column: "author_id"
-  add_foreign_key "etymologies", "words"
   add_foreign_key "languages", "languages", column: "parent_language_id"
   add_foreign_key "languages", "users", column: "author_id"
   add_foreign_key "lexemes", "languages"
