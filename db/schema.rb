@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_09_05_202822) do
+ActiveRecord::Schema[7.2].define(version: 2025_09_07_101119) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -121,7 +121,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_05_202822) do
     t.datetime "updated_at", null: false
     t.bigint "language_id", null: false
     t.index ["author_id"], name: "index_parts_of_speech_on_author_id"
-    t.index ["code"], name: "index_parts_of_speech_on_code", unique: true
+    t.index ["code", "language_id"], name: "index_parts_of_speech_on_code_and_language_id", unique: true
     t.index ["discarded_at"], name: "index_parts_of_speech_on_discarded_at"
     t.index ["language_id"], name: "index_parts_of_speech_on_language_id"
   end

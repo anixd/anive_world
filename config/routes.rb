@@ -8,9 +8,10 @@ Rails.application.routes.draw do
   forge_routes = -> do
     root "dashboard#index", as: :dashboard
 
-    # Лингвистическое ядро
+    # Linguistic core
     resources :languages do
-      resources :parts_of_speech, only: [:index]
+      resources :parts_of_speech
+      resources :roots
     end
     resources :roots
     resources :affixes

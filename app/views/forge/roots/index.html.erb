@@ -1,0 +1,47 @@
+<div class="p-6">
+  <div class="flex justify-between items-start mb-4">
+    <div>
+      <h1 class="text-2xl font-bold">Roots</h1>
+      <% if @current_language %>
+        <h2 class="text-xl text-gray-500 font-normal"><%= @current_language.name %></h2>
+      <% end %>
+    </div>
+    <% if @current_language %>
+      <%= link_to 'New Root', new_forge_language_root_path(@current_language), class: 'bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded flex-shrink-0' %>
+    <% end %>
+  </div>
+
+  <div class="flex items-center gap-4 mb-6 border-b pb-3">
+    <span class="text-sm font-medium text-gray-600">Languages:</span>
+    <% @languages.each do |language| %>
+      <% active_class = (language == @current_language) ? "bg-blue-100 text-blue-800 font-semibold" : "bg-gray-100 text-gray-700 hover:bg-gray-200" %>
+      <%= link_to language.name, forge_language_roots_path(language, lang: language.code), class: "px-3 py-1 rounded-full text-sm #{active_class}" %>
+    <% end %>
+  </div>
+
+  <div class="my-4">
+    <%= render "shared/pagination_controls", pagy: @pagy %>
+  </div>
+
+  <div class="flex flex-col gap-3">
+    <% @roots.each do |root| %>
+      <div class="bg-white shadow rounded-lg p-4">
+        <div class="flex justify-between items-start">
+          <div class="flex-grow">
+            <h2 class="font-semibold text-lg text-blue-700"><%= root.text %></h2>
+            <div class="prose max-w-none text-gray-800 mt-1">
+              <%= render_markdown(root.meaning) %>
+            </div>
+          </div>
+          <div class="flex-shrink-0 ml-4 text-sm">
+            <%= link_to 'Edit', edit_forge_language_root_path(root.language, root), class: 'text-indigo-600 hover:text-indigo-900' %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="mt-8">
+    <%= render "shared/pagination_controls", pagy: @pagy %>
+  </div>
+</div>

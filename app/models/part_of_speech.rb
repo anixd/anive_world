@@ -14,10 +14,10 @@
 #
 # Indexes
 #
-#  index_parts_of_speech_on_author_id     (author_id)
-#  index_parts_of_speech_on_code          (code) UNIQUE
-#  index_parts_of_speech_on_discarded_at  (discarded_at)
-#  index_parts_of_speech_on_language_id   (language_id)
+#  index_parts_of_speech_on_author_id             (author_id)
+#  index_parts_of_speech_on_code_and_language_id  (code,language_id) UNIQUE
+#  index_parts_of_speech_on_discarded_at          (discarded_at)
+#  index_parts_of_speech_on_language_id           (language_id)
 #
 # Foreign Keys
 #
