@@ -13,6 +13,20 @@
     <p class="text-xs text-gray-600 mt-1">Description of the root's meaning. Markdown is supported.</p>
   </div>
 
+  <div class="space-y-4 bg-gray-50 p-4 rounded-lg border">
+    <h3 class="font-semibold text-lg border-b pb-2 mb-4">Etymology</h3>
+    <%= form.fields_for :etymology do |etymology_form| %>
+      <div>
+        <%= etymology_form.label :explanation, "Explanation", class: "block font-bold mb-1" %>
+        <%= etymology_form.text_area :explanation, rows: 5, class: "border rounded w-full p-2" %>
+      </div>
+      <div>
+        <%= etymology_form.label :comment, "Comment", class: "block font-bold mb-1" %>
+        <%= etymology_form.text_area :comment, rows: 2, class: "border rounded w-full p-2" %>
+      </div>
+    <% end %>
+  </div>
+
   <div class="actions">
     <%= form.submit "Save Root", class: "bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer" %>
   </div>

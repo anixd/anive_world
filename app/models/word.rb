@@ -41,8 +41,8 @@ class Word < ApplicationRecord
   belongs_to :lexeme
   belongs_to :origin_word, class_name: "Word", optional: true
   has_and_belongs_to_many :parts_of_speech, class_name: "PartOfSpeech"
-
-  has_one :etymology, dependent: :destroy
+  has_one :etymology, as: :etymologizable, dependent: :destroy
+  accepts_nested_attributes_for :etymology, allow_destroy: true
 
   has_many :synonym_relations, dependent: :destroy
   has_many :synonyms, through: :synonym_relations, source: :synonym

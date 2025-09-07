@@ -1,44 +1,56 @@
-class Forge::RootsController < Forge::BaseController
+# app/controllers/forge/roots_controller.rb
 
-  before_action :set_language, only: %i[index new create]
+class Forge::RootsController < Forge::BaseController
+  before_action :set_language_from_id, except: [:index]
   before_action :set_root, only: %i[edit update destroy]
 
   def index
     @languages = Language.order(:name)
     target_code = params.fetch(:lang, Language::DEFAULT_CODE)
-    @current_language = @languages.find { |l| l.code == target_code } || Language.find_by(code: Language::DEFAULT_CODE) || @languages.first
+    @current_language = @languages.find { |l| l.code == target_code } || Language.order(:name).first
 
     scope = if @current_language
-              # Eager loading для :author, чтобы избежать N+1 запросов
-              Root.where(language: @current_language).includes(:author).order(:text)
+              @current_language.roots.includes(:author).order(:text)
             else
               Root.none
             end
 
-    @pagy, @roots = pagy(scope, limit: per_page)
+    @pagy, @roots = pagy(scope)
   end
 
   def new
     @root = @language.roots.build
+    @root.build_etymology
   end
 
   def create
-    @root = @language.roots.build(root_params)
-    @root.author = current_user
+    @root = @language.affixes.build(root_params)
+    @affix.author = current_user
+
+    if @root.etymology.present?
+      @root.etymology.author = current_user
+    end
 
     if @root.save
-      redirect_to forge_language_roots_path(@language), notice: "Root was created."
+      redirect_to forge_language_affixes_path(@language, lang: @language.code), notice: "Affix was created."
     else
       render :new, status: :unprocessable_content
     end
   end
 
   def edit
+    @root.build_etymology if @root.etymology.nil?
   end
 
   def update
-    if @root.update(root_params)
-      redirect_to forge_language_roots_path(@language), notice: "Root was updated."
+    @root.assign_attributes(root_params)
+
+    if @root.etymology.present? && @root.etymology.new_record?
+      @root.etymology.author = current_user
+    end
+
+    if @root.save
+      redirect_to forge_language_affixes_path(@language, lang: @language.code), notice: "Affix was updated."
     else
       render :edit, status: :unprocessable_content
     end
@@ -46,22 +58,25 @@ class Forge::RootsController < Forge::BaseController
 
   def destroy
     @root.discard
-    redirect_to forge_language_roots_path(@language), notice: "Root was archived."
+    redirect_to forge_language_roots_path(@language, lang: @language.code), notice: "Root was archived."
   end
 
   private
 
-  def set_language
-    if params[:language_id]
-      @language = Language.find(params[:language_id])
-    end
+  # Этот метод находит родительский язык по :language_id из URL
+  def set_language_from_id
+    @language = Language.find(params[:language_id])
   end
 
   def set_root
+    # Теперь @language гарантированно будет установлен из set_language_from_id
     @root = @language.roots.find(params[:id])
   end
 
   def root_params
-    params.require(:root).permit(:text, :meaning)
+    params.require(:root).permit(
+      :text, :meaning,
+      etymology_attributes: [:id, :explanation, :comment]
+    )
   end
 end

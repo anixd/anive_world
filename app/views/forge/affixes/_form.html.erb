@@ -1,22 +1,36 @@
 <%= form_with(model: [:forge, @language, @affix], class: "space-y-6") do |form| %>
   <%# ... error messages block ... %>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-    <div>
-      <%= form.label :text, "Affix Text", class: "block font-bold mb-1" %>
-      <%= form.text_field :text, class: "border rounded w-full p-2" %>
-      <p class="text-xs text-gray-600 mt-1">The affix itself, e.g., "-an".</p>
+  <div class="space-y-4 bg-gray-50 p-4 rounded-lg border">
+    <h3 class="font-semibold text-lg border-b pb-2 mb-4">Affix Details</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <%= form.label :text, "Affix Text", class: "block font-bold mb-1" %>
+        <%= form.text_field :text, class: "border rounded w-full p-2" %>
+      </div>
+      <div>
+        <%= form.label :affix_type, "Type", class: "block font-bold mb-1" %>
+        <%= form.select :affix_type, Affix.affix_types.keys.map { |t| [t.humanize, t] }, {}, class: "border rounded w-full p-2" %>
+      </div>
     </div>
     <div>
-      <%= form.label :affix_type, "Type", class: "block font-bold mb-1" %>
-      <%= form.select :affix_type, Affix.affix_types.keys.map { |t| [t.humanize, t] }, {}, class: "border rounded w-full p-2" %>
+      <%= form.label :meaning, "Meaning", class: "block font-bold mb-1" %>
+      <%= form.text_area :meaning, rows: 5, class: "border rounded w-full p-2" %>
     </div>
   </div>
 
-  <div>
-    <%= form.label :meaning, "Meaning", class: "block font-bold mb-1" %>
-    <%= form.text_area :meaning, rows: 5, class: "border rounded w-full p-2" %>
-    <p class="text-xs text-gray-600 mt-1">Description of the affix's meaning. Markdown is supported.</p>
+  <div class="space-y-4 bg-gray-50 p-4 rounded-lg border">
+    <h3 class="font-semibold text-lg border-b pb-2 mb-4">Etymology</h3>
+    <%= form.fields_for :etymology do |etymology_form| %>
+      <div>
+        <%= etymology_form.label :explanation, "Explanation", class: "block font-bold mb-1" %>
+        <%= etymology_form.text_area :explanation, rows: 5, class: "border rounded w-full p-2" %>
+      </div>
+      <div>
+        <%= etymology_form.label :comment, "Comment", class: "block font-bold mb-1" %>
+        <%= etymology_form.text_area :comment, rows: 2, class: "border rounded w-full p-2" %>
+      </div>
+    <% end %>
   </div>
 
   <div class="actions">

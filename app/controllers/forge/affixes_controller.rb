@@ -1,35 +1,54 @@
-class Forge::AffixesController < ApplicationController
-  before_action :set_language_from_param, only: [:index]
-  before_action :set_language_from_id, only: %i[new create edit update destroy]
+class Forge::AffixesController < Forge::BaseController
+  before_action :set_language_from_id, except: [:index]
   before_action :set_affix, only: %i[edit update destroy]
 
   def index
     @languages = Language.order(:name)
-    scope = @language ? @language.affixes.includes(:author).order(:text) : Affix.none
+    target_code = params.fetch(:lang, Language::DEFAULT_CODE)
+    @current_language = @languages.find { |l| l.code == target_code } || Language.order(:name).first
+
+    scope = if @current_language
+              @current_language.affixes.includes(:author).order(:text)
+            else
+              Affix.none
+            end
+
     @pagy, @affixes = pagy(scope)
   end
 
   def new
     @affix = @language.affixes.build
+    @affix.build_etymology
   end
 
   def create
     @affix = @language.affixes.build(affix_params)
     @affix.author = current_user
 
+    if @affix.etymology.present?
+      @affix.etymology.author = current_user
+    end
+
     if @affix.save
-      redirect_to forge_language_affixes_path(@language), notice: "Affix was created."
+      redirect_to forge_language_affixes_path(@language, lang: @language.code), notice: "Affix was created."
     else
       render :new, status: :unprocessable_content
     end
   end
 
   def edit
+    @affix.build_etymology if @affix.etymology.nil?
   end
 
   def update
-    if @affix.update(affix_params)
-      redirect_to forge_language_affixes_path(@language), notice: "Affix was updated."
+    @affix.assign_attributes(affix_params)
+
+    if @affix.etymology.present? && @affix.etymology.new_record?
+      @affix.etymology.author = current_user
+    end
+
+    if @affix.save
+      redirect_to forge_language_affixes_path(@language, lang: @language.code), notice: "Affix was updated."
     else
       render :edit, status: :unprocessable_content
     end
@@ -37,15 +56,10 @@ class Forge::AffixesController < ApplicationController
 
   def destroy
     @affix.discard
-    redirect_to forge_language_affixes_path(@language), notice: "Affix was archived."
+    redirect_to forge_language_affixes_path(@language, lang: @language.code), notice: "Affix was archived."
   end
 
   private
-
-  def set_language_from_param
-    target_code = params.fetch(:lang, Language::DEFAULT_CODE)
-    @language = Language.find_by(code: target_code)
-  end
 
   def set_language_from_id
     @language = Language.find(params[:language_id])
@@ -56,6 +70,9 @@ class Forge::AffixesController < ApplicationController
   end
 
   def affix_params
-    params.require(:affix).permit(:text, :affix_type, :meaning)
+    params.require(:affix).permit(
+      :text, :affix_type, :meaning,
+      etymology_attributes: [:id, :explanation, :comment]
+    )
   end
 end
