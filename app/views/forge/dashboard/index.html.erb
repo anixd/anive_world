@@ -12,12 +12,11 @@
       <ul class="space-y-2 text-blue-600">
         <li><%= link_to "Languages", forge_languages_path, class: "hover:underline" %></li>
         <ul class="list-disc list-inside ml-4 mt-1 text-sm">
-          <li><%= link_to "Parts of Speech", forge_language_parts_of_speech_path(@first_lang), class: "hover:underline" %></li>
-          <li><%= link_to "Roots", forge_language_roots_path(@first_lang), class: "hover:underline" %></li>
+          <li><%= link_to "Parts of Speech", forge_language_parts_of_speech_path(@default_lang), class: "hover:underline" %></li>
+          <li><%= link_to "Roots", forge_language_roots_path(@default_lang), class: "hover:underline" %></li>
+          <li><%= link_to "Affixes", forge_language_affixes_path(@default_lang), class: "hover:underline" %></li>
         </ul>
         <li><%= link_to "Lexemes (Dictionary)", forge_lexemes_path, class: "hover:underline" %></li>
-        <li><%= link_to "Roots", "#", class: "text-gray-400 cursor-not-allowed" %></li>
-        <li><%= link_to "Affixes", "#", class: "text-gray-400 cursor-not-allowed" %></li>
       </ul>
     </div>
 

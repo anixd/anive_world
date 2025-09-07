@@ -2,6 +2,7 @@ class Forge::PartsOfSpeechController < Forge::BaseController
 
   before_action :set_language_from_id, only: %i[new create edit update destroy]
   before_action :set_part_of_speech, only: %i[edit update destroy]
+
   def index
     @languages = Language.order(:name)
     target_code = params.fetch(:lang, Language::DEFAULT_CODE)

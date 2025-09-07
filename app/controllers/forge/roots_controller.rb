@@ -1,4 +1,5 @@
 class Forge::RootsController < Forge::BaseController
+
   before_action :set_language, only: %i[index new create]
   before_action :set_root, only: %i[edit update destroy]
 
@@ -28,7 +29,7 @@ class Forge::RootsController < Forge::BaseController
     if @root.save
       redirect_to forge_language_roots_path(@language), notice: "Root was created."
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -39,7 +40,7 @@ class Forge::RootsController < Forge::BaseController
     if @root.update(root_params)
       redirect_to forge_language_roots_path(@language), notice: "Root was updated."
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 

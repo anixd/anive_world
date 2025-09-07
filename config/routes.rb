@@ -12,6 +12,7 @@ Rails.application.routes.draw do
     resources :languages do
       resources :parts_of_speech
       resources :roots
+      resources :affixes
     end
     resources :roots
     resources :affixes
