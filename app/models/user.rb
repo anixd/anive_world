@@ -10,6 +10,7 @@
 #  lastname              :string
 #  password_digest       :string
 #  remember_token_digest :string
+#  role                  :integer          default("neophyte"), not null
 #  username              :string           not null
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null
@@ -33,6 +34,18 @@ class User < ApplicationRecord
 
   scope :active, -> { where(active: true) }
   scope :inactive, -> { where(active: false) }
+
+  enum :role, { root: 0, owner: 1, author: 2, editor: 3, neophyte: 4 }
+
+  def can_manage_all_content?
+    root? || owner? || author?
+  end
+
+  def can_manage_user_role?(other_user)
+    # root может менять всех, owner тоже.
+    # Остальные могут менять только тех, кто ниже по иерархии.
+    root? || owner? || User.roles[self.role] < User.roles[other_user.role]
+  end
 
   def remember_me
     self.remember_token = SecureRandom.urlsafe_base64

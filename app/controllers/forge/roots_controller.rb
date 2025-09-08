@@ -1,5 +1,3 @@
-# app/controllers/forge/roots_controller.rb
-
 class Forge::RootsController < Forge::BaseController
   before_action :set_language_from_id, except: [:index]
   before_action :set_root, only: %i[edit update destroy]
@@ -15,17 +13,19 @@ class Forge::RootsController < Forge::BaseController
               Root.none
             end
 
-    @pagy, @roots = pagy(scope)
+    @pagy, @roots = pagy(policy_scope(scope))
   end
 
   def new
     @root = @language.roots.build
     @root.build_etymology
+    authorize @root
   end
 
   def create
     @root = @language.affixes.build(root_params)
     @affix.author = current_user
+    authorize @root
 
     if @root.etymology.present?
       @root.etymology.author = current_user
@@ -39,10 +39,12 @@ class Forge::RootsController < Forge::BaseController
   end
 
   def edit
+    authorize @root
     @root.build_etymology if @root.etymology.nil?
   end
 
   def update
+    authorize @root
     @root.assign_attributes(root_params)
 
     if @root.etymology.present? && @root.etymology.new_record?
@@ -57,6 +59,7 @@ class Forge::RootsController < Forge::BaseController
   end
 
   def destroy
+    authorize @root
     @root.discard
     redirect_to forge_language_roots_path(@language, lang: @language.code), notice: "Root was archived."
   end

@@ -1,0 +1,2 @@
+class RootPolicy < LinguisticPolicy
+end

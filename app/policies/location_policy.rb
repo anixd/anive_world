@@ -1,0 +1,2 @@
+class LocationPolicy < ContentEntryPolicy
+end

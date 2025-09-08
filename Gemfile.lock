@@ -211,6 +211,8 @@ GEM
       stringio
     puma (6.6.1)
       nio4r (~> 2.0)
+    pundit (2.5.0)
+      activesupport (>= 3.0.0)
     racc (1.8.1)
     rack (3.1.16)
     rack-mini-profiler (4.0.1)
@@ -372,6 +374,7 @@ DEPENDENCIES
   pg (~> 1.5)
   propshaft
   puma (>= 5.0)
+  pundit (~> 2.5)
   rack-mini-profiler
   rails (~> 7.2.2, >= 7.2.2.2)
   redcarpet (~> 3.5)

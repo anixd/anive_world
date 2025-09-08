@@ -5,24 +5,29 @@ class Forge::WordsController < Forge::BaseController
 
   def new
     @word = @lexeme.words.build
+    @word.build_etymology
+    authorize @word # Can create new meanings?
   end
 
   def create
     @word = @lexeme.words.build(word_params)
     @word.author = current_user
+    authorize @word # Can create new meanings?
 
     if @word.save
-      redirect_to forge_lexeme_path(@lexeme), notice: "Etymology was created."
+      redirect_to forge_lexeme_path(@lexeme), notice: "Meaning was created."
     else
       render :new, status: :unprocessable_content
     end
   end
 
   def edit
+    authorize @word # Can edit this meaning?
     @word.build_etymology if @word.etymology.nil?
   end
 
   def update
+    authorize @word # Can update this meaning?
     attributes = word_params
 
     etymology_attrs = attributes[:etymology_attributes]
@@ -31,16 +36,17 @@ class Forge::WordsController < Forge::BaseController
     end
 
     if @word.update(attributes)
-      redirect_to forge_lexeme_path(@word.lexeme), notice: "Etymology was updated."
+      redirect_to forge_lexeme_path(@word.lexeme), notice: "Meaning was updated."
     else
       render :edit, status: :unprocessable_content
     end
   end
 
   def destroy
+    authorize @word # Can destroy this meaning?
     lexeme = @word.lexeme
     @word.discard
-    redirect_to forge_lexeme_path(lexeme), notice: "Etymology was deleted."
+    redirect_to forge_lexeme_path(lexeme), notice: "Meaning was deleted."
   end
 
   private
@@ -61,9 +67,9 @@ class Forge::WordsController < Forge::BaseController
   def word_params
     params.require(:word).permit(
       :definition,
-             :transcription,
-             :comment,
-             part_of_speech_ids: [],
-             etymology_attributes: [:id, :explanation, :comment, :_destroy])
+      :transcription,
+      :comment,
+      part_of_speech_ids: [],
+      etymology_attributes: [:id, :explanation, :comment, :_destroy])
   end
 end

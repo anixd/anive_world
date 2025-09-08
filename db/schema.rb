@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_09_07_131539) do
+ActiveRecord::Schema[7.2].define(version: 2025_09_07_224608) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -153,6 +153,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_07_131539) do
     t.bigint "shareable_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "access_level", default: 0, null: false
     t.index ["shareable_type", "shareable_id"], name: "index_shares_on_shareable"
     t.index ["user_id", "shareable_id", "shareable_type"], name: "index_shares_on_user_and_shareable", unique: true
     t.index ["user_id"], name: "index_shares_on_user_id"
@@ -191,6 +192,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_07_131539) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "remember_token_digest"
+    t.integer "role", default: 4, null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["username"], name: "index_users_on_username", unique: true
   end

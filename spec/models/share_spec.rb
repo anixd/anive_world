@@ -3,6 +3,7 @@
 # Table name: shares
 #
 #  id             :bigint           not null, primary key
+#  access_level   :integer          default("read"), not null
 #  shareable_type :string           not null
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null

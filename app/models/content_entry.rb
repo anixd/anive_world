@@ -41,8 +41,15 @@ class ContentEntry < ApplicationRecord
 
   has_paper_trail
 
+  before_validation :generate_slug, on: :create
+
   # for Location
   belongs_to :parent_location, class_name: "Location", optional: true
-end
 
-# Dir[Rails.root.join("app/models/content_entries/*.rb")].each { |f| require_dependency f }
+  private
+
+  # Добавляем этот метод
+  def generate_slug
+    self.slug = SlugGenerator.call(title) if title.present? && slug.blank?
+  end
+end

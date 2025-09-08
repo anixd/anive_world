@@ -1,0 +1,2 @@
+class HistoryEntryPolicy < ContentEntryPolicy
+end

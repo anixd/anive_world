@@ -13,17 +13,19 @@ class Forge::AffixesController < Forge::BaseController
               Affix.none
             end
 
-    @pagy, @affixes = pagy(scope)
+    @pagy, @affixes = pagy(policy_scope(scope))
   end
 
   def new
     @affix = @language.affixes.build
     @affix.build_etymology
+    authorize @affix
   end
 
   def create
     @affix = @language.affixes.build(affix_params)
     @affix.author = current_user
+    authorize @affix
 
     if @affix.etymology.present?
       @affix.etymology.author = current_user
@@ -37,10 +39,12 @@ class Forge::AffixesController < Forge::BaseController
   end
 
   def edit
+    authorize @affix
     @affix.build_etymology if @affix.etymology.nil?
   end
 
   def update
+    authorize @affix
     @affix.assign_attributes(affix_params)
 
     if @affix.etymology.present? && @affix.etymology.new_record?
@@ -55,6 +59,7 @@ class Forge::AffixesController < Forge::BaseController
   end
 
   def destroy
+    authorize @affix
     @affix.discard
     redirect_to forge_language_affixes_path(@language, lang: @language.code), notice: "Affix was archived."
   end

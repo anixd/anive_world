@@ -1,0 +1,2 @@
+class AffixPolicy < LinguisticPolicy
+end

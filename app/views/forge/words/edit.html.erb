@@ -4,6 +4,6 @@
     <p class="text-base text-gray-800 mt-2">Lang: <%= @word.language.name %></p>
   </div>
   <div class="bg-white rounded-lg shadow p-6">
-    <%= render 'form', model: @word, url: forge_word_path(@word) %>
+    <%= render 'form', object: [:forge, @word] %>
   </div>
 </div>

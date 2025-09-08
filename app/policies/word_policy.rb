@@ -1,0 +1,2 @@
+class WordPolicy < LinguisticPolicy
+end
