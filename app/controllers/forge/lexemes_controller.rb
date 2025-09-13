@@ -20,7 +20,7 @@ class Forge::LexemesController < Forge::BaseController
 
     limit = params[:limit].present? ? params[:limit].to_i : Pagy::DEFAULT[:limit]
     # Применяем policy_scope к уже отфильтрованной коллекции
-    @pagy, @lexemes = pagy(policy_scope(scope), items: limit)
+    @pagy, @lexemes = pagy(policy_scope(scope), limit: limit)
   end
 
   def show

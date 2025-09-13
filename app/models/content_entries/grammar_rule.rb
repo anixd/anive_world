@@ -38,8 +38,7 @@
 #
 
 class GrammarRule < ContentEntry
-  include Discard::Model
-  include Authored
 
+  belongs_to :language
   # Логика для грамматических правил
 end

@@ -49,7 +49,7 @@ class Forge::ArticlesController < Forge::BaseController
 
   def set_article
     # В будущем для публичной части можно будет искать по slug
-    @article = Article.find(params[:id])
+    @article = Article.find_by!(slug: params[:id])
   end
 
   def article_params

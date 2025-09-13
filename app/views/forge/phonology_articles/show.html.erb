@@ -1,0 +1,24 @@
+<div class="p-6">
+  <div class="flex justify-between items-center mb-6">
+    <div>
+      <h1 class="text-3xl font-bold"><%= @phonology_article.title %></h1>
+      <p class="font-mono text-lg text-gray-500"><%= @phonology_article.rule_code %></p>
+    </div>
+    <div>
+      <% if policy(@phonology_article).edit? %>
+        <%= link_to 'Edit', edit_forge_phonology_article_path(@phonology_article), class: 'bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded' %>
+      <% end %>
+      <%= link_to 'Back to List', forge_phonology_articles_path, class: 'ml-2 text-blue-600' %>
+    </div>
+  </div>
+
+  <div class="bg-white shadow rounded-lg p-6">
+    <div class="mb-6 pb-6 border-b">
+      <h3 class="text-lg font-semibold mb-2">Language</h3>
+      <%= link_to @phonology_article.language.name, forge_language_path(@phonology_article.language), class: "text-blue-600 hover:underline" %>
+    </div>
+    <div class="prose max-w-none">
+      <%= render_markdown(@phonology_article.body) %>
+    </div>
+  </div>
+</div>

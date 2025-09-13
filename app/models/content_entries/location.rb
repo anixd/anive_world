@@ -38,8 +38,8 @@
 #
 
 class Location < ContentEntry
-  include Discard::Model
-  include Authored
+
+  belongs_to :parent_location, class_name: "Location", optional: true
 
   has_many :child_locations, class_name: "Location",
            foreign_key: "parent_location_id",

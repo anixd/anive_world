@@ -38,17 +38,21 @@
 #
 class ContentEntry < ApplicationRecord
   include Authored
+  include Discard::Model
 
   has_paper_trail
 
-  before_validation :generate_slug, on: :create
+  before_validation :generate_slug, on: %i[create update]
 
   # for Location
-  belongs_to :parent_location, class_name: "Location", optional: true
+  # belongs_to :parent_location, class_name: "Location", optional: true
+
+  def to_param
+    slug
+  end
 
   private
 
-  # Добавляем этот метод
   def generate_slug
     self.slug = SlugGenerator.call(title) if title.present? && slug.blank?
   end

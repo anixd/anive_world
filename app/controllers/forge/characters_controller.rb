@@ -49,7 +49,7 @@ class Forge::CharactersController < Forge::BaseController
   private
 
   def set_character
-    @character = Character.find(params[:id])
+    @character = Character.find_by!(slug: params[:id])
   end
 
   def character_params
