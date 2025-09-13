@@ -1,0 +1,42 @@
+<div class="p-6">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold"><%= @location.title %></h1>
+    <div>
+      <% if policy(@location).edit? %>
+        <%= link_to 'Edit', edit_forge_location_path(@location), class: 'bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded' %>
+      <% end %>
+      <%= link_to 'Back to List', forge_locations_path, class: 'ml-2 text-blue-600' %>
+    </div>
+  </div>
+
+  <div class="bg-white shadow rounded-lg p-6">
+    <div class="mb-6 pb-6 border-b">
+      <h3 class="text-lg font-semibold mb-2">Details</h3>
+      <dl>
+        <dt class="font-medium text-gray-500">Parent Location</dt>
+        <dd class="text-gray-900">
+          <% if @location.parent_location %>
+            <%= link_to @location.parent_location.title, forge_location_path(@location.parent_location), class: "text-blue-600 hover:underline" %>
+          <% else %>
+            —
+          <% end %>
+        </dd>
+      </dl>
+    </div>
+
+    <div class="prose max-w-none mb-6">
+      <%= render_markdown(@location.body) %>
+    </div>
+
+    <% if @location.child_locations.any? %>
+      <div class="mt-6 pt-6 border-t">
+        <h3 class="text-lg font-semibold mb-2">Locations inside this one</h3>
+        <ul class="list-disc list-inside text-blue-600">
+          <% @location.child_locations.order(:title).each do |child| %>
+            <li><%= link_to child.title, forge_location_path(child), class: "hover:underline" %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+  </div>
+</div>

@@ -38,7 +38,5 @@
 #
 
 class Article < ContentEntry
-  include Discard::Model
-  include Authored
 
 end

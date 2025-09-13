@@ -1,0 +1,2 @@
+class PartOfSpeechPolicy < LinguisticPolicy
+end

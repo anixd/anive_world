@@ -38,8 +38,8 @@
 #
 
 class PhonologyArticle < ContentEntry
-  include Discard::Model
-  include Authored
+
+  belongs_to :language
 
   # Логика для фонологических статей
 end

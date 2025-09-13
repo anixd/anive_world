@@ -1,0 +1,40 @@
+<%= form_with(model: [:forge, grammar_rule], class: "space-y-6") do |form| %>
+  <% if grammar_rule.errors.any? %>
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+      <h2 class="font-bold mb-2"><%= pluralize(grammar_rule.errors.count, "error") %> prohibited this from being saved:</h2>
+      <ul class="list-disc list-inside">
+        <% grammar_rule.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="md:col-span-2">
+      <%= form.label :title, "Title", class: "block font-bold mb-1" %>
+      <%= form.text_field :title, class: "border rounded w-full p-2" %>
+    </div>
+    <div>
+      <%= form.label :rule_code, "Rule Code", class: "block font-bold mb-1" %>
+      <%= form.text_field :rule_code, class: "border rounded w-full p-2", placeholder: "e.g. N-01" %>
+    </div>
+  </div>
+
+  <div>
+    <%= form.label :language_id, "Language", class: "block font-bold mb-1" %>
+    <%= form.collection_select :language_id, @languages, :id, :name,
+                               { prompt: "Select a language" },
+                               { class: "border rounded w-full p-2" } %>
+  </div>
+
+  <div>
+    <%= form.label :body, "Description (Markdown)", class: "block font-bold mb-1" %>
+    <%= form.text_area :body, rows: 15, class: "border rounded w-full p-2 font-mono" %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit "Save Rule", class: "bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded cursor-pointer" %>
+    <%= link_to "Cancel", forge_grammar_rules_path, class: "ml-4 text-gray-600" %>
+  </div>
+<% end %>

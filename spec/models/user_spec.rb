@@ -10,6 +10,7 @@
 #  lastname              :string
 #  password_digest       :string
 #  remember_token_digest :string
+#  role                  :integer          default("neophyte"), not null
 #  username              :string           not null
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null

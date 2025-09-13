@@ -1,41 +1,40 @@
 <div class="p-6">
   <div class="flex justify-between items-center mb-6">
-    <h1 class="text-2xl font-bold">Языки</h1>
-    <%= link_to 'Add lang', new_forge_language_path, class: 'bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded' %>
+    <h1 class="text-2xl font-bold">Languages</h1>
+    <% if policy(Language).new? %>
+      <%= link_to 'New Language', new_forge_language_path, class: 'bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded' %>
+    <% end %>
   </div>
 
-  <div class="bg-white shadow rounded-lg overflow-hidden">
-    <table class="min-w-full divide-y divide-gray-200">
-      <thead class="bg-gray-50">
-      <tr>
-        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">SYstem code</th>
-        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Parent lang</th>
-        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-      </tr>
-      </thead>
-      <tbody class="bg-white divide-y divide-gray-200">
-      <% @languages.each do |language| %>
-        <tr>
-          <td class="px-6 py-4 whitespace-nowrap">
-            <%= link_to language.name, forge_language_path(language), class: "text-blue-600 font-semibold hover:underline" %>
-          </td>
-          <td class="px-6 py-4 whitespace-nowrap font-mono text-sm text-gray-500">
-            <%= language.code %>
-          </td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-            <%= language.parent_language&.name || "---" %>
-          </td>
-          <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-            <%= link_to 'View', forge_language_path(language), class: 'text-xs inline-block px-3 py-1 border bg-green-100 border-green-600 hover:bg-green-300 rounded' %>
-            <span class="mx-1 text-gray-600">|</span>
-            <%= link_to 'Edit', edit_forge_language_path(language), class: 'text-xs inline-block px-3 py-1 border bg-blue-100 border-blue-600 hover:bg-blue-300 rounded' %>
-            <span class="mx-1 text-gray-600">|</span>
-            <%= link_to 'Delete', forge_language_path(language), data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: 'text-xs inline-block px-3 py-1 border bg-red-100 border-red-600 hover:bg-red-300 rounded' %>
-          </td>
-        </tr>
-      <% end %>
-      </tbody>
-    </table>
+  <%# Контейнер для списка карточек %>
+  <div class="flex flex-col gap-3">
+    <% @languages.each do |language| %>
+      <div class="bg-white shadow rounded-lg p-4">
+        <div class="flex justify-between items-center">
+          <%# Левая часть: Название, код и родительский язык %>
+          <div>
+            <h2 class="font-semibold text-lg">
+              <%= link_to language.name, forge_language_path(language), class: "text-blue-600 hover:underline" %>
+            </h2>
+            <div class="flex items-baseline gap-4 mt-1">
+              <p class="font-mono text-sm text-gray-500" title="System code"><%= language.code %></p>
+              <p class="text-sm text-gray-600">
+                <span class="text-gray-400">Parent:</span> <%= language.parent_language&.name || "None" %>
+              </p>
+            </div>
+          </div>
+
+          <%# Правая часть: Кнопки действий %>
+          <div class="flex-shrink-0 ml-4 text-sm flex items-center gap-2">
+            <% if policy(language).edit? %>
+              <%= link_to 'Edit', edit_forge_language_path(language), class: 'text-xs inline-block px-3 py-1 border bg-blue-100 border-blue-600 hover:bg-blue-300 rounded' %>
+            <% end %>
+            <% if policy(language).destroy? %>
+              <%= link_to 'Delete', forge_language_path(language), data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: 'text-xs inline-block px-3 py-1 border bg-red-100 border-red-600 hover:bg-red-300 rounded' %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% end %>
   </div>
 </div>

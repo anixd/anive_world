@@ -38,8 +38,6 @@
 #
 
 class HistoryEntry < ContentEntry
-  include Discard::Model
-  include Authored
 
   # Здесь в будущем будет логика, связанная с timeline_position и world_date
 end

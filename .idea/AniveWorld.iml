@@ -101,6 +101,7 @@
     <orderEntry type="library" scope="PROVIDED" name="propshaft (v1.2.1, RVM: ruby-3.3.3 [anive_world]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="psych (v5.2.6, RVM: ruby-3.3.3 [anive_world]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="puma (v6.6.1, RVM: ruby-3.3.3 [anive_world]) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="pundit (v2.5.0, RVM: ruby-3.3.3 [anive_world]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="racc (v1.8.1, RVM: ruby-3.3.3 [anive_world]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rack (v3.1.16, RVM: ruby-3.3.3 [anive_world]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rack-mini-profiler (v4.0.1, RVM: ruby-3.3.3 [anive_world]) [gem]" level="application" />

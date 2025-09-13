@@ -3,6 +3,7 @@
 # Table name: shares
 #
 #  id             :bigint           not null, primary key
+#  access_level   :integer          default("read"), not null
 #  shareable_type :string           not null
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
@@ -22,4 +23,6 @@
 class Share < ApplicationRecord
   belongs_to :user
   belongs_to :shareable, polymorphic: true
+
+  enum :access_level, { read: 0, write: 1 }
 end

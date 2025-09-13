@@ -13,16 +13,19 @@ class Forge::PartsOfSpeechController < Forge::BaseController
             else
               PartOfSpeech.none
             end
-    @parts_of_speech = scope
+    # @parts_of_speech = scope
+    @pagy, @parts_of_speech = pagy(policy_scope(scope))
   end
 
   def new
     @part_of_speech = @language.parts_of_speech.build
+    authorize @part_of_speech
   end
 
   def create
     @part_of_speech = @language.parts_of_speech.build(part_of_speech_params)
     @part_of_speech.author = current_user
+    authorize @part_of_speech
 
     if @part_of_speech.save
       redirect_to forge_language_parts_of_speech_path(@language), notice: "Part of speech was created."
@@ -32,9 +35,11 @@ class Forge::PartsOfSpeechController < Forge::BaseController
   end
 
   def edit
+    authorize @part_of_speech
   end
 
   def update
+    authorize @part_of_speech
     if @part_of_speech.update(part_of_speech_params)
       redirect_to forge_language_parts_of_speech_path(@language), notice: "Part of speech was updated."
     else
@@ -43,6 +48,7 @@ class Forge::PartsOfSpeechController < Forge::BaseController
   end
 
   def destroy
+    authorize @part_of_speech
     @part_of_speech.discard
     redirect_to forge_language_parts_of_speech_path(@language), notice: "Part of speech was archived."
   end

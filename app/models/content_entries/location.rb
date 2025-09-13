@@ -38,8 +38,11 @@
 #
 
 class Location < ContentEntry
-  include Discard::Model
-  include Authored
 
-  # Логика для локаций. Связи parent/child уже определены в базовой модели.
+  belongs_to :parent_location, class_name: "Location", optional: true
+
+  has_many :child_locations, class_name: "Location",
+           foreign_key: "parent_location_id",
+           dependent: :nullify,
+           inverse_of: :parent_location
 end

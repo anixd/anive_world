@@ -1,0 +1,2 @@
+class PhonologyArticlePolicy < LinguisticPolicy
+end

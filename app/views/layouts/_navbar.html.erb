@@ -1,0 +1,24 @@
+<nav class="bg-white shadow p-4 mb-8">
+  <div class="container mx-auto flex justify-between items-center">
+    <%# Левая часть: Основные ссылки %>
+    <div class="flex items-center gap-4">
+      <%= link_to "Dashboard", forge_dashboard_path, class: "font-bold text-gray-800 hover:text-blue-600" %>
+      <%= link_to "Languages", forge_languages_path, class: "text-gray-600 hover:text-blue-600" %>
+      <%# Сюда можно будет добавлять другие основные разделы %>
+    </div>
+
+    <%# Правая часть: Информация о пользователе %>
+    <div class="flex items-center gap-4 text-sm">
+      <% if user_signed_in? %>
+        <span class="text-gray-700">
+          Welcome, <strong class="font-medium"><%= current_user.displayname %></strong>
+        </span>
+        <%= button_to "Logout", logout_path,
+                      method: :delete,
+                      class: "text-gray-600 hover:text-red-600" %>
+      <% else %>
+        <%= link_to "Login", login_path, class: "text-blue-600 hover:text-blue-800 font-medium" %>
+      <% end %>
+    </div>
+  </div>
+</nav>

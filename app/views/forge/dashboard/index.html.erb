@@ -17,17 +17,18 @@
           <li><%= link_to "Affixes", forge_language_affixes_path(@default_lang), class: "hover:underline" %></li>
         </ul>
         <li><%= link_to "Lexemes (Dictionary)", forge_lexemes_path, class: "hover:underline" %></li>
+        <li><%= link_to "Phonology", forge_phonology_articles_path, class: "hover:underline" %></li>
       </ul>
     </div>
 
     <%# Контентное ядро %>
     <div class="bg-white rounded-lg shadow p-6">
-      <h3 class="font-semibold text-lg mb-3">Encyclopedia (Lore)</h3>
+      <h3 class="font-semibold text-lg mb-3">Lore (Encyclopedia)</h3>
       <ul class="space-y-2 text-blue-600">
-        <li><%= link_to "Articles", "#", class: "text-gray-400 cursor-not-allowed" %></li>
+        <li><%= link_to "Articles", forge_articles_path, class: "hover:underline" %></li>
         <li><%= link_to "Historical events", "#", class: "text-gray-400 cursor-not-allowed" %></li>
-        <li><%= link_to "Characters", "#", class: "text-gray-400 cursor-not-allowed" %></li>
-        <li><%= link_to "Locations", "#", class: "text-gray-400 cursor-not-allowed" %></li>
+        <li><%= link_to "Characters", forge_characters_path, class: "hover:underline" %></li>
+        <li><%= link_to "Locations", forge_locations_path, class: "hover:underline" %></li>
       </ul>
     </div>
 

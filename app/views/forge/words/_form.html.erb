@@ -1,4 +1,5 @@
-<%= form_with(model: model, scope: :word, url: url, class: "space-y-6") do |form| %>
+<%#= form_with(model: model, scope: :word, url: url, class: "space-y-6") do |form| %>
+  <%= form_with(model: object, scope: :word, class: "space-y-6") do |form| %>
   <%# ... вывод ошибок ... %>
 
   <div class="space-y-4 bg-gray-50 p-4 rounded-lg border">
@@ -30,23 +31,21 @@
     </div>
   </div>
 
-  <%# --- НОВЫЙ БЛОК ДЛЯ ФОРМЫ ЭТИМОЛОГИИ --- %>
   <div class="space-y-4 bg-gray-50 p-4 rounded-lg border">
     <h3 class="font-semibold text-lg border-b pb-2 mb-4">Etymology</h3>
     <%= form.fields_for :etymology do |etymology_form| %>
       <div>
         <%= etymology_form.label :explanation, "Explanation", class: "block font-bold mb-1" %>
-        <%= etymology_form.text_area :explanation, rows: 20, placeholder: "asdfasdfasdfasdfasdfasdfasdf", class: "border rounded w-full p-2" %>
+        <%= etymology_form.text_area :explanation, rows: 12, class: "border rounded w-full p-2" %>
         <p class="text-xs text-gray-500 mt-1">Main text of the etymological note. Markdown is supported.</p>
       </div>
       <div>
         <%= etymology_form.label :comment, "Comment", class: "block font-bold mb-1" %>
-        <%= etymology_form.text_area :comment, rows: 8, class: "border rounded w-full p-2" %>
+        <%= etymology_form.text_area :comment, rows: 6, class: "border rounded w-full p-2" %>
         <p class="text-xs text-gray-500 mt-1">Optional internal comment.</p>
       </div>
     <% end %>
   </div>
-  <%# --- КОНЕЦ НОВОГО БЛОКА --- %>
 
 
   <div class="actions mt-6">

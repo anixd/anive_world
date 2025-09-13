@@ -10,32 +10,35 @@ class Forge::LexemesController < Forge::BaseController
     scope = if @current_language
               Lexeme.where(language: @current_language)
                     .left_joins(:words)
-                    .group('lexemes.id')
+                    .group("lexemes.id")
                     .order(spelling: :asc)
-                    .select('lexemes.*, COUNT(words.id) AS words_count')
+                    .select("lexemes.*, COUNT(words.id) AS words_count")
                     .preload(words: :parts_of_speech)
             else
               Lexeme.none
             end
 
     limit = params[:limit].present? ? params[:limit].to_i : Pagy::DEFAULT[:limit]
-    @pagy, @lexemes = pagy(scope, limit: limit)
+    # Применяем policy_scope к уже отфильтрованной коллекции
+    @pagy, @lexemes = pagy(policy_scope(scope), limit: limit)
   end
 
   def show
+    authorize @lexeme # Can view?
     @words = @lexeme.words.includes(:etymology, :parts_of_speech).order(:created_at)
   end
 
   def new
     @lexeme = Lexeme.new
     @lexeme.words.build
+    authorize @lexeme # Can create?
   end
 
   def create
     @lexeme = Lexeme.new(lexeme_params)
     @lexeme.author = current_user
-
     @lexeme.words.first&.author = current_user
+    authorize @lexeme # Can create?
 
     if @lexeme.save
       redirect_to forge_lexeme_path(@lexeme), notice: "Слово '#{@lexeme.spelling}' создано."
@@ -45,10 +48,13 @@ class Forge::LexemesController < Forge::BaseController
   end
 
   def edit
-    @word.build_etymology if @word.etymology.nil?
+    authorize @lexeme # Can edit?
   end
 
   def update
+    authorize @lexeme # Can update?
+
+    # ... (остальная логика метода без изменений)
     updated_params = lexeme_params
 
     if updated_params[:words_attributes]
@@ -65,6 +71,7 @@ class Forge::LexemesController < Forge::BaseController
   end
 
   def destroy
+    authorize @lexeme # Can destroy?
     @lexeme.discard
     redirect_to forge_lexemes_path, notice: "Слово '#{@lexeme.spelling}' удалено."
   end
@@ -72,11 +79,13 @@ class Forge::LexemesController < Forge::BaseController
   private
 
   def set_lexeme
+    # Мы находим лексему по slug, а не по id
     @lexeme = Lexeme.includes(:language).find_by!(slug: params[:id])
   end
 
   def set_form_options
     @languages = Language.order(:name)
+    # Здесь мы не можем просто взять все, нужно будет фильтровать во вьюхе/JS
     @parts_of_speech = PartOfSpeech.order(:name)
   end
 
@@ -84,16 +93,6 @@ class Forge::LexemesController < Forge::BaseController
     params.require(:lexeme).permit(
       :spelling, :language_id,
       words_attributes: [:id, :definition, :transcription, :comment, :_destroy, part_of_speech_ids: []]
-    )
-  end
-
-  def word_params
-    params.require(:lexeme).require(:words_attributes).require("0").permit(
-:definition,
-      :transcription,
-      :comment,
-      part_of_speech_ids: [],
-      etymology_attributes: [:id, :explanation, :comment, :_destroy]
     )
   end
 end

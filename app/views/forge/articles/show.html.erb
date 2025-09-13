@@ -1,0 +1,17 @@
+<div class="p-6">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold"><%= @article.title %></h1>
+    <div>
+      <% if policy(@article).edit? %>
+        <%= link_to 'Edit', edit_forge_article_path(@article), class: 'bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded' %>
+      <% end %>
+      <%= link_to 'Back to list', forge_articles_path, class: 'ml-2 text-blue-600' %>
+    </div>
+  </div>
+
+  <div class="bg-white shadow rounded-lg p-6">
+    <div class="prose max-w-none">
+      <%= render_markdown(@article.body) %>
+    </div>
+  </div>
+</div>

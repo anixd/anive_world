@@ -38,9 +38,7 @@
 #
 
 class Character < ContentEntry
-  include Discard::Model
-  include Authored
-  
+
   alias_attribute :name, :title
   # character.name
   # Логика для персонажей, например, валидация поля status

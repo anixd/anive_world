@@ -1,0 +1,31 @@
+<div class="p-6">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold"><%= @character.name %></h1>
+    <div>
+      <% if policy(@character).edit? %>
+        <%= link_to 'Edit', edit_forge_character_path(@character), class: 'bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded' %>
+      <% end %>
+      <%= link_to 'К списку', forge_characters_path, class: 'ml-2 text-blue-600' %>
+    </div>
+  </div>
+
+  <div class="bg-white shadow rounded-lg p-6">
+    <dl class="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm mb-6 pb-6 border-b">
+      <div>
+        <dt class="font-medium text-gray-500">Status</dt>
+        <dd class="text-gray-900"><%= @character.life_status.presence || "—" %></dd>
+      </div>
+      <div>
+        <dt class="font-medium text-gray-500">Birth date</dt>
+        <dd class="text-gray-900"><%= @character.birth_date.presence || "—" %></dd>
+      </div>
+      <div>
+        <dt class="font-medium text-gray-500">Death date</dt>
+        <dd class="text-gray-900"><%= @character.death_date.presence || "—" %></dd>
+      </div>
+    </dl>
+    <div class="prose max-w-none">
+      <%= render_markdown(@character.body) %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,2 @@
+class GrammarRulePolicy < LinguisticPolicy
+end

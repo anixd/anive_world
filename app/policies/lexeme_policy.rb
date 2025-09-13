@@ -1,0 +1,2 @@
+class LexemePolicy < LinguisticPolicy
+end

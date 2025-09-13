@@ -1,0 +1,2 @@
+class EtymologyPolicy < LinguisticPolicy
+end
