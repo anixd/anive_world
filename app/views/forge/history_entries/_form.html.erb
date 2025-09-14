@@ -1,0 +1,50 @@
+<%= form_with(model: [:forge, history_entry], class: "space-y-6") do |form| %>
+  <%# ... блок вывода ошибок ... %>
+
+  <div>
+    <%= form.label :title, "Title", class: "block font-bold mb-1" %>
+    <%= form.text_field :title, class: "border rounded w-full p-2" %>
+  </div>
+
+  <div class="bg-gray-50 p-4 rounded-lg border">
+    <h3 class="font-semibold text-lg border-b pb-2 mb-4">Chronology</h3>
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+      <div>
+        <%= form.label :calendar_id, "Calendar", class: "block font-bold mb-1" %>
+        <%= form.collection_select :calendar_id, @calendars, :id, :name,
+                                   {}, { class: "border rounded w-full p-2" } %>
+      </div>
+      <div class="md:col-span-2">
+        <%= form.label :year, "Year", class: "block font-bold mb-1" %>
+        <%= form.number_field :year, class: "border rounded w-full p-2" %>
+      </div>
+      <div class="flex items-center pt-6">
+        <%= form.check_box :is_before_epoch, class: "h-5 w-5 rounded" %>
+        <%= form.label :is_before_epoch, "Before Epoch (BC)", class: "ml-2 font-bold" %>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+      <div>
+        <%= form.label :era_id, "Era", class: "block font-bold mb-1" %>
+        <%= form.collection_select :era_id, @eras, :id, :name,
+                                   { include_blank: 'None' },
+                                   { class: "border rounded w-full p-2" } %>
+      </div>
+      <div>
+        <%= form.label :display_date, "Display Date", class: "block font-bold mb-1" %>
+        <%= form.text_field :display_date, class: "border rounded w-full p-2", placeholder: "e.g. Early winter" %>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <%= form.label :body, "Description (Markdown)", class: "block font-bold mb-1" %>
+    <%= form.text_area :body, rows: 15, class: "border rounded w-full p-2 font-mono" %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit "Save Entry", class: "bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded cursor-pointer" %>
+    <%= link_to "Cancel", forge_history_entries_path, class: "ml-4 text-gray-600" %>
+  </div>
+<% end %>

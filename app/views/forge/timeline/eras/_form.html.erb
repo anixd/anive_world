@@ -1,0 +1,36 @@
+<%= form_with(model: [:forge, era], class: "space-y-6") do |form| %>
+  <%# ... error block ... %>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div>
+      <%= form.label :name, "Era Name", class: "block font-bold mb-1" %>
+      <%= form.text_field :name, class: "border rounded w-full p-2" %>
+    </div>
+    <div>
+      <%= form.label :calendar_id, "Calendar", class: "block font-bold mb-1" %>
+      <%= form.collection_select :calendar_id, @calendars, :id, :name,
+                                 { prompt: "Select a calendar" },
+                                 { class: "border rounded w-full p-2" } %>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div>
+      <%= form.label :order_index, "Order Index", class: "block font-bold mb-1" %>
+      <%= form.number_field :order_index, class: "border rounded w-full p-2", placeholder: "e.g. 1, 2, 3..." %>
+    </div>
+    <div>
+      <%= form.label :start_absolute_year, "Start (Absolute Year)", class: "block font-bold mb-1" %>
+      <%= form.number_field :start_absolute_year, class: "border rounded w-full p-2" %>
+    </div>
+    <div>
+      <%= form.label :end_absolute_year, "End (Absolute Year)", class: "block font-bold mb-1" %>
+      <%= form.number_field :end_absolute_year, class: "border rounded w-full p-2" %>
+    </div>
+  </div>
+
+  <div class="actions">
+    <%= form.submit "Save Era", class: "bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded cursor-pointer" %>
+    <%= link_to "Cancel", forge_timeline_eras_path, class: "ml-4 text-gray-600" %>
+  </div>
+<% end %>

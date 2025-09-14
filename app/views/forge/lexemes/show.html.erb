@@ -40,8 +40,9 @@
                   </span>
                 </summary>
 
-                <div class="prose max-w-none text-gray-800 p-3 pt-0">
+                <div class="prose max-w-none text-gray-800 p-3 mt-1">
                   <%= render_markdown(word.etymology.explanation) %>
+                  <hr>
                   <% if word.etymology.comment.present? %>
                     <p class="text-sm italic text-gray-500 mt-2">
                       <%= render_markdown(word.etymology.comment) %>

@@ -29,14 +29,13 @@ module.exports = {
                             padding: '0.5rem',
                             borderRadius: '0.25rem',
                         },
-                        // Стили для инлайн-кода (`word`)
                         code: {
-                            color: theme('colors.red[800]'),         // Цвет текста
-                            fontWeight: '600',                          // Насыщенность шрифта (полужирный)
-                            backgroundColor: theme('colors.purple[50]'),// Цвет фона
-                            padding: '0.2em 0.4em',                     // Внутренние отступы
-                            borderRadius: '0.25rem',                    // Скругление углов
-                            margin: '0 0.15rem',                        // Небольшой внешний отступ
+                            color: theme('colors.red[800]'),
+                            fontWeight: '900',
+                            backgroundColor: theme('colors.purple[50]'),
+                            padding: '0.2em 0.4em',
+                            borderRadius: '0.25rem',
+                            margin: '0 0.15rem',
                         },
                         // Плагин typography по умолчанию добавляет кавычки вокруг <code>.
                         // Этот блок убирает их, чтобы избежать двойных кавычек.

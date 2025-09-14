@@ -1,11 +1,11 @@
 <div class="p-6">
   <div class="flex justify-between items-center mb-6">
     <h1 class="text-3xl font-bold"><%= @article.title %></h1>
-    <div>
+    <div class="flex items-center gap-2">
       <% if policy(@article).edit? %>
-        <%= link_to 'Edit', edit_forge_article_path(@article), class: 'bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded' %>
+        <%= link_to 'Edit', edit_forge_article_path(@article), class: 'text-xs font-bold inline-block border bg-blue-400 border-blue-600 hover:bg-blue-300 rounded py-2 px-4' %>
       <% end %>
-      <%= link_to 'Back to list', forge_articles_path, class: 'ml-2 text-blue-600' %>
+      <%= link_to 'Back to List', forge_articles_path, class: 'text-xs font-bold inline-block border bg-gray-200 border-gray-400 hover:bg-gray-300 rounded py-2 px-4' %>
     </div>
   </div>
 

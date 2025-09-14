@@ -1,0 +1,43 @@
+<div class="p-6">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold"><%= @history_entry.title %></h1>
+    <div>
+      <% if policy(@history_entry).edit? %>
+        <%= link_to 'Edit', edit_forge_history_entry_path(@history_entry), class: 'bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded' %>
+      <% end %>
+      <%= link_to 'Back to List', forge_history_entries_path, class: 'ml-2 text-blue-600' %>
+    </div>
+  </div>
+
+  <div class="bg-white shadow rounded-lg p-6">
+    <%# Инициализируем нужные нам объекты в самом верху %>
+    <% converter = Timeline::TimeConverter.new %>
+    <% anike_calendar = Timeline::Calendar.find_by(name: "Летосчисление vel'tari") %>
+    <% drelen_calendar = Timeline::Calendar.find_by(name: "Летосчисление drelen") %>
+
+    <div class="mb-6 pb-6 border-b">
+      <h3 class="text-lg font-semibold mb-2">Chronology</h3>
+      <% converter = Timeline::TimeConverter.new %>
+
+      <dl class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+        <div>
+          <dt class="font-medium text-gray-500">Display Date</dt>
+          <dd class="text-gray-900 font-semibold"><%= @history_entry.display_date.presence || "—" %></dd>
+        </div>
+
+        <% if @history_entry.absolute_year.present? %>
+          <% @calendars.each do |calendar| %>
+            <div>
+              <dt class="font-medium text-gray-500"><%= calendar.name %></dt>
+              <dd class="text-gray-900"><%= converter.from_absolute(absolute_year: @history_entry.absolute_year, to_calendar_id: calendar.id) %></dd>
+            </div>
+          <% end %>
+        <% end %>
+      </dl>
+    </div>
+
+    <div class="prose max-w-none">
+      <%= render_markdown(@history_entry.body) %>
+    </div>
+  </div>
+</div>
