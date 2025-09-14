@@ -33,6 +33,11 @@ Rails.application.routes.draw do
     resources :grammar_rules
     resources :phonology_articles
 
+    namespace :timeline do
+      resources :calendars
+      resources :eras
+    end
+
     resources :notes
   end
 

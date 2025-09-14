@@ -1,0 +1,29 @@
+<div class="p-6">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold">Timeline Eras</h1>
+    <% if policy(Timeline::Era).new? %>
+      <%= link_to 'New Era', new_forge_timeline_era_path, class: 'bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded' %>
+    <% end %>
+  </div>
+
+  <div class="flex flex-col gap-3">
+    <% @eras.each do |era| %>
+      <div class="bg-white shadow rounded-lg p-4">
+        <div class="flex justify-between items-center">
+          <div>
+            <h2 class="font-semibold text-lg">
+              <%= era.name %>
+            </h2>
+            <p class="text-sm text-gray-500 mt-1">
+              Calendar: <%= era.calendar.name %> | Order: <%= era.order_index %>
+            </p>
+          </div>
+          <div class="flex-shrink-0 ml-4 flex items-center gap-4 text-sm">
+            <%= link_to 'Edit', edit_forge_timeline_era_path(era), class: 'text-xs inline-block px-3 py-1 border bg-blue-100 border-blue-600 hover:bg-blue-300 rounded' %>
+            <%= link_to 'Delete', forge_timeline_era_path(era), data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: 'text-xs inline-block px-3 py-1 border bg-red-100 border-red-600 hover:bg-red-300 rounded' %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

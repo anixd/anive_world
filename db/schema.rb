@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_09_07_224608) do
+ActiveRecord::Schema[7.2].define(version: 2025_09_13_222156) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -37,8 +37,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_07_224608) do
     t.string "slug", null: false
     t.datetime "published_at"
     t.datetime "discarded_at"
-    t.string "world_date"
-    t.integer "timeline_position"
     t.string "life_status"
     t.string "birth_date"
     t.string "death_date"
@@ -47,8 +45,13 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_07_224608) do
     t.bigint "language_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "era_id"
+    t.integer "absolute_year"
+    t.string "display_date"
+    t.index ["absolute_year"], name: "index_content_entries_on_absolute_year"
     t.index ["author_id"], name: "index_content_entries_on_author_id"
     t.index ["discarded_at"], name: "index_content_entries_on_discarded_at"
+    t.index ["era_id"], name: "index_content_entries_on_era_id"
     t.index ["language_id"], name: "index_content_entries_on_language_id"
     t.index ["parent_location_id"], name: "index_content_entries_on_parent_location_id"
     t.index ["slug"], name: "index_content_entries_on_slug", unique: true, where: "(discarded_at IS NULL)"
@@ -169,6 +172,37 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_07_224608) do
     t.index ["word_id"], name: "index_synonym_relations_on_word_id"
   end
 
+  create_table "timeline_calendars", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "epoch_name"
+    t.integer "absolute_year_of_epoch", null: false
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "timeline_eras", force: :cascade do |t|
+    t.string "name", null: false
+    t.integer "order_index"
+    t.integer "start_absolute_year"
+    t.integer "end_absolute_year"
+    t.bigint "calendar_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["calendar_id"], name: "index_timeline_eras_on_calendar_id"
+  end
+
+  create_table "timeline_participations", force: :cascade do |t|
+    t.string "role"
+    t.bigint "history_entry_id", null: false
+    t.string "participant_type", null: false
+    t.bigint "participant_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["history_entry_id"], name: "index_timeline_participations_on_history_entry_id"
+    t.index ["participant_type", "participant_id"], name: "index_timeline_participations_on_participant"
+  end
+
   create_table "translations", force: :cascade do |t|
     t.string "text", null: false
     t.string "language", null: false
@@ -256,6 +290,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_07_224608) do
   add_foreign_key "affixes", "users", column: "author_id"
   add_foreign_key "content_entries", "content_entries", column: "parent_location_id"
   add_foreign_key "content_entries", "languages"
+  add_foreign_key "content_entries", "timeline_eras", column: "era_id"
   add_foreign_key "content_entries", "users", column: "author_id"
   add_foreign_key "etymologies", "users", column: "author_id"
   add_foreign_key "languages", "languages", column: "parent_language_id"
@@ -270,6 +305,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_07_224608) do
   add_foreign_key "shares", "users"
   add_foreign_key "synonym_relations", "words"
   add_foreign_key "synonym_relations", "words", column: "synonym_id"
+  add_foreign_key "timeline_eras", "timeline_calendars", column: "calendar_id"
+  add_foreign_key "timeline_participations", "content_entries", column: "history_entry_id"
   add_foreign_key "translations", "users", column: "author_id"
   add_foreign_key "word_roots", "roots"
   add_foreign_key "word_roots", "users", column: "author_id"
