@@ -17,20 +17,21 @@
 
     <div class="mb-6 pb-6 border-b">
       <h3 class="text-lg font-semibold mb-2">Chronology</h3>
+      <% converter = Timeline::TimeConverter.new %>
+
       <dl class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
         <div>
           <dt class="font-medium text-gray-500">Display Date</dt>
           <dd class="text-gray-900 font-semibold"><%= @history_entry.display_date.presence || "—" %></dd>
         </div>
+
         <% if @history_entry.absolute_year.present? %>
-          <div>
-            <dt class="font-medium text-gray-500">Ank'e Calendar</dt>
-            <dd class="text-gray-900"><%= converter.from_absolute(absolute_year: @history_entry.absolute_year, to_calendar_id: anike_calendar.id) %></dd>
-          </div>
-          <div>
-            <dt class="font-medium text-gray-500">Drelen Calendar</dt>
-            <dd class="text-gray-900"><%= converter.from_absolute(absolute_year: @history_entry.absolute_year, to_calendar_id: drelen_calendar.id) %></dd>
-          </div>
+          <% @calendars.each do |calendar| %>
+            <div>
+              <dt class="font-medium text-gray-500"><%= calendar.name %></dt>
+              <dd class="text-gray-900"><%= converter.from_absolute(absolute_year: @history_entry.absolute_year, to_calendar_id: calendar.id) %></dd>
+            </div>
+          <% end %>
         <% end %>
       </dl>
     </div>

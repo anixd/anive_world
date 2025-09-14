@@ -8,6 +8,7 @@ class Forge::HistoryEntriesController < Forge::BaseController
 
   def show
     authorize @history_entry
+    @calendars = Timeline::Calendar.order(:name)
   end
 
   def new

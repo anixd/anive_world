@@ -12,24 +12,26 @@
 
   <div class="flex flex-col gap-3">
     <% @locations.each do |location| %>
-      <div class="bg-white shadow rounded-lg p-4">
-        <div class="flex justify-between items-center">
-          <div>
-            <h2 class="font-semibold text-lg">
-              <%= link_to location.title, forge_location_path(location), class: "text-blue-600 hover:underline" %>
-            </h2>
-            <p class="text-sm text-gray-500 mt-1">
-              Parent: <%= location.parent_location&.title || "None" %>
-            </p>
-          </div>
-          <div class="flex-shrink-0 ml-4 flex items-center gap-4 text-sm">
-            <% if policy(location).edit? %>
-              <%= link_to 'Edit', edit_forge_location_path(location), class: 'text-xs inline-block px-3 py-1 border bg-blue-100 border-blue-600 hover:bg-blue-300 rounded' %>
-            <% end %>
-            <% if policy(location).destroy? %>
-              <%= link_to 'Delete', forge_location_path(location), data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: 'text-xs inline-block px-3 py-1 border bg-red-100 border-red-600 hover:bg-red-300 rounded' %>
-            <% end %>
-          </div>
+      <div class="bg-white shadow rounded-lg p-4 flex justify-between items-start gap-4">
+        <%# Активная зона %>
+        <%= link_to forge_location_path(location), class: "flex-grow group" do %>
+          <h2 class="font-semibold text-lg text-blue-700 group-hover:text-blue-900 group-hover:underline">
+            <%= location.title %>
+          </h2>
+          <p class="text-sm text-gray-500 mt-1">
+            by <%= location.author.displayname %>
+          </p>
+        <% end %>
+
+        <%# Кнопки %>
+        <div class="flex-shrink-0 text-sm flex items-center gap-2">
+          <% if policy(location).edit? %>
+            <%= link_to 'Edit', edit_forge_location_path(location), class: 'text-xs inline-block px-3 py-1 border bg-blue-100 border-blue-600 hover:bg-blue-300 rounded' %>
+          <% end %>
+          <% if policy(location).destroy? %>
+            <span class="mx-1 text-gray-600">|</span>
+            <%= link_to 'Delete', forge_location_path(location), data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: 'text-xs inline-block px-3 py-1 border bg-red-100 border-red-600 hover:bg-red-300 rounded' %>
+          <% end %>
         </div>
       </div>
     <% end %>

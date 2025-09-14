@@ -9,22 +9,21 @@
   <div class="bg-gray-50 p-4 rounded-lg border">
     <h3 class="font-semibold text-lg border-b pb-2 mb-4">Chronology</h3>
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-      <%# Эти поля не сохраняются в БД напрямую, а обрабатываются в контроллере %>
       <div>
-        <%= label_tag "history_entry[calendar_id]", "Calendar", class: "block font-bold mb-1" %>
-        <%= select_tag "history_entry[calendar_id]",
-                       options_from_collection_for_select(@calendars, :id, :name),
-                       class: "border rounded w-full p-2" %>
+        <%= form.label :calendar_id, "Calendar", class: "block font-bold mb-1" %>
+        <%= form.collection_select :calendar_id, @calendars, :id, :name,
+                                   {}, { class: "border rounded w-full p-2" } %>
       </div>
       <div class="md:col-span-2">
-        <%= label_tag "history_entry[year]", "Year", class: "block font-bold mb-1" %>
-        <%= number_field_tag "history_entry[year]", nil, class: "border rounded w-full p-2" %>
+        <%= form.label :year, "Year", class: "block font-bold mb-1" %>
+        <%= form.number_field :year, class: "border rounded w-full p-2" %>
       </div>
-      <div class="flex items-center pb-2">
-        <%= check_box_tag "history_entry[is_before_epoch]", "1" %>
-        <%= label_tag "history_entry[is_before_epoch]", "Before Epoch (BC)", class: "ml-2 font-bold" %>
+      <div class="flex items-center pt-6">
+        <%= form.check_box :is_before_epoch, class: "h-5 w-5 rounded" %>
+        <%= form.label :is_before_epoch, "Before Epoch (BC)", class: "ml-2 font-bold" %>
       </div>
     </div>
+
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
       <div>
         <%= form.label :era_id, "Era", class: "block font-bold mb-1" %>

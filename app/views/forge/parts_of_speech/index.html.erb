@@ -20,7 +20,6 @@
     <% end %>
   </div>
 
-  <%# Контейнер для списка карточек %>
   <div class="flex flex-col gap-3">
     <% @parts_of_speech.each do |part_of_speech| %>
       <div class="bg-white shadow rounded-lg p-4">
@@ -31,9 +30,9 @@
             <p class="font-mono text-sm text-gray-500"><%= part_of_speech.code %></p>
           </div>
 
-          <%# Правая часть: Кнопки действий %>
           <div class="flex-shrink-0 ml-4 text-sm flex items-center gap-2 px-2 border-l border-blue-100">
             <%= link_to 'Edit', edit_forge_language_part_of_speech_path(@current_language, part_of_speech), class: 'text-xs inline-block px-3 py-1 border bg-blue-100 border-blue-600 hover:bg-blue-300 rounded' %>
+            <span class="mx-1 text-gray-600">|</span>
             <%= link_to 'Delete', forge_language_part_of_speech_path(@current_language, part_of_speech), data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: 'text-xs inline-block px-3 py-1 border bg-red-100 border-red-600 hover:bg-red-300 rounded' %>
           </div>
         </div>

@@ -42,6 +42,19 @@ class Timeline::TimeConverter
     from_absolute(absolute_year: absolute, to_calendar_id: to_calendar_id)
   end
 
+  def from_absolute_parts(absolute_year:, to_calendar_id:)
+    calendar = @calendars[to_calendar_id]
+    return nil unless calendar && absolute_year
+
+    relative_year = absolute_year - (calendar.absolute_year_of_epoch - 1)
+
+    if relative_year <= 0
+      { year: relative_year.abs + 1, is_before_epoch: true }
+    else
+      { year: relative_year, is_before_epoch: false }
+    end
+  end
+
   private
 
   # Вспомогательный метод для красивого форматирования

@@ -42,8 +42,36 @@
 #
 
 class HistoryEntry < ContentEntry
+  include Participable
+
+  attr_accessor :calendar_id, :year, :is_before_epoch
+
   belongs_to :era, class_name: "Timeline::Era", optional: true
 
   has_many :participations, class_name: "Timeline::Participation", dependent: :destroy
   has_many :participants, through: :participations, source: :participant
+
+  after_initialize :set_form_date_fields, if: :persisted?
+
+  private
+
+  def set_form_date_fields
+    return unless absolute_year.present?
+
+    # Используем первый календарь как календарь "по умолчанию"
+    default_calendar = Timeline::Calendar.order(:id).first
+    return unless default_calendar
+
+    # Инициализируем конвертер
+    converter = Timeline::TimeConverter.new
+    # Получаем "запчасти" даты от сервиса
+    date_parts = converter.from_absolute_parts(absolute_year: self.absolute_year, to_calendar_id: default_calendar.id)
+
+    # Заполняем виртуальные атрибуты
+    if date_parts
+      self.calendar_id = default_calendar.id
+      self.year = date_parts[:year]
+      self.is_before_epoch = date_parts[:is_before_epoch]
+    end
+  end
 end

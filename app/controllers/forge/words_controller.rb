@@ -12,6 +12,11 @@ class Forge::WordsController < Forge::BaseController
   def create
     @word = @lexeme.words.build(word_params)
     @word.author = current_user
+
+    if @word.etymology.present?
+      @word.etymology.author = current_user
+    end
+
     authorize @word # Can create new meanings?
 
     if @word.save

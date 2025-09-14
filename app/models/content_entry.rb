@@ -58,6 +58,8 @@ class ContentEntry < ApplicationRecord
   private
 
   def generate_slug
-    self.slug = SlugGenerator.call(title) if title.present? && slug.blank?
+    if slug.blank? || title_changed?
+      self.slug = SlugGenerator.call(title)
+    end
   end
 end
