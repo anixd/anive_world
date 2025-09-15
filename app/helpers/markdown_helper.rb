@@ -2,7 +2,9 @@ module MarkdownHelper
   def render_markdown(text)
     return '' if text.blank?
 
-    markdown_renderer.render(text).html_safe
+    processed_text = WikilinkPreprocessor.call(text)
+
+    markdown_renderer.render(processed_text).html_safe
   end
 
   private

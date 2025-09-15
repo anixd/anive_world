@@ -33,6 +33,7 @@ class Word < ApplicationRecord
   include Discard::Model
   include Authored
   include ApostropheNormalizer
+  include IndexableLinks
 
   has_paper_trail
 

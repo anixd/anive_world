@@ -44,7 +44,8 @@ gem "anike-slugify", github: "anixd/anike-slugify", tag: "v1.0.1"
 gem "discard", "~> 1.4"
 gem "pagy"
 gem "paper_trail", "~> 16.0"
-gem 'pundit', '~> 2.5'
+gem "pundit", "~> 2.5"
+gem "truncate_html"
 gem "redcarpet", "~> 3.5"
 
 group :development, :test do

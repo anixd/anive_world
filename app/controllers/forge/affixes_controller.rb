@@ -23,13 +23,18 @@ class Forge::AffixesController < Forge::BaseController
   end
 
   def create
-    @affix = @language.affixes.build(affix_params)
+    attrs = affix_params.to_h
+    publish_flag = attrs.delete(:publish)
+
+    @affix = @language.affixes.build(attrs)
     @affix.author = current_user
     authorize @affix
 
     if @affix.etymology.present?
       @affix.etymology.author = current_user
     end
+
+    @affix.published_at = Time.current if publish_flag == '1'
 
     if @affix.save
       redirect_to forge_language_affixes_path(@language, lang: @language.code), notice: "Affix was created."
@@ -45,7 +50,12 @@ class Forge::AffixesController < Forge::BaseController
 
   def update
     authorize @affix
-    @affix.assign_attributes(affix_params)
+
+    attrs = affix_params.to_h
+    publish_flag = attrs.delete(:publish)
+
+    @affix.assign_attributes(attrs)
+    @affix.published_at = (publish_flag == '1') ? Time.current : nil
 
     if @affix.etymology.present? && @affix.etymology.new_record?
       @affix.etymology.author = current_user
@@ -74,9 +84,17 @@ class Forge::AffixesController < Forge::BaseController
     @affix = @language.affixes.find(params[:id])
   end
 
+  def handle_publication(record)
+    if params.dig(:lexeme, :publish) == '1'
+      record.published_at = Time.current
+    else
+      record.published_at = nil
+    end
+  end
+
   def affix_params
     params.require(:affix).permit(
-      :text, :affix_type, :meaning,
+      :text, :affix_type, :meaning, :publish,
       etymology_attributes: [:id, :explanation, :comment]
     )
   end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_09_13_222156) do
+ActiveRecord::Schema[7.2].define(version: 2025_09_15_133412) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -23,9 +23,11 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_13_222156) do
     t.datetime "discarded_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "published_at"
     t.index ["author_id"], name: "index_affixes_on_author_id"
     t.index ["discarded_at"], name: "index_affixes_on_discarded_at"
     t.index ["language_id"], name: "index_affixes_on_language_id"
+    t.index ["published_at"], name: "index_affixes_on_published_at"
     t.index ["text", "language_id", "affix_type"], name: "index_affixes_on_text_and_language_id_and_affix_type", unique: true
   end
 
@@ -48,6 +50,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_13_222156) do
     t.bigint "era_id"
     t.integer "absolute_year"
     t.string "display_date"
+    t.text "extract"
+    t.text "annotation"
+    t.index "type, lower((title)::text)", name: "index_content_entries_on_type_and_lower_title"
     t.index ["absolute_year"], name: "index_content_entries_on_absolute_year"
     t.index ["author_id"], name: "index_content_entries_on_author_id"
     t.index ["discarded_at"], name: "index_content_entries_on_discarded_at"
@@ -95,9 +100,11 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_13_222156) do
     t.datetime "discarded_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "published_at"
     t.index ["author_id"], name: "index_lexemes_on_author_id"
     t.index ["discarded_at"], name: "index_lexemes_on_discarded_at"
     t.index ["language_id"], name: "index_lexemes_on_language_id"
+    t.index ["published_at"], name: "index_lexemes_on_published_at"
     t.index ["slug", "language_id"], name: "index_lexemes_on_slug_and_language_id", unique: true, where: "(discarded_at IS NULL)"
     t.index ["spelling", "language_id"], name: "index_lexemes_on_spelling_and_language_id", unique: true, where: "(discarded_at IS NULL)"
   end
@@ -144,9 +151,11 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_13_222156) do
     t.datetime "discarded_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "published_at"
     t.index ["author_id"], name: "index_roots_on_author_id"
     t.index ["discarded_at"], name: "index_roots_on_discarded_at"
     t.index ["language_id"], name: "index_roots_on_language_id"
+    t.index ["published_at"], name: "index_roots_on_published_at"
     t.index ["text", "language_id"], name: "index_roots_on_text_and_language_id", unique: true
   end
 
@@ -160,6 +169,16 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_13_222156) do
     t.index ["shareable_type", "shareable_id"], name: "index_shares_on_shareable"
     t.index ["user_id", "shareable_id", "shareable_type"], name: "index_shares_on_user_and_shareable", unique: true
     t.index ["user_id"], name: "index_shares_on_user_id"
+  end
+
+  create_table "slug_redirects", force: :cascade do |t|
+    t.string "old_slug", null: false
+    t.string "sluggable_type", null: false
+    t.bigint "sluggable_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["old_slug"], name: "index_slug_redirects_on_old_slug"
+    t.index ["sluggable_type", "sluggable_id"], name: "index_slug_redirects_on_sluggable"
   end
 
   create_table "synonym_relations", force: :cascade do |t|
@@ -240,6 +259,19 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_13_222156) do
     t.text "object"
     t.text "object_changes"
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
+  end
+
+  create_table "wikilinks", force: :cascade do |t|
+    t.string "source_type", null: false
+    t.bigint "source_id", null: false
+    t.string "target_slug", null: false
+    t.string "target_type", null: false
+    t.string "target_language_code"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["source_type", "source_id"], name: "index_wikilinks_on_source"
+    t.index ["source_type", "source_id"], name: "index_wikilinks_on_source_type_and_source_id"
+    t.index ["target_type", "target_slug"], name: "index_wikilinks_on_target_type_and_target_slug"
   end
 
   create_table "word_roots", force: :cascade do |t|

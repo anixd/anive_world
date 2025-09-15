@@ -20,6 +20,8 @@
     <%= form.text_area :body, rows: 20, class: "border rounded w-full p-2 font-mono" %>
   </div>
 
+  <%= render 'shared/publication_fields', form: form %>
+
   <div class="actions">
     <%= form.submit "Save Article", class: "bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded cursor-pointer" %>
     <%= link_to "Cancel", forge_articles_path, class: "ml-4 text-gray-600" %>

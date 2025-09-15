@@ -29,7 +29,7 @@
         <div class="flex justify-between items-start">
           <div class="flex-grow pr-2 border-r border-blue-100">
             <h2 class="font-semibold text-lg text-blue-700"><%= root.text %></h2>
-            <div class="prose max-w-none text-gray-800 mt-1">
+            <div class="prose max-w-none text-gray-800 mt-1" data-controller="wikilink-preview">
               <%= render_markdown(root.meaning) %>
             </div>
 

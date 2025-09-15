@@ -18,7 +18,7 @@
       <h3 class="text-lg font-semibold mb-2">Language</h3>
       <%= link_to @grammar_rule.language.name, forge_language_path(@grammar_rule.language), class: "text-blue-600 hover:underline" %>
     </div>
-    <div class="prose max-w-none">
+    <div class="prose max-w-none" data-controller="wikilink-preview">
       <%= render_markdown(@grammar_rule.body) %>
     </div>
   </div>

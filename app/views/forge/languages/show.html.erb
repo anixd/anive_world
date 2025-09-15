@@ -14,7 +14,7 @@
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       <div class="md:col-span-2">
         <h3 class="text-lg font-semibold mb-2">Description</h3>
-        <div class="prose max-w-none">
+        <div class="prose max-w-none" data-controller="wikilink-preview">
           <%= render_markdown(@language.description.presence) || content_tag(:p, "Описание отсутствует.", class: "text-gray-500 italic") %>
         </div>
       </div>

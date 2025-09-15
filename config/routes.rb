@@ -1,14 +1,13 @@
 Rails.application.routes.draw do
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-
   get "/login", to: "auth#new", as: :login
   post "/auth", to: "auth#create", as: :auth
   delete "/logout", to: "auth#destroy", as: :logout
 
+  get "previews/:type/:slug", to: "previews#show", as: :preview
+
   forge_routes = -> do
     root "dashboard#index", as: :dashboard
 
-    # Linguistic core
     resources :languages do
       resources :parts_of_speech
       resources :roots
@@ -16,16 +15,15 @@ Rails.application.routes.draw do
     end
     resources :roots
     resources :affixes
-    resources :translations, only: [:index, :show] # Предполагаем, что переводы создаются через Word
+    resources :translations, only: [:index, :show]
 
     resources :lexemes do
-      # Вложенные роуты для создания нового значения (омонима) для лексемы
+      get :parts_of_speech, on: :collection
       resources :words, only: [:new, :create]
     end
-    # "Плоские" роуты для управления уже созданными значениями
+
     resources :words, only: [:show, :edit, :update, :destroy]
 
-    # Контентное ядро (наследники ContentEntry)
     resources :articles
     resources :history_entries
     resources :characters

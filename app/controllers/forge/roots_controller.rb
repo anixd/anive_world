@@ -23,16 +23,21 @@ class Forge::RootsController < Forge::BaseController
   end
 
   def create
-    @root = @language.affixes.build(root_params)
-    @affix.author = current_user
+    attrs = root_params.to_h
+    publish_flag = attrs.delete(:publish)
+
+    @root = @language.roots.build(attrs)
+    @root.author = current_user
     authorize @root
 
     if @root.etymology.present?
       @root.etymology.author = current_user
     end
 
+    @root.published_at = Time.current if publish_flag == '1'
+
     if @root.save
-      redirect_to forge_language_affixes_path(@language, lang: @language.code), notice: "Affix was created."
+      redirect_to forge_language_roots_path(@language, lang: @language.code), notice: "Root was created."
     else
       render :new, status: :unprocessable_content
     end
@@ -45,14 +50,19 @@ class Forge::RootsController < Forge::BaseController
 
   def update
     authorize @root
-    @root.assign_attributes(root_params)
+
+    attrs = root_params.to_h
+    publish_flag = attrs.delete(:publish)
+
+    @root.assign_attributes(attrs)
+    @root.published_at = (publish_flag == '1') ? Time.current : nil
 
     if @root.etymology.present? && @root.etymology.new_record?
       @root.etymology.author = current_user
     end
 
     if @root.save
-      redirect_to forge_language_affixes_path(@language, lang: @language.code), notice: "Affix was updated."
+      redirect_to forge_language_roots_path(@language, lang: @language.code), notice: "Root was updated."
     else
       render :edit, status: :unprocessable_content
     end
@@ -76,9 +86,17 @@ class Forge::RootsController < Forge::BaseController
     @root = @language.roots.find(params[:id])
   end
 
+  def handle_publication(record)
+    if params.dig(:lexeme, :publish) == '1'
+      record.published_at = Time.current
+    else
+      record.published_at = nil
+    end
+  end
+
   def root_params
     params.require(:root).permit(
-      :text, :meaning,
+      :text, :meaning, :publish,
       etymology_attributes: [:id, :explanation, :comment]
     )
   end

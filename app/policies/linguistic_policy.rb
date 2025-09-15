@@ -1,4 +1,3 @@
-# Базовый класс для всех "лингвистических" моделей.
 class LinguisticPolicy < ApplicationPolicy
   class Scope < ApplicationPolicy::Scope
     def resolve
@@ -6,25 +5,31 @@ class LinguisticPolicy < ApplicationPolicy
     end
   end
 
-  # Просматривать могут все залогиненные
   def show?
-    user.present?
+    record.published? || user.present?
   end
 
-  # Создавать могут все залогиненные
+  def show_preview?
+    show?
+  end
+
   def create?
     user.present?
   end
 
-  # Редактировать могут либо "старшие" роли (для любого объекта),
-  # либо автор своей собственной записи.
   def update?
-    user.can_manage_all_content? || record.author == user
+    return false unless user.present?
+
+    record.author == user || user.editor? || user.author? || user.owner? || user.root?
   end
 
-  # Удалять (архивировать) могут только "старшие" роли.
   def destroy?
-    # В твоей матрице это root и author. Owner тоже сюда логично вписывается.
-    user.can_manage_all_content?
+    return false unless user.present?
+
+    user.author? || user.owner? || user.root?
+  end
+
+  def publish?
+    destroy?
   end
 end

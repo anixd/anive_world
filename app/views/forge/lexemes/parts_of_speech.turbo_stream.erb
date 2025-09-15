@@ -1,0 +1,12 @@
+<%= turbo_stream.replace "parts-of-speech-container" do %>
+  <%#
+    Нам нужен объект form builder, но так как мы рендерим только фрагмент,
+    мы создаем его "заглушку". Главное, чтобы имена полей (name атрибуты)
+    были правильными.
+  %>
+  <%= form_with model: @lexeme, url: "#" do |form| %>
+    <%= form.fields_for :words, @lexeme.words.first do |word_form| %>
+      <%= render 'forge/lexemes/parts_of_speech_checkboxes', form: word_form, lexeme: @lexeme %>
+    <% end %>
+  <% end %>
+<% end %>

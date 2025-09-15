@@ -40,7 +40,7 @@
                   </span>
                 </summary>
 
-                <div class="prose max-w-none text-gray-800 p-3 mt-1">
+                <div class="prose max-w-none text-gray-800 p-3 mt-1" data-controller="wikilink-preview">
                   <%= render_markdown(word.etymology.explanation) %>
                   <hr>
                   <% if word.etymology.comment.present? %>

@@ -25,7 +25,7 @@
         <dd class="text-gray-900"><%= @character.death_date.presence || "—" %></dd>
       </div>
     </dl>
-    <div class="prose max-w-none">
+    <div class="prose max-w-none" data-controller="wikilink-preview">
       <%= render_markdown(@character.body) %>
     </div>
   </div>
