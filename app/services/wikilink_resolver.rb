@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class WikilinkResolver
   TYPE_ALIASES = {
     "w" => Lexeme, "word" => Lexeme,
@@ -15,60 +17,33 @@ class WikilinkResolver
     "v" => "veltari", "veltari" => "veltari"
   }.freeze
 
-
-  # def self.resolve(type_alias, lang_alias, identifier)
-  #   model = TYPE_ALIASES[type_alias]
-  #   return nil unless model
-  #
-  #   generated_slug = SlugGenerator.call(identifier)
-  #
-  #   if model == Lexeme
-  #     lang_code = LANGUAGE_ALIASES[lang_alias]
-  #     return nil unless lang_code
-  #     language = Language.find_by(code: lang_code)
-  #     return nil unless language
-  #
-  #     # Цепочка поиска для Лексем:
-  #     # 1. По прямому совпадению слага
-  #     record = model.find_by(slug: identifier, language: language)
-  #     # 2. По сгенерированному слагу
-  #     record ||= model.find_by(slug: generated_slug, language: language)
-  #     # 3. По точному совпадению написания (spelling)
-  #     record ||= model.find_by(spelling: identifier, language: language)
-  #     record
-  #   else
-  #     # Цепочка поиска для остального контента:
-  #     # 1. По прямому совпадению slug
-  #     record = model.find_by(slug: identifier)
-  #     # 2. По сгенерированному slug
-  #     record ||= model.find_by(slug: generated_slug)
-  #     # 3. По точному совпадению заголовка (title)
-  #     record ||= model.find_by(title: identifier)
-  #     record
-  #   end
-  # end
-
   def self.resolve(type_alias, lang_alias, identifier)
-    model = TYPE_ALIASES[type_alias]
+    model = TYPE_ALIASES[type_alias&.downcase]
     return nil unless model
 
-    generated_slug = SlugGenerator.call(identifier)
+    # Шаг 0: Проверяем, не является ли идентификатор старым slug.
+    # Это надо сделать ДО всех остальных проверок.
+    slug_to_check = SlugGenerator.call(identifier.strip)
+    redirect = SlugRedirect.find_by(old_slug: slug_to_check)
+
+    if redirect && redirect.sluggable.is_a?(model)
+      return redirect.sluggable
+    end
 
     if model == Lexeme
-      lang_code = LANGUAGE_ALIASES[lang_alias]
+      lang_code = LANGUAGE_ALIASES[lang_alias&.downcase]
       return nil unless lang_code
       language = Language.find_by(code: lang_code)
       return nil unless language
 
       record = model.find_by(slug: identifier, language: language)
-      record ||= model.find_by(slug: generated_slug, language: language)
-      # Шаг 3: Ищем по написанию (spelling) без учета регистра
+      record ||= model.find_by(slug: slug_to_check, language: language)
       record ||= model.where("spelling ILIKE ?", identifier).where(language: language).first
       record
     else
+      # Цепочка поиска для остального контента
       record = model.find_by(slug: identifier)
-      record ||= model.find_by(slug: generated_slug)
-      # Шаг 3: Ищем по заголовку (title) без учета регистра
+      record ||= model.find_by(slug: slug_to_check)
       record ||= model.where("title ILIKE ?", identifier).first
       record
     end

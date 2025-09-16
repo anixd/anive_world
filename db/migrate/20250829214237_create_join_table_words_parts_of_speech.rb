@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateJoinTableWordsPartsOfSpeech < ActiveRecord::Migration[7.2]
   def change
     create_join_table :words, :parts_of_speech do |t|

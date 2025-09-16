@@ -76,13 +76,11 @@ class Forge::RootsController < Forge::BaseController
 
   private
 
-  # Этот метод находит родительский язык по :language_id из URL
   def set_language_from_id
     @language = Language.find(params[:language_id])
   end
 
   def set_root
-    # Теперь @language гарантированно будет установлен из set_language_from_id
     @root = @language.roots.find(params[:id])
   end
 

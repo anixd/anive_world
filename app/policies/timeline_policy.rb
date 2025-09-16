@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 class TimelinePolicy < ApplicationPolicy
   class Scope < ApplicationPolicy::Scope
     def resolve
-      # Only high-level users can see these lists
       user.can_manage_all_content? ? scope.all : scope.none
     end
   end

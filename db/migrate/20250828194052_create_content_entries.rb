@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateContentEntries < ActiveRecord::Migration[7.2]
   def change
     create_table :content_entries do |t|
@@ -10,7 +12,7 @@ class CreateContentEntries < ActiveRecord::Migration[7.2]
       t.datetime :published_at
       t.datetime :discarded_at, default: nil
 
-      # СПЕЦИФИЧНЫЕ ПОЛЯ ДЛЯ НАСЛЕДНИКОВ
+      # специфичные поля для наследников
 
       # HistoryEntry
       t.string :world_date

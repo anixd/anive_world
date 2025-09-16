@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: content_entries
@@ -47,5 +49,4 @@
 class GrammarRule < ContentEntry
 
   belongs_to :language
-  # Логика для грамматических правил
 end

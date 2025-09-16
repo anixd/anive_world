@@ -53,7 +53,6 @@ class Forge::LocationsController < Forge::BaseController
   end
 
   def set_form_options
-    # Загружаем все локации для dropdown, исключая текущую (чтобы не сделать её родителем самой себе)
     @parent_location_options = Location.where.not(id: @location&.id).order(:title)
   end
 

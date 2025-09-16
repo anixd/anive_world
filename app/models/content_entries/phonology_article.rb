@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: content_entries
@@ -48,5 +50,4 @@ class PhonologyArticle < ContentEntry
 
   belongs_to :language
 
-  # Логика для фонологических статей
 end

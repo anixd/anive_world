@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Shareable
   extend ActiveSupport::Concern
   included do

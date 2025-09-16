@@ -96,7 +96,7 @@ export default class extends Controller {
                 // Сначала проверяем, пришел ли URL картинки
                 let image_html = data.image_url ? `<img src="${data.image_url}" class="wikilink-popup-image">` : ''
 
-                // Затем собираем остальной контент
+                // собираем остальной контент
                 let html = `
                   ${image_html}
                   <div class="wikilink-popup-title">${data.title || ''}</div>

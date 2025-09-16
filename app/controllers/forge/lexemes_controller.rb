@@ -19,7 +19,6 @@ class Forge::LexemesController < Forge::BaseController
             end
 
     limit = params[:limit].present? ? params[:limit].to_i : Pagy::DEFAULT[:limit]
-    # Применяем policy_scope к уже отфильтрованной коллекции
     @pagy, @lexemes = pagy(policy_scope(scope), limit: limit)
   end
 
@@ -105,7 +104,6 @@ class Forge::LexemesController < Forge::BaseController
 
   def set_form_options
     @languages = Language.order(:name)
-    # Здесь мы не можем просто взять все, нужно будет фильтровать во вьюхе/JS
     @parts_of_speech = PartOfSpeech.order(:name)
   end
 

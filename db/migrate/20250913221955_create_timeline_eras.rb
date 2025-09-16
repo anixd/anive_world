@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateTimelineEras < ActiveRecord::Migration[7.2]
   def change
     create_table :timeline_eras do |t|

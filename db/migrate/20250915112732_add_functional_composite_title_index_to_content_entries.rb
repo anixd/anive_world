@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddFunctionalCompositeTitleIndexToContentEntries < ActiveRecord::Migration[7.2]
   INDEX_NAME = "index_content_entries_on_type_and_lower_title"
 

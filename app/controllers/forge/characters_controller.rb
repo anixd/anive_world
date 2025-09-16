@@ -2,7 +2,6 @@ class Forge::CharactersController < Forge::BaseController
   before_action :set_character, only: %i[show edit update destroy]
 
   def index
-    # Для персонажей логично сортировать по имени (title)
     @pagy, @characters = pagy(policy_scope(Character).order(title: :asc))
   end
 

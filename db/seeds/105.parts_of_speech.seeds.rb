@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 author = User.first
 unless author
   puts "❌ Не найден ни один пользователь. Пожалуйста, создайте админа перед запуском сидов."

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddPublishableToLinguisticModels < ActiveRecord::Migration[7.2]
   def change
     add_column :lexemes, :published_at, :datetime

@@ -28,6 +28,8 @@ class Forge::ArticlesController < Forge::BaseController
 
   def edit
     authorize @article
+
+    @backlinks = Wikilink.where(target_slug: @article.slug).includes(:source).limit(10)
   end
 
   def update
@@ -48,7 +50,6 @@ class Forge::ArticlesController < Forge::BaseController
   private
 
   def set_article
-    # В будущем для публичной части можно будет искать по slug
     @article = Article.find_by!(slug: params[:id])
   end
 

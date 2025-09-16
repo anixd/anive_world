@@ -1,4 +1,5 @@
-# app/services/markdown_preprocessor.rb
+# frozen_string_literal: true
+
 class MarkdownPreprocessor
   # [[SECTION:[LANG:]IDENTIFIER|DISPLAY_TEXT]]
   # 1: section_alias (w, a, h, c...)

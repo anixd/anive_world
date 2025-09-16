@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddLanguageToPartOfSpeech < ActiveRecord::Migration[7.2]
   def change
     # 1. Находим "язык по умолчанию", к которому отнесем все существующие части речи

@@ -1,4 +1,19 @@
 <%= form_with(model: [:forge, article], class: "space-y-6") do |form| %>
+
+  <% if @backlinks.any? %>
+    <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 p-4 rounded-md shadow-sm" role="alert">
+      <p class="font-bold">Ахтунг!</p>
+      <p class="text-sm">
+        На эту статью ссылаются как минимум <strong><%= @backlinks.count %></strong> других записей. Изменение заголовка безопасно (старые ссылки будут работать через редирект), но для поддержания порядка рекомендуется обновить их вручную в следующих статьях:
+      </p>
+      <ul class="list-disc list-inside pl-4 mt-2 text-sm">
+        <% @backlinks.each do |link| %>
+          <li><%= link_to link.source.title, url_for([:forge, link.source]), class: "hover:underline" %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
   <% if article.errors.any? %>
     <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
       <h2 class="font-bold mb-2"><%= pluralize(article.errors.count, "error") %> prohibited this article from being saved:</h2>
@@ -20,7 +35,7 @@
     <%= form.text_area :body, rows: 20, class: "border rounded w-full p-2 font-mono" %>
   </div>
 
-  <%= render 'shared/publication_fields', form: form %>
+  <%= render "shared/publication_fields", form: form %>
 
   <div class="actions">
     <%= form.submit "Save Article", class: "bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded cursor-pointer" %>

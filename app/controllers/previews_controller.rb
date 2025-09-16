@@ -1,10 +1,11 @@
 class PreviewsController < ApplicationController
   include Pundit::Authorization
+  include MarkdownHelper
 
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
   def show
-    record = find_record_with_redirect(params[:type], params[:slug])
+    record = WikilinkResolver.resolve(params[:type], nil, params[:slug])
 
     if record.nil?
       render json: { error: "Not found" }, status: :not_found
@@ -16,15 +17,6 @@ class PreviewsController < ApplicationController
   end
 
   private
-
-  def find_record_with_redirect(type_alias, slug)
-    redirect = SlugRedirect.find_by(old_slug: slug)
-    if redirect
-      redirect.sluggable
-    else
-      WikilinkResolver.resolve(type_alias, 'a', slug)
-    end
-  end
 
   def build_preview_for(record)
     case record
@@ -39,15 +31,13 @@ class PreviewsController < ApplicationController
 
   def build_lexeme_preview(lexeme)
     word = lexeme.words.first
-
-    # Используем `helpers.` для вызова хелпера из `markdown_helper.rb`
     summary_html = helpers.render_markdown(word&.definition.to_s)
     plain_summary = helpers.strip_tags(summary_html)
     summary = plain_summary.truncate(200)
 
     {
       title: lexeme.spelling,
-      type: 'word',
+      type: "word",
       transcription: word&.transcription,
       summary: summary
     }
@@ -55,9 +45,8 @@ class PreviewsController < ApplicationController
 
   def build_content_entry_preview(entry)
     summary_source = entry.try(:extract).presence || entry.try(:annotation).presence || entry.body
-
     full_html = helpers.render_markdown(summary_source.to_s)
-    summary = helpers.truncate_html(full_html, length: 250, omission: '...')
+    summary = helpers.truncate_html(full_html, length: 250, omission: "...")
 
     image_url = nil
     if entry.respond_to?(:images) && entry.images.attached?
