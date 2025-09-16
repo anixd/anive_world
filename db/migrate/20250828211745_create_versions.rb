@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateVersions < ActiveRecord::Migration[7.2]
 
   # The largest text column available in all supported RDBMS is

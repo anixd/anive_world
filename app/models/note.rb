@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: notes
@@ -23,7 +25,7 @@
 class Note < ApplicationRecord
   include Authored
 
-  # Здесь же в будущем появится связь has_many :shares, as: :shareable
+  # TODO: в будущем добавить связь has_many :shares, as: :shareable
   # для гранулярного контроля доступа.
 
   validates :title, presence: true

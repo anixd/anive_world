@@ -6,6 +6,7 @@
 #  affix_type   :string
 #  discarded_at :datetime
 #  meaning      :text
+#  published_at :datetime
 #  text         :string
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
@@ -17,6 +18,7 @@
 #  index_affixes_on_author_id                            (author_id)
 #  index_affixes_on_discarded_at                         (discarded_at)
 #  index_affixes_on_language_id                          (language_id)
+#  index_affixes_on_published_at                         (published_at)
 #  index_affixes_on_text_and_language_id_and_affix_type  (text,language_id,affix_type) UNIQUE
 #
 # Foreign Keys

@@ -18,7 +18,7 @@
       <h3 class="text-lg font-semibold mb-2">Language</h3>
       <%= link_to @phonology_article.language.name, forge_language_path(@phonology_article.language), class: "text-blue-600 hover:underline" %>
     </div>
-    <div class="prose max-w-none">
+    <div class="prose max-w-none" data-controller="wikilink-preview">
       <%= render_markdown(@phonology_article.body) %>
     </div>
   </div>

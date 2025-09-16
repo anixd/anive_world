@@ -19,79 +19,97 @@ class Forge::LexemesController < Forge::BaseController
             end
 
     limit = params[:limit].present? ? params[:limit].to_i : Pagy::DEFAULT[:limit]
-    # Применяем policy_scope к уже отфильтрованной коллекции
     @pagy, @lexemes = pagy(policy_scope(scope), limit: limit)
   end
 
   def show
-    authorize @lexeme # Can view?
+    authorize @lexeme
     @words = @lexeme.words.includes(:etymology, :parts_of_speech).order(:created_at)
   end
 
   def new
     @lexeme = Lexeme.new
+
+    if params.dig(:lexeme, :language_id).present?
+      @lexeme.language_id = params.dig(:lexeme, :language_id)
+    end
+
     @lexeme.words.build
-    authorize @lexeme # Can create?
+    authorize @lexeme
   end
 
   def create
-    @lexeme = Lexeme.new(lexeme_params)
+    attrs = lexeme_params.to_h
+    publish_flag = attrs.delete(:publish)
+
+    @lexeme = Lexeme.new(attrs)
     @lexeme.author = current_user
     @lexeme.words.first&.author = current_user
-    authorize @lexeme # Can create?
+    authorize @lexeme
+
+    @lexeme.published_at = Time.current if publish_flag == '1'
 
     if @lexeme.save
       redirect_to forge_lexeme_path(@lexeme), notice: "Слово '#{@lexeme.spelling}' создано."
     else
+      set_form_options
       render :new, status: :unprocessable_content
     end
   end
 
   def edit
-    authorize @lexeme # Can edit?
+    authorize @lexeme
   end
 
   def update
-    authorize @lexeme # Can update?
+    authorize @lexeme
 
-    # ... (остальная логика метода без изменений)
-    updated_params = lexeme_params
+    attrs = lexeme_params.to_h
+    publish_flag = attrs.delete(:publish)
 
-    if updated_params[:words_attributes]
-      updated_params[:words_attributes].each do |_, word_attrs|
-        word_attrs[:author_id] = current_user.id
-      end
-    end
+    @lexeme.assign_attributes(attrs)
+    @lexeme.published_at = (publish_flag == '1') ? Time.current : nil
 
-    if @lexeme.update(lexeme_params)
+    if @lexeme.save
       redirect_to forge_lexeme_path(@lexeme), notice: "Лексема обновлена."
     else
+      set_form_options
       render :edit, status: :unprocessable_content
     end
   end
 
   def destroy
-    authorize @lexeme # Can destroy?
+    authorize @lexeme
     @lexeme.discard
     redirect_to forge_lexemes_path, notice: "Слово '#{@lexeme.spelling}' удалено."
+  end
+
+  def parts_of_speech
+    language = Language.find_by(id: params[:language_id])
+    @parts_of_speech = language ? language.parts_of_speech.order(:name) : []
+
+    @lexeme = Lexeme.new(language: language)
+    @lexeme.words.build
+
+    respond_to do |format|
+      format.turbo_stream
+    end
   end
 
   private
 
   def set_lexeme
-    # Мы находим лексему по slug, а не по id
     @lexeme = Lexeme.includes(:language).find_by!(slug: params[:id])
   end
 
   def set_form_options
     @languages = Language.order(:name)
-    # Здесь мы не можем просто взять все, нужно будет фильтровать во вьюхе/JS
     @parts_of_speech = PartOfSpeech.order(:name)
   end
 
   def lexeme_params
     params.require(:lexeme).permit(
-      :spelling, :language_id,
+      :spelling, :language_id, :publish,
       words_attributes: [:id, :definition, :transcription, :comment, :_destroy, part_of_speech_ids: []]
     )
   end

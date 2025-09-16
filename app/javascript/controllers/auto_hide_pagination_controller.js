@@ -19,7 +19,7 @@ export default class extends Controller {
     evaluate() {
         if (!this.hasListTarget || !this.hasBottomTarget) return
 
-        const fudge = 48 // запас в px, чтобы «+1–2 элемента» тоже считались как «не нужно»
+        const fudge = 28 // запас в px, чтобы «+1–2 элемента» тоже считались как «не нужно»
         const listHeight = this.listTarget.scrollHeight
         const vp = window.innerHeight
 

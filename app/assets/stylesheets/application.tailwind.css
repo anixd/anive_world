@@ -1,5 +1,7 @@
+@import "./wikilinks.css";
 @import "tailwindcss";
 @import"@tailwindcss/typography";
+
 @tailwind utilities;
 
 @layer components {

@@ -6,7 +6,7 @@ class Forge::WordsController < Forge::BaseController
   def new
     @word = @lexeme.words.build
     @word.build_etymology
-    authorize @word # Can create new meanings?
+    authorize @word
   end
 
   def create
@@ -17,7 +17,7 @@ class Forge::WordsController < Forge::BaseController
       @word.etymology.author = current_user
     end
 
-    authorize @word # Can create new meanings?
+    authorize @word
 
     if @word.save
       redirect_to forge_lexeme_path(@lexeme), notice: "Meaning was created."
@@ -27,12 +27,12 @@ class Forge::WordsController < Forge::BaseController
   end
 
   def edit
-    authorize @word # Can edit this meaning?
+    authorize @word
     @word.build_etymology if @word.etymology.nil?
   end
 
   def update
-    authorize @word # Can update this meaning?
+    authorize @word
     attributes = word_params
 
     etymology_attrs = attributes[:etymology_attributes]
@@ -48,7 +48,7 @@ class Forge::WordsController < Forge::BaseController
   end
 
   def destroy
-    authorize @word # Can destroy this meaning?
+    authorize @word
     lexeme = @word.lexeme
     @word.discard
     redirect_to forge_lexeme_path(lexeme), notice: "Meaning was deleted."

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateSynonymRelations < ActiveRecord::Migration[7.2]
   def change
     create_table :synonym_relations do |t|

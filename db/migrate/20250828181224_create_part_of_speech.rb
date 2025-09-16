@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreatePartOfSpeech < ActiveRecord::Migration[7.2]
   def change
     create_table :parts_of_speech do |t|

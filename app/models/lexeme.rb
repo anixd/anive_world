@@ -1,9 +1,12 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: lexemes
 #
 #  id           :bigint           not null, primary key
 #  discarded_at :datetime
+#  published_at :datetime
 #  slug         :string           not null
 #  spelling     :string
 #  created_at   :datetime         not null
@@ -16,6 +19,7 @@
 #  index_lexemes_on_author_id                 (author_id)
 #  index_lexemes_on_discarded_at              (discarded_at)
 #  index_lexemes_on_language_id               (language_id)
+#  index_lexemes_on_published_at              (published_at)
 #  index_lexemes_on_slug_and_language_id      (slug,language_id) UNIQUE WHERE (discarded_at IS NULL)
 #  index_lexemes_on_spelling_and_language_id  (spelling,language_id) UNIQUE WHERE (discarded_at IS NULL)
 #
@@ -28,10 +32,12 @@ class Lexeme < ApplicationRecord
   include Discard::Model
   include Authored
   include ApostropheNormalizer
+  include Sluggable
+  include Publishable
 
   has_paper_trail
 
-  before_validation :generate_slug, on: [:create, :update]
+  sluggable_from :spelling
 
   belongs_to :language
 
@@ -41,17 +47,9 @@ class Lexeme < ApplicationRecord
   validates :spelling, presence: true, uniqueness: { scope: :language }
   validates :language, presence: true
 
-  def to_param
-    slug
-  end
-
   private
 
   def normalize_apostrophes
     normalize_field(:spelling, rule: :strict)
-  end
-
-  def generate_slug
-    self.slug = SlugGenerator.call(self.spelling) if self.spelling_changed?
   end
 end

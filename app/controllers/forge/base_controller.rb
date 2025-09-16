@@ -12,7 +12,6 @@ class Forge::BaseController < ApplicationController
 
   def user_not_authorized
     flash[:alert] = "You are not authorized to perform this action."
-    # Возвращаем пользователя назад или на дашборд, если "назад" невозможно
     redirect_to(request.referer || forge_dashboard_path)
   end
 end

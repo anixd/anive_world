@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: users
@@ -21,7 +23,6 @@
 #  index_users_on_username  (username) UNIQUE
 #
 class User < ApplicationRecord
-  # enum role: { admin: 0, owner: 1, editor: 2 }, _suffix: :role
 
   attr_accessor :remember_token
 

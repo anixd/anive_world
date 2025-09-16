@@ -11,7 +11,7 @@
       </span>
     </summary>
 
-    <div class="prose max-w-none text-gray-800 p-2 my-2">
+    <div class="prose max-w-none text-gray-800 p-2 my-2" data-controller="wikilink-preview">
       <%= render_markdown(etymologizable.etymology.explanation) %>
 
       <% if etymologizable.etymology.comment.present? %>

@@ -4,6 +4,7 @@
 #
 #  id           :bigint           not null, primary key
 #  discarded_at :datetime
+#  published_at :datetime
 #  slug         :string           not null
 #  spelling     :string
 #  created_at   :datetime         not null
@@ -16,6 +17,7 @@
 #  index_lexemes_on_author_id                 (author_id)
 #  index_lexemes_on_discarded_at              (discarded_at)
 #  index_lexemes_on_language_id               (language_id)
+#  index_lexemes_on_published_at              (published_at)
 #  index_lexemes_on_slug_and_language_id      (slug,language_id) UNIQUE WHERE (discarded_at IS NULL)
 #  index_lexemes_on_spelling_and_language_id  (spelling,language_id) UNIQUE WHERE (discarded_at IS NULL)
 #

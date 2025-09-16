@@ -139,6 +139,7 @@
     <orderEntry type="library" scope="PROVIDED" name="stringio (v3.1.7, RVM: ruby-3.3.3 [anive_world]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="thor (v1.4.0, RVM: ruby-3.3.3 [anive_world]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="timeout (v0.4.3, RVM: ruby-3.3.3 [anive_world]) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="truncate_html (v0.9.3, RVM: ruby-3.3.3 [anive_world]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="turbo-rails (v2.0.16, RVM: ruby-3.3.3 [anive_world]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="tzinfo (v2.0.6, RVM: ruby-3.3.3 [anive_world]) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="unicode-display_width (v3.1.5, RVM: ruby-3.3.3 [anive_world]) [gem]" level="application" />

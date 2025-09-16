@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateWordRoots < ActiveRecord::Migration[7.2]
   def change
     create_table :word_roots do |t|

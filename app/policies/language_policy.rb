@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class LanguagePolicy < LinguisticPolicy
   class Scope < ApplicationPolicy::Scope
     def resolve

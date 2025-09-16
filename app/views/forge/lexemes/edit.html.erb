@@ -1,2 +1,5 @@
 <h1 class="text-2xl font-bold mb-6">Edit lexeme: <%= @lexeme.spelling %></h1>
-<%= render 'form', lexeme: @lexeme %>
+
+<%= turbo_frame_tag "lexeme_form" do %>
+  <%= render 'form', lexeme: @lexeme %>
+<% end %>

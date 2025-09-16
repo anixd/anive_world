@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddCompositeUniqueIndexToPartsOfSpeech < ActiveRecord::Migration[7.2]
   def up
     remove_index :parts_of_speech, :code, name: :index_parts_of_speech_on_code

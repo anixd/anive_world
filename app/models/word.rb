@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: words
@@ -33,6 +35,7 @@ class Word < ApplicationRecord
   include Discard::Model
   include Authored
   include ApostropheNormalizer
+  include IndexableLinks
 
   has_paper_trail
 
@@ -67,7 +70,6 @@ class Word < ApplicationRecord
 
   def normalize_apostrophes
     normalize_field(:transcription, rule: :strict)
-
     normalize_field(:definition, rule: :safe)
     normalize_field(:comment, rule: :safe)
   end

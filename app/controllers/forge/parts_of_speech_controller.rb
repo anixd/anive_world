@@ -13,7 +13,6 @@ class Forge::PartsOfSpeechController < Forge::BaseController
             else
               PartOfSpeech.none
             end
-    # @parts_of_speech = scope
     @pagy, @parts_of_speech = pagy(policy_scope(scope))
   end
 

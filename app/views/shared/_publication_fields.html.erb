@@ -1,0 +1,12 @@
+<div class="bg-gray-50 p-4 rounded-lg border">
+  <label class="flex items-center space-x-3 cursor-pointer">
+    <%= form.check_box :publish, {
+      checked: form.object.published?,
+      class: 'h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500'
+    }, '1', '0' %>
+    <span class="text-gray-900 font-medium">Publish</span>
+  </label>
+  <p class="text-sm text-gray-500 mt-1 ml-8">
+    Published posts will be visible to all users on the public site.
+  </p>
+</div>

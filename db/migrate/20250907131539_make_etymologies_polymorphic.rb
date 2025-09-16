@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class MakeEtymologiesPolymorphic < ActiveRecord::Migration[7.2]
   def change
     unless column_exists?(:etymologies, :etymologizable_id) && column_exists?(:etymologies, :etymologizable_type)

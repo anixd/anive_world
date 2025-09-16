@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddTimelineFieldsToContentEntries < ActiveRecord::Migration[7.2]
   def change
     add_reference :content_entries, :era, foreign_key: { to_table: :timeline_eras }, index: true, null: true
