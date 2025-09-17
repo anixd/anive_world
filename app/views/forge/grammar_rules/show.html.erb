@@ -14,6 +14,17 @@
   </div>
 
   <div class="bg-white shadow rounded-lg p-6">
+    <% if @grammar_rule.tags.any? %>
+      <div class="mb-6 pb-6 border-b border-gray-200 flex flex-wrap items-center gap-2">
+        <h3 class="text-sm font-medium text-gray-500 mr-2">Tags:</h3>
+        <% @grammar_rule.tags.order(:name).each do |tag| %>
+      <span class="px-3 py-1 text-sm leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+        #<%= tag.name %>
+      </span>
+        <% end %>
+      </div>
+    <% end %>
+
     <div class="mb-6 pb-6 border-b">
       <h3 class="text-lg font-semibold mb-2">Language</h3>
       <%= link_to @grammar_rule.language.name, forge_language_path(@grammar_rule.language), class: "text-blue-600 hover:underline" %>

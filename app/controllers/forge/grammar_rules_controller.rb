@@ -8,7 +8,7 @@ class Forge::GrammarRulesController < Forge::BaseController
     @current_language = @languages.find { |l| l.code == target_code } || @languages.first
 
     scope = if @current_language
-              policy_scope(GrammarRule).where(language_id: @current_language.id).order(title: :asc)
+              policy_scope(GrammarRule).includes(:tags).where(language_id: @current_language.id).order(title: :asc)
             else
               GrammarRule.none
             end
@@ -58,7 +58,7 @@ class Forge::GrammarRulesController < Forge::BaseController
   private
 
   def set_grammar_rule
-    @grammar_rule = GrammarRule.find_by!(slug: params[:id])
+    @grammar_rule = GrammarRule.includes(:tags).find_by!(slug: params[:id])
   end
 
   def set_form_options
@@ -66,6 +66,6 @@ class Forge::GrammarRulesController < Forge::BaseController
   end
 
   def grammar_rule_params
-    params.require(:grammar_rule).permit(:title, :body, :language_id, :rule_code)
+    params.require(:grammar_rule).permit(:title, :body, :language_id, :rule_code, :tags_string)
   end
 end

@@ -2,7 +2,7 @@ class Forge::ArticlesController < Forge::BaseController
   before_action :set_article, only: %i[show edit update destroy]
 
   def index
-    @pagy, @articles = pagy(policy_scope(Article).order(created_at: :desc))
+    @pagy, @articles = pagy(policy_scope(Article).includes(:tags).order(created_at: :desc))
   end
 
   def show
@@ -50,10 +50,10 @@ class Forge::ArticlesController < Forge::BaseController
   private
 
   def set_article
-    @article = Article.find_by!(slug: params[:id])
+    @article = Article.includes(:tags).find_by!(slug: params[:id])
   end
 
   def article_params
-    params.require(:article).permit(:title, :body, :published_at)
+    params.require(:article).permit(:title, :body, :published_at, :tags_string)
   end
 end

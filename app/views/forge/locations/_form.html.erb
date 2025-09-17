@@ -28,6 +28,12 @@
     <%= form.text_area :body, rows: 15, class: "border rounded w-full p-2 font-mono" %>
   </div>
 
+  <div>
+    <%= form.label :tags_string, "Tags", class: "block font-bold mb-1" %>
+    <%= form.text_field :tags_string, class: "border rounded w-full p-2", placeholder: "art, magic, history" %>
+    <p class="text-xs text-gray-600 mt-1">Enter tags separated by commas or spaces. New tags will be created automatically.</p>
+  </div>
+
   <%= render 'shared/publication_fields', form: form %>
 
   <div class="actions">
