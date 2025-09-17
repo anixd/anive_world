@@ -1,31 +1,44 @@
-# Базовый класс для подключения к старой БД
-class LegacyBase < ActiveRecord::Base
+
+class LegacyRecord < ActiveRecord::Base
   self.abstract_class = true
   establish_connection :anixsite_legacy
 end
 
-# Определяем пространство имен для старых моделей
 module Legacy
-  # Модель для таблицы `anike_word_types`
-  class AnikeWordType < LegacyBase
-    self.table_name = 'anike_word_types'
+  class AnikeWordType < LegacyRecord
+    self.table_name = "anike_word_types"
+    has_and_belongs_to_many :words,
+                            class_name: "Legacy::AnikeWord",
+                            join_table: "anike_words_word_types",
+                            foreign_key: "anike_word_type_id",
+                            association_foreign_key: "anike_word_id"
   end
 
-  # Модель для таблицы `anike_words`
-  class AnikeWord < LegacyBase
-    self.table_name = 'anike_words'
+  class AnikeEtymology < LegacyRecord
+    self.table_name = "anike_etymologies"
+  end
 
-    enum language: { anike: 0, drelen: 1, veltari: 2 }
-
+  class AnikeWord < LegacyRecord
+    self.table_name = "anike_words"
     has_and_belongs_to_many :word_types,
-                            class_name: 'Legacy::AnikeWordType',
-                            join_table: 'anike_words_word_types',
-                            foreign_key: 'anike_word_id',
-                            association_foreign_key: 'anike_word_type_id'
+                            class_name: "Legacy::AnikeWordType",
+                            join_table: "anike_words_word_types",
+                            foreign_key: "anike_word_id",
+                            association_foreign_key: "anike_word_type_id"
+    has_one :etymology, class_name: "Legacy::AnikeEtymology", foreign_key: "word_id"
   end
 
-  # Модель для таблицы `anike_etymologies`
-  class AnikeEtymology < LegacyBase
-    self.table_name = 'anike_etymologies'
+
+
+  class AnikeArticle < LegacyRecord
+    self.table_name = "anike_articles"
+  end
+
+  class AnikeHistoryEntry < LegacyRecord
+    self.table_name = "anike_history_entries"
+  end
+
+  class AnikeNote < LegacyRecord
+    self.table_name = "anike_notes"
   end
 end
