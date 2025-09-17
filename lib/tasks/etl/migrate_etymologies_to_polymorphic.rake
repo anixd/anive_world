@@ -1,5 +1,3 @@
-# lib/tasks/etl/migrate_etymologies_to_polymorphic.rake
-
 namespace :etl do
   desc "Migrates existing etymologies from word_id to a polymorphic association before the schema change."
   task migrate_etymologies_to_polymorphic: :environment do
