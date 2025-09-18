@@ -8,7 +8,9 @@ Rails.application.routes.draw do
   forge_routes = -> do
     root "dashboard#index", as: :dashboard
 
-    resources :tags
+    resources :tags do
+      get :search, on: :collection
+    end
 
     resources :languages do
       resources :parts_of_speech

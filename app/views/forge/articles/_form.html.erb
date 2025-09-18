@@ -35,9 +35,22 @@
     <%= form.text_area :body, rows: 20, class: "border rounded w-full p-2 font-mono" %>
   </div>
 
-  <div>
+  <div data-controller="tag-autocomplete"
+       data-tag-autocomplete-url-value="<%= search_forge_tags_path %>"
+  class="mb-4">
+
     <%= form.label :tags_string, "Tags", class: "block font-bold mb-1" %>
-    <%= form.text_field :tags_string, class: "border rounded w-full p-2", placeholder: "art, magic, history" %>
+    <%= form.text_field :tags_string,
+                        class: "border rounded w-full p-2",
+                        placeholder: "art, magic, history",
+                        data: {
+                          action: "keyup->tag-autocomplete#search",
+                          "tag-autocomplete-target": "input"
+                        } %>
+
+    <div class="relative" data-tag-autocomplete-target="results">
+    </div>
+
     <p class="text-xs text-gray-600 mt-1">Enter tags separated by commas or spaces. New tags will be created automatically.</p>
   </div>
 

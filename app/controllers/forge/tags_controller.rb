@@ -47,6 +47,13 @@ class Forge::TagsController < Forge::BaseController
     redirect_to forge_tags_path, notice: "Тег '#{@tag.name}' удален."
   end
 
+  def search
+    authorize Tag
+    query = params[:query].to_s.downcase
+    tags = policy_scope(Tag).where("name LIKE ?", "#{query}%").limit(10).pluck(:name)
+    render json: tags
+  end
+
   private
 
   def set_tag
