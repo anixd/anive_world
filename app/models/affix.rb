@@ -44,6 +44,14 @@ class Affix < ApplicationRecord
 
   enum affix_type: { prefix: "prefix", suffix: "suffix", infix: "infix" }
 
+  scope :search_by_text, ->(query) {
+    where("text ILIKE ? OR meaning ILIKE ?", "%#{query}%", "%#{query}%")
+  }
+
+  scope :for_language, ->(language_code) {
+    joins(:language).where(languages: { code: language_code })
+  }
+
   private
 
   def normalize_apostrophes

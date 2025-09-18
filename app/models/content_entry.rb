@@ -59,7 +59,7 @@ class ContentEntry < ApplicationRecord
   has_paper_trail
 
   pg_search_scope :search_by_text,
-                  against: [:title, :body],
+                  # against: [:title, :body],
                   using: {
                     tsearch: {
                       dictionary: 'russian_simple',

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Forge::LocationsController < Forge::BaseController
   before_action :set_location, only: %i[show edit update destroy]
   before_action :set_form_options, only: %i[new edit create update]

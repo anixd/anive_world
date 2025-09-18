@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Forge::AffixesController < Forge::BaseController
   before_action :set_language_from_id, except: [:index]
   before_action :set_affix, only: %i[edit update destroy]

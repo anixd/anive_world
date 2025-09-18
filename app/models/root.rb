@@ -42,6 +42,14 @@ class Root < ApplicationRecord
   has_one :etymology, as: :etymologizable, dependent: :destroy
   accepts_nested_attributes_for :etymology, allow_destroy: true
 
+  scope :search_by_text, ->(query) {
+    where("text ILIKE ? OR meaning ILIKE ?", "%#{query}%", "%#{query}%")
+  }
+
+  scope :for_language, ->(language_code) {
+    joins(:language).where(languages: { code: language_code })
+  }
+
   private
 
   def normalize_apostrophes

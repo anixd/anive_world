@@ -1,0 +1,50 @@
+<%= turbo_stream.update "live-search-results",
+                        target: "[data-live-search-target='resultsContainer']" do %>
+  <% if @live_results&.any? %>
+    <div class="absolute top-full left-0 right-0 mt-1 bg-white shadow-lg rounded-lg border border-gray-200 max-h-96 overflow-y-auto z-50">
+      <% @live_results.each do |result| %>
+        <%= link_to url_for([:forge, result]),
+                    class: "block px-4 py-3 hover:bg-gray-50 border-b border-gray-100 transition-colors",
+                    data: { turbo: false } do %>
+          <div class="flex justify-between items-start">
+            <div class="flex-1">
+              <div class="font-medium text-gray-900">
+                <%= result.try(:spelling) || result.title %>
+              </div>
+
+              <% if result.is_a?(Lexeme) %>
+                <div class="text-sm text-gray-600 mt-1">
+                  <span class="text-xs uppercase tracking-wide text-gray-500">
+                    <%= result.language.name %>
+                  </span>
+                  <% if result.words.any? && result.words.first.parts_of_speech.any? %>
+                    • <%= result.words.first.parts_of_speech.pluck(:name).join(", ") %>
+                  <% end %>
+                </div>
+              <% elsif result.respond_to?(:type) %>
+                <div class="text-xs text-gray-500 mt-1">
+                  <%= result.type.gsub(/([A-Z])/, ' \1').strip %>
+                </div>
+              <% end %>
+            </div>
+
+            <svg class="w-4 h-4 text-gray-400 ml-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+          </div>
+        <% end %>
+      <% end %>
+
+      <% if @results.count > 5 %>
+        <%= link_to forge_search_path(q: @query, scope: @scope_name),
+                    class: "block px-4 py-3 text-center text-sm text-blue-600 hover:bg-gray-50 font-medium" do %>
+          View all <%= @results.count %> results →
+        <% end %>
+      <% end %>
+    </div>
+  <% elsif @query.present? %>
+    <div class="absolute top-full left-0 right-0 mt-1 bg-white shadow-lg rounded-lg border border-gray-200 p-4 z-50">
+      <p class="text-gray-500 text-center">No results found for "<%= @query %>"</p>
+    </div>
+  <% end %>
+<% end %>

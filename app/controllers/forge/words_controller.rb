@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Forge::WordsController < Forge::BaseController
   before_action :set_lexeme, only: [:new, :create]
   before_action :set_word, only: [:edit, :update, :destroy]

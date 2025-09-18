@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Forge::GrammarRulesController < Forge::BaseController
   before_action :set_grammar_rule, only: %i[show edit update destroy]
   before_action :set_form_options, only: %i[new edit create update]

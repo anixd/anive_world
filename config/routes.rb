@@ -8,6 +8,8 @@ Rails.application.routes.draw do
   forge_routes = -> do
     root "dashboard#index", as: :dashboard
 
+    get "search", to: "search#index"
+
     resources :tags do
       get :search, on: :collection
     end

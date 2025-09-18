@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Forge::RootsController < Forge::BaseController
   before_action :set_language_from_id, except: [:index]
   before_action :set_root, only: %i[edit update destroy]
