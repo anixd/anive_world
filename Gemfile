@@ -46,6 +46,7 @@ gem "pagy"
 gem "paper_trail", "~> 16.0"
 gem "pundit", "~> 2.5"
 gem "truncate_html"
+gem "pg_search"
 gem "redcarpet", "~> 3.5"
 
 group :development, :test do

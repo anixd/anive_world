@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_09_17_191926) do
+ActiveRecord::Schema[7.2].define(version: 2025_09_18_004435) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -52,6 +52,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_17_191926) do
     t.string "display_date"
     t.text "extract"
     t.text "annotation"
+    t.tsvector "searchable"
     t.index "type, lower((title)::text)", name: "index_content_entries_on_type_and_lower_title"
     t.index ["absolute_year"], name: "index_content_entries_on_absolute_year"
     t.index ["author_id"], name: "index_content_entries_on_author_id"
@@ -59,6 +60,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_17_191926) do
     t.index ["era_id"], name: "index_content_entries_on_era_id"
     t.index ["language_id"], name: "index_content_entries_on_language_id"
     t.index ["parent_location_id"], name: "index_content_entries_on_parent_location_id"
+    t.index ["searchable"], name: "content_entries_searchable_idx", using: :gin
     t.index ["slug"], name: "index_content_entries_on_slug", unique: true, where: "(discarded_at IS NULL)"
     t.index ["type"], name: "index_content_entries_on_type"
   end

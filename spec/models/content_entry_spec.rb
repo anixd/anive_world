@@ -14,6 +14,7 @@
 #  life_status        :string
 #  published_at       :datetime
 #  rule_code          :string
+#  searchable         :tsvector
 #  slug               :string           not null
 #  title              :string           not null
 #  type               :string           not null
@@ -26,6 +27,7 @@
 #
 # Indexes
 #
+#  content_entries_searchable_idx                 (searchable) USING gin
 #  index_content_entries_on_absolute_year         (absolute_year)
 #  index_content_entries_on_author_id             (author_id)
 #  index_content_entries_on_discarded_at          (discarded_at)
