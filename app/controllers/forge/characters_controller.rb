@@ -2,7 +2,7 @@ class Forge::CharactersController < Forge::BaseController
   before_action :set_character, only: %i[show edit update destroy]
 
   def index
-    @pagy, @characters = pagy(policy_scope(Character).order(title: :asc))
+    @pagy, @characters = pagy(policy_scope(Character).includes(:tags).order(title: :asc))
   end
 
   def show
@@ -48,10 +48,10 @@ class Forge::CharactersController < Forge::BaseController
   private
 
   def set_character
-    @character = Character.find_by!(slug: params[:id])
+    @character = Character.includes(:tags).find_by!(slug: params[:id])
   end
 
   def character_params
-    params.require(:character).permit(:title, :body, :life_status, :birth_date, :death_date)
+    params.require(:character).permit(:title, :body, :life_status, :birth_date, :death_date, :tags_string)
   end
 end

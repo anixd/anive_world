@@ -18,6 +18,16 @@
           </p>
         <% end %>
 
+        <% if character.tags.any? %>
+          <div class="mt-2 flex flex-wrap gap-2">
+            <% character.tags.order(:name).each do |tag| %>
+            <span class="px-2 py-1 text-xs leading-4 font-semibold rounded-full bg-gray-100 text-gray-800">
+              #<%= tag.name %>
+            </span>
+            <% end %>
+          </div>
+        <% end %>
+
         <div class="flex-shrink-0 text-sm flex items-center gap-2">
           <% if policy(character).edit? %>
             <%= link_to 'Edit', edit_forge_character_path(character), class: 'text-xs inline-block px-3 py-1 border bg-blue-100 border-blue-600 hover:bg-blue-300 rounded' %>

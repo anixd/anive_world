@@ -3,7 +3,7 @@ class Forge::LocationsController < Forge::BaseController
   before_action :set_form_options, only: %i[new edit create update]
 
   def index
-    @pagy, @locations = pagy(policy_scope(Location).order(title: :asc))
+    @pagy, @locations = pagy(policy_scope(Location).includes(:tags).order(title: :asc))
   end
 
   def show
@@ -49,7 +49,7 @@ class Forge::LocationsController < Forge::BaseController
   private
 
   def set_location
-    @location = Location.find_by!(slug: params[:id])
+    @location = Location.includes(:tags).find_by!(slug: params[:id])
   end
 
   def set_form_options
@@ -57,6 +57,6 @@ class Forge::LocationsController < Forge::BaseController
   end
 
   def location_params
-    params.require(:location).permit(:title, :body, :parent_location_id)
+    params.require(:location).permit(:title, :body, :parent_location_id, :tags_string)
   end
 end

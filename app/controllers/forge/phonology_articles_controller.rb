@@ -8,7 +8,7 @@ class Forge::PhonologyArticlesController < Forge::BaseController
     @current_language = @languages.find { |l| l.code == target_code } || @languages.first
 
     scope = if @current_language
-              policy_scope(PhonologyArticle).where(language_id: @current_language.id).order(title: :asc)
+              policy_scope(PhonologyArticle).includes(:tags).where(language_id: @current_language.id).order(title: :asc)
             else
               PhonologyArticle.none
             end
@@ -58,7 +58,7 @@ class Forge::PhonologyArticlesController < Forge::BaseController
   private
 
   def set_phonology_article
-    @phonology_article = PhonologyArticle.find_by!(slug: params[:id])
+    @phonology_article = PhonologyArticle.includes(:tags).find_by!(slug: params[:id])
   end
 
   def set_form_options
@@ -66,6 +66,6 @@ class Forge::PhonologyArticlesController < Forge::BaseController
   end
 
   def phonology_article_params
-    params.require(:phonology_article).permit(:title, :body, :language_id, :rule_code)
+    params.require(:phonology_article).permit(:title, :body, :language_id, :rule_code, :tags_string)
   end
 end

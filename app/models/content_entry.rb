@@ -51,6 +51,7 @@ class ContentEntry < ApplicationRecord
   include Sluggable
   include Publishable
   include IndexableLinks
+  include Taggable
 
   has_paper_trail
 

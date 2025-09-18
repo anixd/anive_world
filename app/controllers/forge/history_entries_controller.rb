@@ -3,7 +3,7 @@ class Forge::HistoryEntriesController < Forge::BaseController
   before_action :set_form_options, only: %i[new edit create update]
 
   def index
-    @pagy, @history_entries = pagy(policy_scope(HistoryEntry).order(absolute_year: :asc))
+    @pagy, @history_entries = pagy(policy_scope(HistoryEntry).includes(:tags).order(absolute_year: :asc))
   end
 
   def show
@@ -58,7 +58,7 @@ class Forge::HistoryEntriesController < Forge::BaseController
   private
 
   def set_history_entry
-    @history_entry = HistoryEntry.find_by!(slug: params[:id])
+    @history_entry = HistoryEntry.includes(:tags).find_by!(slug: params[:id])
   end
 
   def set_form_options
@@ -83,7 +83,6 @@ class Forge::HistoryEntriesController < Forge::BaseController
   end
 
   def history_entry_params
-    # :calendar_id, :year, :is_before_epoch - это "виртуальные" поля только для формы
-    params.require(:history_entry).permit(:title, :body, :era_id, :display_date)
+    params.require(:history_entry).permit(:title, :body, :era_id, :display_date, :tags_string)
   end
 end
