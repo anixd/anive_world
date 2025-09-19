@@ -47,6 +47,14 @@ class Lexeme < ApplicationRecord
   validates :spelling, presence: true, uniqueness: { scope: :language }
   validates :language, presence: true
 
+  scope :search_by_spelling, ->(query) {
+    where("spelling ILIKE ?", "%#{sanitize_sql_like(query)}%")
+  }
+
+  scope :for_language, ->(language_code) {
+    joins(:language).where(languages: { code: language_code })
+  }
+
   private
 
   def normalize_apostrophes

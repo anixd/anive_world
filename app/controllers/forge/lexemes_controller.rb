@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Forge::LexemesController < Forge::BaseController
   before_action :set_lexeme, only: [:show, :edit, :update, :destroy]
   before_action :set_form_options, only: [:new, :create, :edit, :update]

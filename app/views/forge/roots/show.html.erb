@@ -1,0 +1,21 @@
+<div class="p-6">
+  <div class="flex justify-between items-center mb-6">
+    <div>
+      <h1 class="text-3xl font-bold font-mono">"<%= @root.text %>"</h1>
+      <p class="text-lg text-gray-500">Root in <%= @root.language.name.downcase %></p>
+    </div>
+    <div>
+      <%= link_to 'Edit', edit_forge_language_root_path(@root.language, @root), class: 'bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded' %>
+      <%= link_to 'Back to List', forge_language_roots_path(@root.language), class: 'ml-2 text-blue-600' %>
+    </div>
+  </div>
+
+  <div class="bg-white shadow rounded-lg p-6">
+    <h3 class="text-lg font-semibold mb-2">Meaning</h3>
+    <div class="prose max-w-none mb-6 pb-6 border-b" data-controller="wikilink-preview">
+      <%= render_markdown(@root.meaning.presence) || content_tag(:p, "No meaning provided.", class: "text-gray-500 italic") %>
+    </div>
+
+    <%= render 'shared/etymology_spoiler', etymologizable: @root %>
+  </div>
+</div>

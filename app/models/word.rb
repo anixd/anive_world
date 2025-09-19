@@ -37,6 +37,14 @@ class Word < ApplicationRecord
   include ApostropheNormalizer
   include IndexableLinks
 
+  enum origin_type: {
+    unspecified: 0,
+    inherited: 1,
+    neologism: 2,
+    borrowed: 3,
+    derived: 4
+  }, _prefix: :origin
+
   has_paper_trail
 
   before_validation :set_sti_type, on: :create
@@ -64,6 +72,10 @@ class Word < ApplicationRecord
 
   def all_synonyms
     synonyms + inverse_synonyms
+  end
+
+  def spelling_with_language
+    "#{spelling} (#{language.code})"
   end
 
   private

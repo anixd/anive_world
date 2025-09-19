@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Forge::PartsOfSpeechController < Forge::BaseController
 
   before_action :set_language_from_id, only: %i[new create edit update destroy]

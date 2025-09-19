@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Forge::CharactersController < Forge::BaseController
   before_action :set_character, only: %i[show edit update destroy]
 

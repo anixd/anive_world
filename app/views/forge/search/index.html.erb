@@ -1,0 +1,37 @@
+<div class="container mx-auto px-4 py-8">
+  <% if @query.present? %>
+    <div class="mb-6">
+      <h2 class="text-2xl font-bold text-gray-900">
+        Search Results
+        <span class="text-base font-normal text-gray-600 ml-2">
+          <%= @pagy.count %> <%= 'result'.pluralize(@pagy.count) %> for "<%= @query %>"
+        </span>
+      </h2>
+      <div class="text-sm text-gray-500 mt-1">
+        Searching in: <span class="font-medium"><%= @scope_name.capitalize %></span>
+      </div>
+    </div>
+
+    <div class="space-y-4">
+      <% if @results.any? %>
+        <% @results.each do |result| %>
+          <%= render 'search_result', result: result %>
+        <% end %>
+      <% else %>
+        <div class="bg-gray-50 rounded-lg p-8 text-center">
+          <p class="text-gray-500">No results found. Try different search terms.</p>
+        </div>
+      <% end %>
+    </div>
+
+    <% if @pagy.pages > 1 %>
+      <div class="mt-8">
+        <%== pagy_nav(@pagy) %>
+      </div>
+    <% end %>
+  <% else %>
+    <div class="bg-gray-50 rounded-lg p-8 text-center">
+      <p class="text-gray-500">Enter a search query to see results.</p>
+    </div>
+  <% end %>
+</div>

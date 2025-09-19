@@ -8,6 +8,8 @@ Rails.application.routes.draw do
   forge_routes = -> do
     root "dashboard#index", as: :dashboard
 
+    get "search", to: "search#index"
+
     resources :tags do
       get :search, on: :collection
     end
@@ -17,8 +19,6 @@ Rails.application.routes.draw do
       resources :roots
       resources :affixes
     end
-    resources :roots
-    resources :affixes
     resources :translations, only: [:index, :show]
 
     resources :lexemes do
@@ -26,9 +26,11 @@ Rails.application.routes.draw do
       resources :words, only: [:new, :create]
     end
 
-    resources :words, only: [:show, :edit, :update, :destroy]
+    resources :words, only: [:show, :edit, :update, :destroy] do
+      get :search, on: :collection
+    end
 
-    resources :articles
+      resources :articles
     resources :history_entries
     resources :characters
     resources :locations

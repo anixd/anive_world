@@ -1,0 +1,114 @@
+<div data-controller="live-search modal"
+     data-live-search-scope-value="<%= params[:scope] || 'lore' %>"
+     data-live-search-search-url-value="<%= forge_search_path %>">
+
+  <%= form_with(url: forge_search_path, method: :get, class: "relative", data: { live_search_target: "form" }) do |form| %>
+    <%= form.hidden_field :scope, value: params[:scope] || 'lore', data: { live_search_target: "scopeInput" } %>
+
+    <div class="flex rounded-t-lg overflow-hidden border border-b-0 border-gray-300">
+      <button type="button"
+              data-scope="lore"
+              data-action="click->live-search#setScope"
+              data-live-search-target="loreTab"
+              class="flex-1 py-2 px-4 text-center font-medium transition-colors <%= (params[:scope] || 'lore') == 'lore' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' %>">
+        Lore
+      </button>
+
+      <button type="button"
+              data-scope="dictionary"
+              data-action="click->live-search#setScope"
+              data-live-search-target="dictionaryTab"
+              class="flex-1 py-2 px-4 text-center font-medium transition-colors <%= params[:scope] == 'dictionary' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' %>">
+        Dictionary
+      </button>
+    </div>
+
+    <div class="relative">
+      <%= form.search_field :q,
+                            value: params[:q],
+                            class: "block w-full border border-gray-300 rounded-b-lg text-lg pr-10 focus:border-blue-500 focus:ring-blue-500 px-3 py-2",
+                            placeholder: (params[:scope] == 'dictionary' ? "Search in Dictionary..." : "Search in Lore..."),
+                            data: {
+                              live_search_target: "input",
+                              action: "input->live-search#search"
+                            } %>
+      <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+        <button type="submit" class="text-gray-400 hover:text-gray-600" title="Search">
+          <span class="sr-only">Search</span>
+          <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" /></svg>
+        </button>
+      </div>
+    </div>
+  <% end %>
+
+  <div id="live-search-results" data-live-search-target="resultsContainer" class="relative"></div>
+
+  <div class="mt-2 text-center">
+    <button type="button" data-action="click->modal#open" class="text-sm text-gray-600 cursor-pointer bg-gray-50 hover:text-blue-600 hover:bg-blue-200 hover:underline transition-colors border rounded-md py-1 px-2">
+      Search syntax help
+    </button>
+  </div>
+
+  <div data-modal-target="container" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div data-modal-target="backdrop" data-action="click->modal#closeOnBackdropClick" class="fixed inset-0 bg-indigo-500 bg-opacity-0"></div>
+
+    <%# Modal Panel %>
+    <div class="relative bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-full overflow-y-auto">
+      <div class="flex items-start justify-between p-4 border-b rounded-t">
+        <h3 class="text-xl font-semibold text-gray-900">
+          Search Syntax Help
+        </h3>
+        <button type="button" data-action="click->modal#close" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center">
+          <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/></svg>
+          <span class="sr-only">Close modal</span>
+        </button>
+      </div>
+      <%# Modal Body %>
+      <div class="p-6 space-y-6 text-gray-700">
+        <p>You can use special prefixes to narrow down your search. Prefixes have priority over the selected tab.</p>
+
+        <div class="space-y-4">
+          <div class="flex">
+            <strong class="w-1/4 shrink-0">Content Types:</strong>
+            <ul class="list-disc list-inside mt-2 space-y-1">
+              <li><code>ar: (Article)</code></li>
+              <li><code>ch: (Character)</code></li>
+              <li><code>hs: (History)</code></li>
+              <li><code>lc: (Location)</code></li>
+              <li><code>gr: (Grammar)</code></li>
+              <li><code>ph: (Phonology)</code></li>
+            </ul>
+          </div>
+          <div class="flex">
+            <strong class="w-1/4 shrink-0">Languages:</strong>
+            <div class="flex flex-col space-y-1">
+              <code>an: (Anik'e), dr: (Drelen), ve: (Vel'tari)</code>
+              <code>l: (any language)</code>
+            </div>
+          </div>
+          <div class="flex">
+            <strong class="w-1/4 shrink-0">Search Modes:</strong>
+            <div class="flex flex-col space-y-1">
+              <code>"exact phrase"</code>
+              <code>^starts with</code>
+              <code>!exclude</code>
+            </div>
+          </div>
+          <div class="flex">
+            <strong class="w-1/4 shrink-0">Tags:</strong>
+            <code>#tagname</code>
+          </div>
+        </div>
+
+        <div class="text-sm text-gray-500 pt-4 border-t">
+          <p class="font-semibold">Examples:</p>
+          <ul class="list-disc list-inside mt-2 space-y-1">
+            <li><code>ar: #war king</code> — search for articles with tag 'war' containing 'king'.</li>
+            <li><code>an: ^lar</code> — search in Anik'e dictionary for words starting with 'lar'.</li>
+            <li><code>ch: Elara !dead</code> — search for characters named 'Elara' that don't contain 'dead'.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

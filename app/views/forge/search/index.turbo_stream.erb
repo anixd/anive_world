@@ -1,0 +1,19 @@
+<%= turbo_stream.update "live-search-results" do %>
+  <div class="absolute top-full left-0 right-0 mt-1 bg-white shadow-lg rounded-lg border max-h-96 overflow-y-auto z-50">
+    <% if @results.any? %>
+      <% @results.each do |result| %>
+        <a href="<%= url_for([:forge, result]) %>"
+           class="block px-4 py-2 hover:bg-gray-50 border-b">
+          <div class="font-medium"><%= result.spelling || result.title %></div>
+          <% if result.respond_to?(:words) && result.words.any? %>
+            <div class="text-sm text-gray-600">
+              <%= result.words.first.parts_of_speech.pluck(:name).join(", ") %>
+            </div>
+          <% end %>
+        </a>
+      <% end %>
+    <% else %>
+      <div class="px-4 py-2 text-gray-500">Nothing is found</div>
+    <% end %>
+  </div>
+<% end %>

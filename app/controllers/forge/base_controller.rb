@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Forge::BaseController < ApplicationController
   include Paginatable
   include Pundit::Authorization

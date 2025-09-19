@@ -8,6 +8,7 @@
 #  discarded_at :datetime
 #  meaning      :text
 #  published_at :datetime
+#  slug         :string
 #  text         :string
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
@@ -20,6 +21,7 @@
 #  index_roots_on_discarded_at          (discarded_at)
 #  index_roots_on_language_id           (language_id)
 #  index_roots_on_published_at          (published_at)
+#  index_roots_on_slug_and_language_id  (slug,language_id) UNIQUE WHERE (discarded_at IS NULL)
 #  index_roots_on_text_and_language_id  (text,language_id) UNIQUE
 #
 # Foreign Keys
@@ -31,16 +33,27 @@ class Root < ApplicationRecord
   include Authored
   include Discard::Model
   include ApostropheNormalizer
+  include Sluggable
   include Publishable
   include IndexableLinks
 
   has_paper_trail
+
+  sluggable_from :text
 
   belongs_to :language
   has_many :word_roots, dependent: :destroy
   has_many :words, through: :word_roots
   has_one :etymology, as: :etymologizable, dependent: :destroy
   accepts_nested_attributes_for :etymology, allow_destroy: true
+
+  scope :search_by_text, ->(query) {
+    where("text ILIKE ? OR meaning ILIKE ?", "%#{query}%", "%#{query}%")
+  }
+
+  scope :for_language, ->(language_code) {
+    joins(:language).where(languages: { code: language_code })
+  }
 
   private
 

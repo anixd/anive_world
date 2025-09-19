@@ -10,6 +10,9 @@ import AutoHidePaginationController from "./auto_hide_pagination_controller"
 import PerPageController from "./per_page_controller"
 import WikilinkPreviewController from "./wikilink_preview_controller"
 import TagAutocompleteController from "./tag_autocomplete_controller"
+import LiveSearchController from "./live_search_controller"
+import ModalController from "./modal_controller"
+import AutocompleteController from "./autocomplete_controller"
 
 application.register("dependent-select", DependentSelectController)
 application.register("autosubmit", AutosubmitController)
@@ -17,4 +20,6 @@ application.register("auto-hide-pagination", AutoHidePaginationController)
 application.register("per-page", PerPageController)
 application.register("wikilink-preview", WikilinkPreviewController)
 application.register("tag-autocomplete", TagAutocompleteController)
-
+application.register("live-search", LiveSearchController)
+application.register("modal", ModalController)
+application.register("autocomplete", AutocompleteController)

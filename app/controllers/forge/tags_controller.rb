@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Forge::TagsController < Forge::BaseController
   before_action :set_tag, only: %i[edit update destroy]
 

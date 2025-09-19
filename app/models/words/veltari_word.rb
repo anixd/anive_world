@@ -35,4 +35,7 @@
 class VeltariWord < Word
   include Authored
 
+  def self.model_name
+    Word.model_name
+  end
 end

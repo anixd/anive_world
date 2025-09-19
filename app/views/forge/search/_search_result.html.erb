@@ -1,0 +1,12 @@
+<div class="bg-white shadow rounded-lg p-4">
+  <div class="flex justify-between items-baseline">
+    <h3 class="font-semibold text-lg">
+      <%= link_to result.title, url_for([:forge, result]), class: "text-blue-700 hover:underline" %>
+    </h3>
+    <span class="text-xs font-medium uppercase text-gray-500"><%= result.class.name %></span>
+  </div>
+
+  <div class="prose prose-sm max-w-none text-gray-600 mt-2">
+    <%= truncate(strip_tags(result.body.to_s), length: 300) %>
+  </div>
+</div>

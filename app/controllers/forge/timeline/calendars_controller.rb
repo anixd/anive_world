@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Forge::Timeline::CalendarsController < Forge::BaseController
   before_action :set_calendar, only: %i[show edit update destroy]
 

@@ -1,0 +1,137 @@
+import { Controller } from "@hotwired/stimulus"
+import { FetchRequest } from '@hotwired/turbo'
+
+// Helper function to delay function execution
+function debounce(func, wait) {
+    let timeout
+    return function(...args) {
+        const context = this
+        clearTimeout(timeout)
+        timeout = setTimeout(() => func.apply(context, args), wait)
+    }
+}
+
+export default class extends Controller {
+    static targets = ["input", "resultsContainer", "form", "loreTab", "dictionaryTab", "scopeInput"]
+    static values = {
+        scope: String,
+        searchUrl: String
+    }
+
+    connect() {
+        this.debouncedSearch = debounce(this.performSearch, 300).bind(this)
+        this.hideResultsOnClickOutside = this.hideResultsOnClickOutside.bind(this)
+        document.addEventListener("click", this.hideResultsOnClickOutside)
+
+        // Set initial state from params or default to 'lore'
+        if (!this.scopeValue) {
+            this.scopeValue = 'lore'
+        }
+        this.updateTabStyles()
+        this.updatePlaceholder()
+    }
+
+    disconnect() {
+        document.removeEventListener("click", this.hideResultsOnClickOutside)
+    }
+
+    // Called on every key press in the input
+    search() {
+        this.debouncedSearch()
+    }
+
+    async performSearch() {
+        const query = this.inputTarget.value.trim()
+
+        const shouldLiveSearch = this.scopeValue === 'dictionary' || this.hasLanguagePrefix(query)
+
+        if (!shouldLiveSearch) {
+            this.clearResults()
+            return
+        }
+
+        if (query.length < 2) {
+            this.clearResults()
+            return
+        }
+
+        const url = new URL(this.searchUrlValue, window.location.origin)
+        url.searchParams.set("q", query)
+        url.searchParams.set("scope", this.scopeValue)
+
+        try {
+            // Используем стандартный fetch
+            const response = await fetch(url, {
+                headers: {
+                    // заголовок для Rails, что мы хотим получить TurboStream
+                    "Accept": "text/vnd.turbo-stream.html",
+                }
+            })
+
+            if (!response.ok) {
+                // Если сервер ответил ошибкой, прерываем выполнение
+                throw new Error("Network response was not ok")
+            }
+
+            // Получаем ответ сервера в виде текста
+            const responseText = await response.text()
+            // И вручную "скармливаем" его Turbo для обработки
+            Turbo.renderStreamMessage(responseText)
+
+        } catch (error) {
+            console.error("Live search fetch error:", error)
+            this.clearResults() // В случае ошибки очищаем результаты
+        }
+    }
+
+    // Helper to check for language prefixes (an:, dr:, ve:, l:)
+    hasLanguagePrefix(query) {
+        return /^(an|dr|ve|l):/i.test(query)
+    }
+
+    // Called when a tab is clicked
+    setScope(event) {
+        event.preventDefault()
+        const newScope = event.currentTarget.dataset.scope
+
+        if (this.scopeValue !== newScope) {
+            this.scopeValue = newScope
+            this.scopeInputTarget.value = newScope
+            this.updateTabStyles()
+            this.updatePlaceholder()
+            // Clear previous results when switching tabs
+            this.clearResults()
+        }
+    }
+
+    updateTabStyles() {
+        const isLore = this.scopeValue === 'lore'
+
+        // Update Lore tab
+        this.loreTabTarget.className = `flex-1 py-2 px-4 text-center font-medium transition-colors ${
+            isLore ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+        }`
+
+        // Update Dictionary tab
+        this.dictionaryTabTarget.className = `flex-1 py-2 px-4 text-center font-medium transition-colors ${
+            !isLore ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+        }`
+    }
+
+    updatePlaceholder() {
+        this.inputTarget.placeholder = this.scopeValue === 'dictionary'
+            ? "Search in Dictionary..."
+            : "Search in Lore..."
+    }
+
+    // Clear results when clicking outside
+    clearResults() {
+        this.resultsContainerTarget.innerHTML = ''
+    }
+
+    hideResultsOnClickOutside(event) {
+        if (!this.element.contains(event.target)) {
+            this.clearResults()
+        }
+    }
+}

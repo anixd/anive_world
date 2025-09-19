@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class Forge::RootsController < Forge::BaseController
   before_action :set_language_from_id, except: [:index]
-  before_action :set_root, only: %i[edit update destroy]
+  before_action :set_root, only: %i[show edit update destroy]
 
   def index
     @languages = Language.order(:name)
@@ -19,6 +21,10 @@ class Forge::RootsController < Forge::BaseController
   def new
     @root = @language.roots.build
     @root.build_etymology
+    authorize @root
+  end
+
+  def show
     authorize @root
   end
 
@@ -81,7 +87,7 @@ class Forge::RootsController < Forge::BaseController
   end
 
   def set_root
-    @root = @language.roots.find(params[:id])
+    @root = @language.roots.find_by!(slug: params[:id])
   end
 
   def handle_publication(record)

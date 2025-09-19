@@ -1,14 +1,21 @@
-<nav class="bg-white shadow p-4 mb-8">
+<nav class="bg-white shadow py-6 px-4 mb-8">
   <div class="container mx-auto flex justify-between items-center">
-    <%# Левая часть: Основные ссылки %>
-    <div class="flex items-center gap-4">
+
+    <%# Левая часть: Основные ссылки (добавил w-1/4 для выравнивания) %>
+    <div class="flex items-center gap-4 w-1/5">
       <%= link_to "Dashboard", forge_dashboard_path, class: "font-bold text-gray-800 hover:text-blue-600" %>
-      <%= link_to "Languages", forge_languages_path, class: "text-gray-600 hover:text-blue-600" %>
-      <%# Сюда можно будет добавлять другие основные разделы %>
     </div>
 
-    <%# Правая часть: Информация о пользователе %>
-    <div class="flex items-center gap-4 text-sm">
+    <%# Центральная часть: Форма поиска %>
+    <div class="flex-1">
+      <%# Ограничиваем максимальную ширину и центрируем саму форму %>
+      <div class="w-full max-w-lg mx-auto">
+        <%= render 'forge/search/search_form', query: params[:q] %>
+      </div>
+    </div>
+
+    <%# Правая часть: Информация о пользователе (добавил w-1/4 для выравнивания) %>
+    <div class="flex items-center justify-end gap-4 text-sm w-1/5">
       <% if user_signed_in? %>
         <span class="text-gray-700">
           Welcome, <strong class="font-medium"><%= current_user.displayname %></strong>
