@@ -19,8 +19,6 @@ Rails.application.routes.draw do
       resources :roots
       resources :affixes
     end
-    resources :roots
-    resources :affixes
     resources :translations, only: [:index, :show]
 
     resources :lexemes do

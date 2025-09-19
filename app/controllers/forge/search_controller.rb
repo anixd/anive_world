@@ -65,9 +65,9 @@ class Forge::SearchController < Forge::BaseController
   def render_live_search
     # Only show first 5 results for live search dropdown
     @live_results = if @results.is_a?(Array)
-                      @results.first(5)
+                      @results.first(10)
                     else
-                      @results.limit(5)
+                      @results.limit(10)
                     end
     render :live_search
   end

@@ -1,6 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 import { FetchRequest } from '@hotwired/turbo'
 
+// Helper function to delay function execution
 function debounce(func, wait) {
     let timeout
     return function(...args) {
@@ -19,7 +20,10 @@ export default class extends Controller {
 
     connect() {
         this.debouncedSearch = debounce(this.performSearch, 300).bind(this)
-        // Set initial scope from params or default
+        this.hideResultsOnClickOutside = this.hideResultsOnClickOutside.bind(this)
+        document.addEventListener("click", this.hideResultsOnClickOutside)
+
+        // Set initial state from params or default to 'lore'
         if (!this.scopeValue) {
             this.scopeValue = 'lore'
         }
@@ -27,10 +31,62 @@ export default class extends Controller {
         this.updatePlaceholder()
     }
 
-    // Called when typing in the input
+    disconnect() {
+        document.removeEventListener("click", this.hideResultsOnClickOutside)
+    }
+
+    // Called on every key press in the input
     search() {
-        // For now, do nothing - we'll implement live search later
-        // this.debouncedSearch()
+        this.debouncedSearch()
+    }
+
+    async performSearch() {
+        const query = this.inputTarget.value.trim()
+
+        const shouldLiveSearch = this.scopeValue === 'dictionary' || this.hasLanguagePrefix(query)
+
+        if (!shouldLiveSearch) {
+            this.clearResults()
+            return
+        }
+
+        if (query.length < 2) {
+            this.clearResults()
+            return
+        }
+
+        const url = new URL(this.searchUrlValue, window.location.origin)
+        url.searchParams.set("q", query)
+        url.searchParams.set("scope", this.scopeValue)
+
+        try {
+            // Используем стандартный fetch
+            const response = await fetch(url, {
+                headers: {
+                    // заголовок для Rails, что мы хотим получить TurboStream
+                    "Accept": "text/vnd.turbo-stream.html",
+                }
+            })
+
+            if (!response.ok) {
+                // Если сервер ответил ошибкой, прерываем выполнение
+                throw new Error("Network response was not ok")
+            }
+
+            // Получаем ответ сервера в виде текста
+            const responseText = await response.text()
+            // И вручную "скармливаем" его Turbo для обработки
+            Turbo.renderStreamMessage(responseText)
+
+        } catch (error) {
+            console.error("Live search fetch error:", error)
+            this.clearResults() // В случае ошибки очищаем результаты
+        }
+    }
+
+    // Helper to check for language prefixes (an:, dr:, ve:, l:)
+    hasLanguagePrefix(query) {
+        return /^(an|dr|ve|l):/i.test(query)
     }
 
     // Called when a tab is clicked
@@ -43,9 +99,8 @@ export default class extends Controller {
             this.scopeInputTarget.value = newScope
             this.updateTabStyles()
             this.updatePlaceholder()
-
-            // NO automatic form submission - user must press Enter or click Search
-            // Just update the hidden field value for when they do search
+            // Clear previous results when switching tabs
+            this.clearResults()
         }
     }
 
@@ -69,12 +124,14 @@ export default class extends Controller {
             : "Search in Lore..."
     }
 
-    performSearch() {
-        // Will implement later for live search
-    }
-
     // Clear results when clicking outside
     clearResults() {
         this.resultsContainerTarget.innerHTML = ''
+    }
+
+    hideResultsOnClickOutside(event) {
+        if (!this.element.contains(event.target)) {
+            this.clearResults()
+        }
     }
 }

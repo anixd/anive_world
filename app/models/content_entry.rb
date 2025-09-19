@@ -64,6 +64,7 @@ class ContentEntry < ApplicationRecord
                     tsearch: {
                       dictionary: 'russian_simple',
                       prefix: true,
+                      negation: true,
                       tsvector_column: 'searchable'
                     }
                   }

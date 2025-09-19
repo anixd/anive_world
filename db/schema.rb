@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_09_18_125445) do
+ActiveRecord::Schema[7.2].define(version: 2025_09_18_234252) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -24,10 +24,12 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_18_125445) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "published_at"
+    t.string "slug"
     t.index ["author_id"], name: "index_affixes_on_author_id"
     t.index ["discarded_at"], name: "index_affixes_on_discarded_at"
     t.index ["language_id"], name: "index_affixes_on_language_id"
     t.index ["published_at"], name: "index_affixes_on_published_at"
+    t.index ["slug", "language_id"], name: "index_affixes_on_slug_and_language_id", unique: true, where: "(discarded_at IS NULL)"
     t.index ["text", "language_id", "affix_type"], name: "index_affixes_on_text_and_language_id_and_affix_type", unique: true
   end
 
@@ -154,10 +156,12 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_18_125445) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "published_at"
+    t.string "slug"
     t.index ["author_id"], name: "index_roots_on_author_id"
     t.index ["discarded_at"], name: "index_roots_on_discarded_at"
     t.index ["language_id"], name: "index_roots_on_language_id"
     t.index ["published_at"], name: "index_roots_on_published_at"
+    t.index ["slug", "language_id"], name: "index_roots_on_slug_and_language_id", unique: true, where: "(discarded_at IS NULL)"
     t.index ["text", "language_id"], name: "index_roots_on_text_and_language_id", unique: true
   end
 

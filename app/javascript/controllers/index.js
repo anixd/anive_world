@@ -11,6 +11,7 @@ import PerPageController from "./per_page_controller"
 import WikilinkPreviewController from "./wikilink_preview_controller"
 import TagAutocompleteController from "./tag_autocomplete_controller"
 import LiveSearchController from "./live_search_controller"
+import ModalController from "./modal_controller"
 
 application.register("dependent-select", DependentSelectController)
 application.register("autosubmit", AutosubmitController)
@@ -19,3 +20,4 @@ application.register("per-page", PerPageController)
 application.register("wikilink-preview", WikilinkPreviewController)
 application.register("tag-autocomplete", TagAutocompleteController)
 application.register("live-search", LiveSearchController)
+application.register("modal", ModalController)

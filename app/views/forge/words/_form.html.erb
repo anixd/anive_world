@@ -32,6 +32,20 @@
   </div>
 
   <div class="space-y-4 bg-gray-50 p-4 rounded-lg border">
+    <h3 class="font-semibold text-lg border-b pb-2 mb-4">Origin Details</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <%= form.label :origin_type, "Origin Type", class: "block font-bold mb-1" %>
+        <%= form.select :origin_type, Word.origin_types.keys.map { |ot| [ot.humanize, ot] }, { include_blank: 'Not specified' }, { class: "border rounded w-full p-2" } %>
+      </div>
+      <div>
+        <%= form.label :origin_word_id, "Origin Word ID (Ancestor)", class: "block font-bold mb-1" %>
+        <%= form.number_field :origin_word_id, class: "border rounded w-full p-2", placeholder: "Enter Word ID manually" %>
+      </div>
+    </div>
+  </div>
+
+  <div class="space-y-4 bg-gray-50 p-4 rounded-lg border">
     <h3 class="font-semibold text-lg border-b pb-2 mb-4">Etymology</h3>
     <%= form.fields_for :etymology do |etymology_form| %>
       <div>

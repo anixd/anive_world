@@ -9,6 +9,7 @@
 #  discarded_at :datetime
 #  meaning      :text
 #  published_at :datetime
+#  slug         :string
 #  text         :string
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
@@ -21,6 +22,7 @@
 #  index_affixes_on_discarded_at                         (discarded_at)
 #  index_affixes_on_language_id                          (language_id)
 #  index_affixes_on_published_at                         (published_at)
+#  index_affixes_on_slug_and_language_id                 (slug,language_id) UNIQUE WHERE (discarded_at IS NULL)
 #  index_affixes_on_text_and_language_id_and_affix_type  (text,language_id,affix_type) UNIQUE
 #
 # Foreign Keys
@@ -32,10 +34,13 @@ class Affix < ApplicationRecord
   include Authored
   include Discard::Model
   include ApostropheNormalizer
+  include Sluggable
   include Publishable
   include IndexableLinks
 
   has_paper_trail
+
+  sluggable_from :text
 
   belongs_to :language
   has_one :etymology, as: :etymologizable, dependent: :destroy

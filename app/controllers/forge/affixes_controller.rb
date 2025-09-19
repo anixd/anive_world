@@ -2,7 +2,7 @@
 
 class Forge::AffixesController < Forge::BaseController
   before_action :set_language_from_id, except: [:index]
-  before_action :set_affix, only: %i[edit update destroy]
+  before_action :set_affix, only: %i[show edit update destroy]
 
   def index
     @languages = Language.order(:name)
@@ -21,6 +21,10 @@ class Forge::AffixesController < Forge::BaseController
   def new
     @affix = @language.affixes.build
     @affix.build_etymology
+    authorize @affix
+  end
+
+  def show
     authorize @affix
   end
 
@@ -83,7 +87,7 @@ class Forge::AffixesController < Forge::BaseController
   end
 
   def set_affix
-    @affix = @language.affixes.find(params[:id])
+    @affix = @language.affixes.find_by!(slug: params[:id])
   end
 
   def handle_publication(record)

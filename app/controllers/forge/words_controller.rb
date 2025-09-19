@@ -76,6 +76,8 @@ class Forge::WordsController < Forge::BaseController
       :definition,
       :transcription,
       :comment,
+      :origin_type,
+      :origin_word_id,
       part_of_speech_ids: [],
       etymology_attributes: [:id, :explanation, :comment, :_destroy])
   end

@@ -51,6 +51,10 @@ class Lexeme < ApplicationRecord
     where("spelling ILIKE ?", "%#{sanitize_sql_like(query)}%")
   }
 
+  scope :for_language, ->(language_code) {
+    joins(:language).where(languages: { code: language_code })
+  }
+
   private
 
   def normalize_apostrophes
