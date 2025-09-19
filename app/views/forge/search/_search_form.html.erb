@@ -2,11 +2,9 @@
      data-live-search-scope-value="<%= params[:scope] || 'lore' %>"
      data-live-search-search-url-value="<%= forge_search_path %>">
 
-  <%# Search form with scope parameter %>
   <%= form_with(url: forge_search_path, method: :get, class: "relative", data: { live_search_target: "form" }) do |form| %>
     <%= form.hidden_field :scope, value: params[:scope] || 'lore', data: { live_search_target: "scopeInput" } %>
 
-    <%# Tabs %>
     <div class="flex rounded-t-lg overflow-hidden border border-b-0 border-gray-300">
       <button type="button"
               data-scope="lore"
@@ -25,7 +23,6 @@
       </button>
     </div>
 
-    <%# Search input field %>
     <div class="relative">
       <%= form.search_field :q,
                             value: params[:q],
@@ -44,20 +41,16 @@
     </div>
   <% end %>
 
-  <%# Container for live search results %>
   <div id="live-search-results" data-live-search-target="resultsContainer" class="relative"></div>
 
-  <%# Link to open the syntax help modal %>
   <div class="mt-2 text-center">
     <button type="button" data-action="click->modal#open" class="text-sm text-gray-600 cursor-pointer bg-gray-50 hover:text-blue-600 hover:bg-blue-200 hover:underline transition-colors border rounded-md py-1 px-2">
       Search syntax help
     </button>
   </div>
 
-  <%# MODAL WINDOW STRUCTURE (hidden by default) %>
   <div data-modal-target="container" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
-    <%# ИЗМЕНЕНИЕ №1: Фон стал полупрозрачным темно-серым вместо черного %>
-    <div data-modal-target="backdrop" data-action="click->modal#closeOnBackdropClick" class="fixed inset-0 bg-gray-500 bg-opacity-50"></div>
+    <div data-modal-target="backdrop" data-action="click->modal#closeOnBackdropClick" class="fixed inset-0 bg-indigo-500 bg-opacity-0"></div>
 
     <%# Modal Panel %>
     <div class="relative bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-full overflow-y-auto">
@@ -74,7 +67,6 @@
       <div class="p-6 space-y-6 text-gray-700">
         <p>You can use special prefixes to narrow down your search. Prefixes have priority over the selected tab.</p>
 
-        <%# ИЗМЕНЕНИЕ №2: Grid заменен на Flex-контейнеры для отображения списком %>
         <div class="space-y-4">
           <div class="flex">
             <strong class="w-1/4 shrink-0">Content Types:</strong>

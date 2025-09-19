@@ -56,6 +56,24 @@ class Forge::WordsController < Forge::BaseController
     redirect_to forge_lexeme_path(lexeme), notice: "Meaning was deleted."
   end
 
+  def search
+    query = params[:query].to_s.strip
+    except_id = params[:except_id]
+
+    # Начинаем запрос, сразу объединяя с Lexeme для поиска по написанию
+    scope = Word.joins(:lexeme)
+
+    # Применяем фильтр по тексту, если он есть
+    scope = scope.where("lexemes.spelling ILIKE ?", "%#{query}%") if query.present?
+
+    # Исключаем текущее слово из результатов, чтобы оно не стало предком само себе
+    scope = scope.where.not(id: except_id) if except_id.present?
+
+    words = scope.limit(10)
+
+    render json: words.map { |word| { id: word.id, text: word.spelling_with_language } }
+  end
+
   private
 
   def set_lexeme

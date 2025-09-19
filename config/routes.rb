@@ -26,9 +26,11 @@ Rails.application.routes.draw do
       resources :words, only: [:new, :create]
     end
 
-    resources :words, only: [:show, :edit, :update, :destroy]
+    resources :words, only: [:show, :edit, :update, :destroy] do
+      get :search, on: :collection
+    end
 
-    resources :articles
+      resources :articles
     resources :history_entries
     resources :characters
     resources :locations
