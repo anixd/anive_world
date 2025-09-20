@@ -1,0 +1,51 @@
+<% content_for :title, "#{@language.name} Grammar & Phonology" %>
+
+<div class="bg-white p-6 rounded-lg shadow-md">
+  <div class="mb-6">
+    <%= render 'pub/shared/breadcrumbs', crumbs: [
+      { title: "Languages", path: pub_languages_path },
+      { title: @language.name, path: pub_language_path(@language) },
+      { title: "Grammar & Phonology" }
+    ] %>
+    <hr class="my-3">
+  </div>
+
+  <div class="border-b pb-4 mb-6">
+    <h1 class="text-3xl font-bold"><%= @language.name %>: Grammar & Phonology</h1>
+  </div>
+
+  <div class="mb-6">
+    <div class="flex rounded-lg border overflow-hidden">
+      <%= link_to "Grammar", url_for(tab: 'grammar'),
+                  class: "flex-1 py-2 px-4 text-center font-medium transition-colors #{ @active_tab == 'grammar' ? 'bg-blue-600 text-white' : 'bg-gray-50 text-gray-700 hover:bg-gray-100' }" %>
+
+      <%= link_to "Phonology", url_for(tab: 'phonology'),
+                  class: "flex-1 py-2 px-4 text-center font-medium transition-colors #{ @active_tab == 'phonology' ? 'bg-blue-600 text-white' : 'bg-gray-50 text-gray-700 hover:bg-gray-100' }" %>
+    </div>
+  </div>
+
+  <div>
+    <%= render "shared/pagination_controls", pagy: @pagy %>
+
+    <div class="flex flex-col gap-3 mt-4">
+      <% if @items.any? %>
+        <% @items.each do |item| %>
+          <%= link_to [:pub, item], class: "block p-4 bg-white shadow rounded-lg border hover:border-blue-400 group" do %>
+            <div class="flex items-center gap-4">
+              <%# ... (плашка с типом) ... %>
+              <h2 class="text-xl font-semibold text-blue-700 group-hover:underline">
+                <%= item.title %>
+              </h2>
+            </div>
+          <% end %>
+        <% end %>
+      <% else %>
+        <p class="text-gray-500 italic p-4">No published entries in this section yet.</p>
+      <% end %>
+    </div>
+
+    <div class="mt-6">
+      <%= render "shared/pagination_controls", pagy: @pagy %>
+    </div>
+  </div>
+</div>

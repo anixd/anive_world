@@ -23,7 +23,7 @@ class Forge::LocationsController < Forge::BaseController
     authorize @location
 
     if @location.save
-      redirect_to forge_location_path(@location), notice: "Location was successfully created."
+      redirect_to forge_location_path(@location), notice: "Location created."
     else
       render :new, status: :unprocessable_content
     end
@@ -35,9 +35,11 @@ class Forge::LocationsController < Forge::BaseController
 
   def update
     authorize @location
+
     if @location.update(location_params)
-      redirect_to forge_location_path(@location), notice: "Location was successfully updated."
+      redirect_to forge_location_path(@location), notice: "Location updated."
     else
+      set_form_options
       render :edit, status: :unprocessable_content
     end
   end
@@ -59,6 +61,6 @@ class Forge::LocationsController < Forge::BaseController
   end
 
   def location_params
-    params.require(:location).permit(:title, :body, :parent_location_id, :tags_string)
+    params.require(:location).permit(:title, :body, :parent_location_id, :tags_string, :publish)
   end
 end

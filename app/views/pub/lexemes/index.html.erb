@@ -1,0 +1,52 @@
+<% content_for :title, "#{@language.name} Dictionary" %>
+
+<div class="bg-white p-6 rounded-lg shadow-md">
+  <div class="mb-6">
+    <%= render 'pub/shared/breadcrumbs', crumbs: [
+      { title: "Languages", path: pub_languages_path },
+      { title: @language.name, path: pub_language_path(@language) },
+      { title: "Dictionary" }
+    ] %>
+  </div>
+
+  <div class="border-b pb-4 mb-6">
+    <h1 class="text-3xl font-bold"><%= @language.name %> Dictionary</h1>
+    <p class="mt-1 text-gray-600"><%= link_to "← Back to all languages", pub_languages_path, class: "text-blue-600 hover:underline" %></p>
+  </div>
+
+  <div class="my-4">
+    <%= render "shared/pagination_controls", pagy: @pagy %>
+  </div>
+
+  <% if @lexemes.any? %>
+    <div class="flex flex-col gap-3">
+      <% @lexemes.each do |lexeme| %>
+        <% first_word = lexeme.words.first %>
+        <%= link_to pub_language_lexeme_path(@language, lexeme), class: "block p-4 bg-white shadow rounded-lg border hover:border-blue-400 group" do %>
+          <h2 class="text-2xl font-semibold text-blue-700 group-hover:underline">
+            <%= lexeme.spelling %>
+          </h2>
+          <% if first_word %>
+            <div class="flex items-baseline gap-4 mt-1 text-sm">
+              <% if first_word.transcription.present? %>
+                <p class="text-gray-500">[<%= first_word.transcription %>]</p>
+              <% end %>
+              <% if first_word.parts_of_speech.any? %>
+                <p class="font-semibold text-gray-600"><%= first_word.parts_of_speech.map(&:name).join(', ') %></p>
+              <% end %>
+            </div>
+            <div class="prose prose-sm max-w-none text-gray-800 mt-2">
+              <%= render_markdown(first_word.definition) %>
+            </div>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+
+    <div class="mt-8">
+      <%= render "shared/pagination_controls", pagy: @pagy %>
+    </div>
+  <% else %>
+    <p class="text-gray-500 italic">There are no published words in this dictionary yet.</p>
+  <% end %>
+</div>

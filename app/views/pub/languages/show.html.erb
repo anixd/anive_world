@@ -1,0 +1,42 @@
+<% content_for :title, @language.name %>
+
+<div class="bg-white p-6 md:p-8 rounded-lg shadow-md">
+  <div class="mb-6">
+    <%= render 'pub/shared/breadcrumbs', crumbs: [
+      { title: "Languages", path: pub_languages_path },
+      { title: @language.name }
+    ] %>
+  </div>
+
+  <header class="border-b pb-6 mb-6">
+    <h1 class="text-4xl font-bold text-gray-900"><%= @language.name %></h1>
+    <div class="prose max-w-none mt-4" data-controller="wikilink-preview">
+      <%= render_markdown(@language.description.to_s) %>
+    </div>
+  </header>
+
+  <div>
+    <h2 class="text-2xl font-semibold text-gray-800 mb-4">Explore This Language</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <%= link_to pub_language_lexemes_path(@language), class: "block p-6 bg-blue-50 hover:bg-blue-100 rounded-lg border border-blue-200 transition-colors group" do %>
+        <h3 class="text-xl font-bold text-blue-800">Dictionary</h3>
+        <p class="text-sm text-blue-700 mt-1">Browse words and their meanings.</p>
+      <% end %>
+      </a>
+
+      <%= link_to pub_language_word_building_path(@language), class: "block p-6 bg-green-50 hover:bg-green-100 rounded-lg border border-green-200 transition-colors group" do %>
+        <h3 class="text-xl font-bold text-green-800">Word-building</h3>
+        <p class="text-sm text-green-700 mt-1">Discover roots and affixes.</p>
+      <% end %>
+
+      <%= link_to pub_language_grammar_path(@language), class: "block p-6 bg-yellow-50 hover:bg-yellow-100 rounded-lg border border-yellow-200 transition-colors group" do %>
+        <h3 class="text-xl font-bold text-yellow-800">Grammar & Phonology</h3>
+        <p class="text-sm text-yellow-700 mt-1">Learn the rules of the language.</p>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="mt-8 pt-6 border-t">
+    <%= link_to "← Back to all languages", pub_languages_path, class: "text-blue-600 hover:underline" %>
+  </div>
+</div>

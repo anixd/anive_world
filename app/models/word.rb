@@ -45,6 +45,8 @@ class Word < ApplicationRecord
     derived: 4
   }, _prefix: :origin
 
+  # enum :origin_type, {:unspecified=>0, :inherited=>1, :neologism=>2, :borrowed=>3, :derived=>4}
+
   has_paper_trail
 
   before_validation :set_sti_type, on: :create

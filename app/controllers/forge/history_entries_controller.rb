@@ -85,6 +85,6 @@ class Forge::HistoryEntriesController < Forge::BaseController
   end
 
   def history_entry_params
-    params.require(:history_entry).permit(:title, :body, :era_id, :display_date, :tags_string)
+    params.require(:history_entry).permit(:title, :body, :era_id, :display_date, :tags_string, :publish)
   end
 end

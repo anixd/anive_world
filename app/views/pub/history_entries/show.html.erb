@@ -1,0 +1,65 @@
+<% content_for :title, @history_entry.title %>
+
+<div class="bg-white p-6 md:p-8 rounded-lg shadow-md">
+
+  <header class="border-b pb-4 mb-6">
+    <h1 class="text-4xl font-bold text-gray-900"><%= @history_entry.title %></h1>
+  </header>
+
+  <div class="mb-6 pb-6 border-b">
+    <%= render 'pub/shared/content_header', back_path: pub_history_entries_path, back_path_text: 'Back to all histories', record: @location %>
+
+
+    <h3 class="text-lg font-semibold mb-3 text-gray-700">Chronology</h3>
+
+    <dl class="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-4 text-sm">
+      <div>
+        <dt class="font-medium text-gray-500">Event Date</dt>
+        <dd class="text-gray-900 font-semibold"><%= @history_entry.display_date.presence || "Not specified" %></dd>
+      </div>
+
+      <% if @history_entry.era %>
+        <div>
+          <dt class="font-medium text-gray-500">Era</dt>
+          <dd class="text-gray-900"><%= @history_entry.era.name %></dd>
+        </div>
+      <% end %>
+
+      <%# Конвертированные даты для всех календарей %>
+      <% if @history_entry.absolute_year.present? %>
+        <% converter = Timeline::TimeConverter.new %>
+        <% Timeline::Calendar.order(:name).each do |calendar| %>
+          <div>
+            <dt class="font-medium text-gray-500"><%= calendar.name %></dt>
+            <dd class="text-gray-900">
+              <%= converter.from_absolute(absolute_year: @history_entry.absolute_year, to_calendar_id: calendar.id) %>
+            </dd>
+          </div>
+        <% end %>
+      <% end %>
+    </dl>
+  </div>
+
+  <div class="prose max-w-none" data-controller="wikilink-preview">
+    <%= render_markdown(@history_entry.body) %>
+  </div>
+
+  <% if @history_entry.participants.any? %>
+    <div class="mt-8 pt-6 border-t">
+      <h3 class="text-lg font-semibold mb-3 text-gray-700">Participants</h3>
+      <ul class="list-disc list-inside">
+        <% @history_entry.participants.each do |participant| %>
+          <li class="text-blue-600 hover:text-blue-800 hover:underline">
+            <%= link_to participant.title, [:pub, participant] %>
+            <span class="text-xs text-gray-400 italic ml-1">(<%= participant.class.name %>)</span>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+
+  <div class="border-t pt-6">
+    <%= render 'pub/shared/content_header', back_path: pub_history_entries_path, back_path_text: 'Back to all histories', record: @location %>
+  </div>
+</div>

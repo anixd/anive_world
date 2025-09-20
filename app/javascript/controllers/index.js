@@ -13,6 +13,7 @@ import TagAutocompleteController from "./tag_autocomplete_controller"
 import LiveSearchController from "./live_search_controller"
 import ModalController from "./modal_controller"
 import AutocompleteController from "./autocomplete_controller"
+import DropdownController from "./dropdown_controller"
 
 application.register("dependent-select", DependentSelectController)
 application.register("autosubmit", AutosubmitController)
@@ -23,3 +24,5 @@ application.register("tag-autocomplete", TagAutocompleteController)
 application.register("live-search", LiveSearchController)
 application.register("modal", ModalController)
 application.register("autocomplete", AutocompleteController)
+application.register("dropdown", DropdownController)
+
