@@ -14,6 +14,10 @@ Rails.application.routes.draw do
       get :search, on: :collection
     end
 
+    resources :tags do
+      get :search, on: :collection
+    end
+
     resources :languages do
       resources :parts_of_speech
       resources :roots
@@ -36,6 +40,7 @@ Rails.application.routes.draw do
     resources :locations
     resources :grammar_rules
     resources :phonology_articles
+    resources :help_pages, path: "help"
 
     namespace :timeline do
       resources :calendars
@@ -58,10 +63,14 @@ Rails.application.routes.draw do
     resources :characters, only: [:index, :show]
     resources :locations, only: [:index, :show]
     resources :history_entries, only: [:index, :show], path: "history"
+    resources :tags, only: [:show], param: :name
+    resources :help_pages, path: "help", only: [:index, :show]
     resources :languages, only: [:index, :show] do
       resources :lexemes, only: [:index, :show], path: "dictionary"
       get "word-building", to: "word_building#index", as: :word_building
       get "grammar", to: "grammar#index", as: :grammar
+      resources :roots, only: [:show]
+      resources :affixes, only: [:show]
     end
     resources :grammar_rules, only: [:show], path: "grammar/rules"
     resources :phonology_articles, only: [:show], path: "phonology/articles"

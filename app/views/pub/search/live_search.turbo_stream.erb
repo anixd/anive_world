@@ -3,8 +3,18 @@
   <% if @live_results&.any? %>
     <div class="absolute top-full left-0 right-0 mt-1 bg-white shadow-lg rounded-lg border border-gray-200 max-h-96 overflow-y-auto z-50">
       <% @live_results.each do |result| %>
-        <% url = result.is_a?(Root) || result.is_a?(Affix) ? url_for([:forge, result.language, result]) : url_for([:forge, result]) %>
-
+        <%
+          url = case result
+                when Lexeme
+                  pub_language_lexeme_path(result.language, result)
+                when Root
+                  pub_language_root_path(result.language, result)
+                when Affix
+                  pub_language_affix_path(result.language, result)
+                else
+                  polymorphic_path([:pub, result])
+                end
+        %>
         <%= link_to url,
                     class: "block px-4 py-3 hover:bg-gray-50 border-b border-gray-100 transition-colors",
                     data: { turbo: false } do %>
@@ -42,10 +52,10 @@
         <% end %>
       <% end %>
 
-      <% if @results.count > 5 %>
-        <%= link_to forge_search_path(q: @query, scope: @scope_name),
+      <% if @pagy.count > 10 %>
+        <%= link_to pub_search_path(q: @query, scope: @scope_name),
                     class: "block px-4 py-3 text-center text-sm text-blue-600 hover:bg-gray-50 font-medium" do %>
-          View all <%= @results.count %> results →
+          View all <%= @pagy.count %> results →
         <% end %>
       <% end %>
     </div>

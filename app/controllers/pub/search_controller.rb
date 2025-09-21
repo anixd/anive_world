@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Pub::SearchController < Pub::BaseController
   def index
     @query = params[:q].to_s.strip
@@ -10,7 +12,8 @@ class Pub::SearchController < Pub::BaseController
     end
 
     base_scope = if @scope_name == "dictionary"
-                   Lexeme.published
+                   # eager-loading для языка, чтобы избежать N+1
+                   Lexeme.published.includes(:language)
                  else
                    ContentEntry.published
                  end
@@ -24,9 +27,8 @@ class Pub::SearchController < Pub::BaseController
     @pagy, @results = results.is_a?(Array) ? pagy_array(results) : pagy(results)
 
     respond_to do |format|
-      format.html # Обычный ответ для полной перезагрузки страницы
-      format.turbo_stream do # Ответ для "живого" поиска
-        # Для выпадающего списка берем только первые 10
+      format.html
+      format.turbo_stream do
         @live_results = @results.is_a?(Array) ? @results.first(10) : @results.limit(10)
         render :live_search
       end

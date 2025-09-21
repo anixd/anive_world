@@ -1,12 +1,38 @@
+<%
+  # 1. Определяем переменные в зависимости от типа результата
+  display_text = ""
+  destination_url = "#"
+  summary_text = ""
+
+  case result
+  when Lexeme
+    display_text = result.spelling
+    destination_url = forge_lexeme_path(result)
+    summary_text = result.words.first&.definition.to_s
+  when Root
+    display_text = result.text
+    destination_url = forge_language_root_path(result.language, result)
+    summary_text = result.meaning.to_s
+  when Affix
+    display_text = result.text
+    destination_url = forge_language_affix_path(result.language, result)
+    summary_text = result.meaning.to_s
+  when ContentEntry
+    display_text = result.title
+    destination_url = url_for([:forge, result])
+    summary_text = result.body.to_s
+  end
+%>
+
 <div class="bg-white shadow rounded-lg p-4">
   <div class="flex justify-between items-baseline">
     <h3 class="font-semibold text-lg">
-      <%= link_to result.title, url_for([:forge, result]), class: "text-blue-700 hover:underline" %>
+      <%= link_to display_text, destination_url, class: "text-blue-700 hover:underline" %>
     </h3>
     <span class="text-xs font-medium uppercase text-gray-500"><%= result.class.name %></span>
   </div>
 
   <div class="prose prose-sm max-w-none text-gray-600 mt-2">
-    <%= truncate(strip_tags(result.body.to_s), length: 300) %>
+    <%= truncate(strip_tags(summary_text), length: 300) %>
   </div>
 </div>

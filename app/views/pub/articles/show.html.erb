@@ -3,13 +3,24 @@
 <%= render 'pub/shared/search_block' %>
 
 <div class="bg-white p-6 md:p-8 rounded-lg shadow-md">
-  <%= render 'pub/shared/content_header', back_path: pub_locations_path, back_path_text: 'Back to all articles', record: @article %>
+  <%#= render 'pub/shared/content_header', back_path: pub_locations_path, back_path_text: 'Back to all articles', record: @article %>
 
   <header class="border-b pb-4 mb-6">
+    <div class="mb-6">
+      <%= render 'pub/shared/breadcrumbs', crumbs: [
+        { title: "Lore" },
+        { title: "Articles", path: pub_articles_path },
+        { title: @article.title }
+      ] %>
+    </div>
+
     <h1 class="text-4xl font-bold text-gray-900"><%= @article.title %></h1>
     <p class="text-sm text-gray-500 mt-2">
       Published on <%= @article.published_at.strftime("%B %d, %Y") %> by <%= @article.author.displayname %>
     </p>
+    <div class="mt-4">
+      <%= render 'pub/shared/tags_list', record: @article %>
+    </div>
   </header>
 
   <div class="prose max-w-none" data-controller="wikilink-preview">

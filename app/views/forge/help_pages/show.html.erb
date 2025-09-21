@@ -1,0 +1,15 @@
+<div class="p-6">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold"><%= @help_page.title %></h1>
+    <div class="flex items-center gap-2">
+      <%= link_to 'Edit', edit_forge_help_page_path(@help_page), class: 'text-xs font-bold inline-block border bg-blue-400 border-blue-600 hover:bg-blue-300 rounded py-2 px-4' %>
+      <%= link_to 'Back to List', forge_help_pages_path, class: 'text-xs font-bold inline-block border bg-gray-200 border-gray-400 hover:bg-gray-300 rounded py-2 px-4' %>
+    </div>
+  </div>
+
+  <div class="bg-white shadow rounded-lg p-6">
+    <div class="prose max-w-none" data-controller="wikilink-preview">
+      <%= render_markdown(@help_page.body) %>
+    </div>
+  </div>
+</div>

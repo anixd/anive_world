@@ -3,12 +3,19 @@
 <%= render 'pub/shared/search_block' %>
 
 <div class="bg-white p-6 rounded-lg shadow-md">
+  <div class="mb-6">
+    <%= render 'pub/shared/breadcrumbs', crumbs: [
+      { title: "Lore" },
+      { title: "Articles" }
+    ] %>
+  </div>
+
   <div class="border-b pb-4 mb-6">
     <h1 class="text-3xl font-bold">Articles</h1>
   </div>
 
   <% if @articles.any? %>
-    <div class="flex flex-col gap-3">
+    <div class="flex flex-col gap-4">
       <% @articles.each do |article| %>
         <%= link_to pub_article_path(article), class: "block p-4 bg-white shadow rounded-lg border hover:border-blue-400 group" do %>
           <h2 class="text-2xl font-semibold text-blue-700 group-hover:underline">
@@ -17,6 +24,9 @@
           <p class="text-sm text-gray-500 mt-1">
             Published on <%= article.published_at.strftime("%B %d, %Y") %>
           </p>
+          <div class="mt-3">
+            <%= render 'pub/shared/tags_list', record: article %>
+          </div>
         <% end %>
       <% end %>
     </div>

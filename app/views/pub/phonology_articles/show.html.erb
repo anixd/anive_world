@@ -13,7 +13,7 @@
     <hr class="my-3">
   </div>
 
-  <%= render 'pub/shared/content_header',
+  <%#= render 'pub/shared/content_header',
              back_path: pub_language_grammar_path(@phonology_article.language),
              back_path_text: 'Back to Grammar & Phonology',
              record: @phonology_article %>
@@ -23,6 +23,9 @@
     <p class="text-sm text-gray-500 mt-2">
       Grammar rule for <%= link_to @phonology_article.language.name, pub_language_path(@phonology_article.language), class: "text-blue-600 hover:underline" %>
     </p>
+    <div class="mt-4">
+      <%= render 'pub/shared/tags_list', record: @phonology_article %>
+    </div>
   </header>
 
   <div class="prose max-w-none" data-controller="wikilink-preview">
