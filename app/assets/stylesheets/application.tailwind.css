@@ -45,7 +45,7 @@
     }
 
     .prose code {
-        @apply text-blue-600 font-semibold px-1 py-1;
+        @apply text-green-700 font-semibold px-1 py-1;
     }
 
     .prose code::before, .prose code::after {
@@ -77,6 +77,24 @@
     }
     .pagy-nav .gap {
         @apply relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-700 ring-1 ring-inset ring-gray-300;
+    }
+
+    /*input[type="search"]::-webkit-search-cancel-button,*/
+    /*input[type="search"]::-webkit-search-decoration {*/
+    /*    -webkit-appearance: none;*/
+    /*    appearance: none;*/
+    /*}*/
+
+    .search-tab {
+        @apply flex-1 py-0.5 px-4 text-center font-medium transition-colors text-sm;
+    }
+
+    .search-tab.is-active {
+        @apply bg-blue-400 text-white;
+    }
+
+    .search-tab:not(.is-active) {
+        @apply bg-gray-100 text-gray-700 hover:bg-gray-200;
     }
 
     @layer utilities {

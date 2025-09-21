@@ -295,7 +295,10 @@ def migrate_dictionary(logger:, language:, author:, pos_map:, root_map:, is_dry_
     else
       log_creation(logger: logger, type: "Lexeme", name: old_word.word, is_dry_run: is_dry_run)
       lexeme = nil
-      lexeme = Lexeme.find_or_create_by!(spelling: old_word.word, language: language) { |l| l.author = author } unless is_dry_run
+      lexeme = Lexeme.find_or_create_by!(spelling: old_word.word, language: language) do |l|
+        l.author = author
+        l.published_at = (old_word.published ? old_word.updated_at : nil)
+      end unless is_dry_run
       if lexeme
         word_attrs = { type: 'AnikeWord', definition: old_word.translation, transcription: old_word.transcription, comment: old_word.comment, author: author, created_at: old_word.created_at, updated_at: old_word.updated_at }
         new_word = lexeme.words.build(word_attrs)

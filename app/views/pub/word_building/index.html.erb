@@ -1,0 +1,79 @@
+<% content_for :title, "#{@language.name} Word-building" %>
+
+<%= render 'pub/shared/search_block' %>
+
+<div class="bg-white p-6 rounded-lg shadow-md">
+  <div class="mb-6">
+    <%= render 'pub/shared/breadcrumbs', crumbs: [
+      { title: "Languages", path: pub_languages_path },
+      { title: @language.name, path: pub_language_path(@language) },
+      { title: "Word-building" }
+    ] %>
+  </div>
+
+  <div class="border-b pb-4 mb-6">
+    <h1 class="text-3xl font-bold"><%= @language.name %>: Word-building</h1>
+    <p class="mt-1 text-gray-600">The basic components for constructing words.</p>
+  </div>
+
+  <%# --- НАВИГАЦИЯ ПО ТАБАМ --- %>
+  <div class="mb-6">
+    <div class="flex rounded-lg border overflow-hidden">
+      <%# Таб для Корней %>
+      <%= link_to "Roots", url_for(tab: 'roots'),
+                  class: "flex-1 py-2 px-4 text-center font-medium transition-colors #{ @active_tab == 'roots' ? 'bg-blue-600 text-white' : 'bg-gray-50 text-gray-700 hover:bg-gray-100' }" %>
+
+      <%# Таб для Аффиксов %>
+      <%= link_to "Affixes", url_for(tab: 'affixes'),
+                  class: "flex-1 py-2 px-4 text-center font-medium transition-colors #{ @active_tab == 'affixes' ? 'bg-blue-600 text-white' : 'bg-gray-50 text-gray-700 hover:bg-gray-100' }" %>
+    </div>
+  </div>
+
+  <%# --- КОНТЕНТ ТАБОВ --- %>
+  <div>
+    <% if @active_tab == 'roots' %>
+      <%# -- Содержимое для Корней -- %>
+      <%= render "shared/pagination_controls", pagy: @pagy %>
+      <section class="mt-4">
+        <div class="flex flex-col divide-y">
+          <% if @roots.any? %>
+            <% @roots.each do |root| %>
+              <div class="py-3">
+                <h3 class="font-bold text-lg font-mono text-blue-800"><%= root.text %></h3>
+                <div class="prose prose-sm max-w-none text-gray-700 mt-1" data-controller="wikilink-preview">
+                  <%= render_markdown(root.meaning.to_s) %>
+                </div>
+              </div>
+            <% end %>
+          <% else %>
+            <p class="text-gray-500 italic">No published roots for this language yet.</p>
+          <% end %>
+        </div>
+      </section>
+
+    <% elsif @active_tab == 'affixes' %>
+      <%# -- Содержимое для Аффиксов -- %>
+      <%= render "shared/pagination_controls", pagy: @pagy %>
+      <section class="mt-4">
+        <div class="flex flex-col divide-y">
+          <% if @affixes.any? %>
+            <% @affixes.each do |affix| %>
+              <div class="py-3">
+                <h3 class="font-bold text-lg font-mono text-green-800"><%= affix.text %></h3>
+                <div class="prose prose-sm max-w-none text-gray-700 mt-1" data-controller="wikilink-preview">
+                  <%= render_markdown(affix.meaning.to_s) %>
+                </div>
+              </div>
+            <% end %>
+          <% else %>
+            <p class="text-gray-500 italic">No published affixes for this language yet.</p>
+          <% end %>
+        </div>
+      </section>
+    <% end %>
+
+    <div class="mt-6">
+      <%= render "shared/pagination_controls", pagy: @pagy %>
+    </div>
+  </div>
+</div>

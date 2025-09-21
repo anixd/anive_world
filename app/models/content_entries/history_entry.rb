@@ -56,9 +56,22 @@ class HistoryEntry < ContentEntry
   belongs_to :era, class_name: "Timeline::Era", optional: true
 
   has_many :participations, class_name: "Timeline::Participation", dependent: :destroy
-  has_many :participants, through: :participations, source: :participant
+  # has_many :participants, through: :participations, source: :participant
+  has_many :participating_characters,
+           through: :participations,
+           source: :participant,
+           source_type: 'Character'
+
+  has_many :participating_locations,
+           through: :participations,
+           source: :participant,
+           source_type: 'Location'
 
   after_initialize :set_form_date_fields, if: :persisted?
+
+  def participants
+    participating_characters + participating_locations
+  end
 
   private
 

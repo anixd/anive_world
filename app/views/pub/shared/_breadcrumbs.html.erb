@@ -1,0 +1,26 @@
+<%#
+  Accepts a local variable `crumbs`, which is an array of hashes.
+  Each hash should have :title and optional :path.
+  Example: [{title: "Languages", path: pub_languages_path}, {title: "anik'e"}]
+%>
+<nav aria-label="Breadcrumb">
+  <ol class="flex items-center gap-2 text-sm text-gray-500">
+    <% crumbs.each_with_index do |crumb, index| %>
+      <li>
+        <div class="flex items-center">
+          <% if index > 0 %>
+            <svg class="h-4 w-4 shrink-0 text-gray-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+              <path d="M5.555 17.776l8-16 .894.448-8 16-.894-.448z" />
+            </svg>
+          <% end %>
+
+          <% if crumb[:path] %>
+            <%= link_to crumb[:title], crumb[:path], class: "ml-2 hover:text-gray-700" %>
+          <% else %>
+            <span class="ml-2 font-medium text-blue-600"><%= crumb[:title] %></span>
+          <% end %>
+        </div>
+      </li>
+    <% end %>
+  </ol>
+</nav>

@@ -49,6 +49,24 @@ Rails.application.routes.draw do
 
   scope path: "/f", module: "forge", as: :f, &forge_routes # alias `/f`
 
+
+  # Public Area
+  scope module: "pub", as: "pub" do
+    get "search", to: "search#index"
+    root "home#index"
+    resources :articles, only: [:index, :show]
+    resources :characters, only: [:index, :show]
+    resources :locations, only: [:index, :show]
+    resources :history_entries, only: [:index, :show], path: "history"
+    resources :languages, only: [:index, :show] do
+      resources :lexemes, only: [:index, :show], path: "dictionary"
+      get "word-building", to: "word_building#index", as: :word_building
+      get "grammar", to: "grammar#index", as: :grammar
+    end
+    resources :grammar_rules, only: [:show], path: "grammar/rules"
+    resources :phonology_articles, only: [:show], path: "phonology/articles"
+  end
+
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check

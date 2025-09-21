@@ -1,0 +1,48 @@
+<% content_for :title, @lexeme.spelling %>
+
+<%= render 'pub/shared/search_block' %>
+
+<div class="bg-white p-6 rounded-lg shadow-md">
+  <div class="mb-6">
+    <%= render 'pub/shared/breadcrumbs', crumbs: [
+      { title: "Languages", path: pub_languages_path },
+      { title: @language.name, path: pub_language_path(@language) },
+      { title: "Dictionary", path: pub_language_lexemes_path(@language) },
+      { title: @lexeme.spelling }
+    ] %>
+  </div>
+
+  <header class="border-b pb-4 mb-6">
+    <h1 class="text-4xl font-bold text-gray-900"><%= @lexeme.spelling %></h1>
+    <p class="mt-1 text-gray-600">A word in <%= @language.name %></p>
+  </header>
+
+  <div class="space-y-6">
+    <% if @words.any? %>
+      <% @words.each_with_index do |word, index| %>
+        <div class="border rounded-lg p-4">
+          <% if @words.size > 1 %>
+            <span class="text-sm font-bold text-gray-500">Meaning <%= index + 1 %></span>
+          <% end %>
+
+          <div class="flex items-baseline gap-4 mt-1 text-sm">
+            <% if word.transcription.present? %>
+              <p class="text-gray-500">[<%= word.transcription %>]</p>
+            <% end %>
+            <% if word.parts_of_speech.any? %>
+              <p class="font-semibold text-gray-600"><%= word.parts_of_speech.map(&:name).join(', ') %></p>
+            <% end %>
+          </div>
+
+          <div class="prose max-w-none text-gray-800 mt-2" data-controller="wikilink-preview">
+            <%= render_markdown(word.definition) %>
+          </div>
+
+          <%= render 'shared/etymology_spoiler', etymologizable: word %>
+        </div>
+      <% end %>
+    <% else %>
+      <p class="text-gray-500 italic">This lexeme has no detailed meanings yet.</p>
+    <% end %>
+  </div>
+</div>

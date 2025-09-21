@@ -39,7 +39,7 @@ class LoreSearchService
 
     # Теперь в @parsed_query[:text] уже будет строка вида "текст !исключение"
     if filtered_scope.respond_to?(:search_by_text) && @parsed_query[:text].present?
-      filtered_scope.search_by_text(@parsed_query[:text])
+      filtered_scope.search_by_text(@parsed_query[:text]).with_pg_search_rank
     else
       # Если после парсинга текста не осталось (например, был только тег),
       # возвращаем отфильтрованный по префиксам/тегам скоуп.
@@ -73,9 +73,10 @@ class LoreSearchService
       remaining_query = remaining_query.sub(/^#{prefix}:\s*/i, '')
     end
 
-    tags = remaining_query.scan(/#(\w+)/).flatten
+    tag_regex = /#([a-zA-Z0-9\-_']+)/
+    tags = remaining_query.scan(tag_regex).flatten
     result[:tags] = tags
-    remaining_query = remaining_query.gsub(/#\w+/, '')
+    remaining_query = remaining_query.gsub(tag_regex, '')
 
     exclusions = remaining_query.scan(/!(\S+)/).flatten
     result[:exclusions] = exclusions

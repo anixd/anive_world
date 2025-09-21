@@ -1,0 +1,24 @@
+<% path = case result
+          when Lexeme
+            pub_language_lexeme_path(result.language, result)
+          when Root, Affix
+            "#" # TODO: create show pages for root/affix
+          else
+            polymorphic_path([:pub, result])
+          end %>
+
+<%= link_to path, class: "block p-4 bg-white shadow rounded-lg border hover:border-blue-400 group" do %>
+  <div class="flex justify-between items-baseline">
+    <h2 class="text-xl font-semibold text-blue-700 group-hover:underline">
+      <%= result.try(:spelling) || result.try(:text) || result.title %>
+    </h2>
+    <span class="text-xs font-medium uppercase text-gray-500">
+      <%= result.is_a?(Lexeme) ? "Word" : result.class.name.underscore.humanize %>
+    </span>
+  </div>
+  <% if result.is_a?(ContentEntry) %>
+    <p class="text-sm text-gray-600 mt-2"><%= truncate(strip_tags(result.body.to_s), length: 250) %></p>
+  <% elsif result.is_a?(Lexeme) && result.words.first %>
+    <p class="text-sm text-gray-600 mt-2"><%= truncate(strip_tags(result.words.first.definition.to_s), length: 250) %></p>
+  <% end %>
+<% end %>

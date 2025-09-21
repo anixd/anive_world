@@ -1,0 +1,32 @@
+<% content_for :title, "Languages" %>
+
+<%= render 'pub/shared/search_block' %>
+
+<div class="bg-white p-6 rounded-lg shadow-md">
+  <div class="border-b pb-4 mb-6">
+    <h1 class="text-3xl font-bold">Languages of the World</h1>
+    <p class="mt-1 text-gray-600">Discover the linguistic diversity of the world.</p>
+  </div>
+
+  <% if @languages.any? %>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <% @languages.each do |language| %>
+        <%= link_to pub_language_path(language), class: "block border rounded-lg p-4 transition-shadow hover:shadow-md group" do %>
+          <h2 class="text-2xl font-semibold text-blue-700 group-hover:underline">
+            <%= language.name %>
+          </h2>
+
+          <div class="prose prose-sm max-w-none text-gray-700 mt-2 flex-grow" data-controller="wikilink-preview">
+            <%= render_markdown(language.description.to_s.truncate(250)) %>
+          </div>
+
+          <div class="mt-4 font-semibold text-blue-600">
+            Explore →
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="text-gray-500 italic">Information about languages has not yet been added.</p>
+  <% end %>
+</div>

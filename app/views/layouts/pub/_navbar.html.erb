@@ -1,0 +1,27 @@
+<header class="bg-white shadow-sm sticky top-0 z-50">
+  <div class="container mx-auto px-4">
+    <div class="flex justify-between items-center py-3">
+      <div class="flex-1">
+        <%= link_to "AniveWorld", pub_root_path, class: "font-bold text-xl text-gray-800" %>
+      </div>
+
+      <div class="flex items-center gap-6 text-sm font-medium text-gray-600">
+        <div class="relative" data-controller="dropdown" data-action="mouseenter->dropdown#show mouseleave->dropdown#hide">
+          <span class="hover:text-blue-600 cursor-pointer">Lore</span>
+          <div data-dropdown-target="menu" class="absolute hidden bg-white shadow-lg rounded-md mt-2 py-1 w-40 border z-10">
+            <%= link_to "Articles", pub_articles_path, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" %>
+            <%= link_to "History", pub_history_entries_path, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" %>
+            <%= link_to "Characters", pub_characters_path, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" %>
+            <%= link_to "Locations", pub_locations_path, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" %>
+          </div>
+        </div>
+        <%= link_to "Languages", pub_languages_path, class: "hover:text-blue-600" %>
+        <a href="#" class="text-gray-400 cursor-not-allowed" title="Coming soon">Help</a>
+      </div>
+
+      <div class="flex-1 flex justify-end">
+        <%= link_to "Forge Login", login_path, class: "text-sm text-gray-500 hover:text-blue-600" %>
+      </div>
+    </div>
+  </div>
+</header>

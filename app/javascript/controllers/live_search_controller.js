@@ -60,7 +60,7 @@ export default class extends Controller {
         url.searchParams.set("scope", this.scopeValue)
 
         try {
-            // Используем стандартный fetch
+            // юзаем стандартный fetch
             const response = await fetch(url, {
                 headers: {
                     // заголовок для Rails, что мы хотим получить TurboStream
@@ -75,7 +75,7 @@ export default class extends Controller {
 
             // Получаем ответ сервера в виде текста
             const responseText = await response.text()
-            // И вручную "скармливаем" его Turbo для обработки
+            // И вручную скармливаем его Turbo для обработки
             Turbo.renderStreamMessage(responseText)
 
         } catch (error) {
@@ -105,17 +105,10 @@ export default class extends Controller {
     }
 
     updateTabStyles() {
-        const isLore = this.scopeValue === 'lore'
+        const isLore = this.scopeValue === 'lore';
 
-        // Update Lore tab
-        this.loreTabTarget.className = `flex-1 py-2 px-4 text-center font-medium transition-colors ${
-            isLore ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-        }`
-
-        // Update Dictionary tab
-        this.dictionaryTabTarget.className = `flex-1 py-2 px-4 text-center font-medium transition-colors ${
-            !isLore ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-        }`
+        this.loreTabTarget.classList.toggle('is-active', isLore);
+        this.dictionaryTabTarget.classList.toggle('is-active', !isLore);
     }
 
     updatePlaceholder() {

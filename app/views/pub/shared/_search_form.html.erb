@@ -1,0 +1,45 @@
+<div data-controller="live-search"
+     data-live-search-scope-value="<%= params[:scope] || 'lore' %>"
+     data-live-search-search-url-value="<%= pub_search_path %>">
+
+  <%= form_with(url: pub_search_path, method: :get, class: "relative", data: { live_search_target: "form" }) do |form| %>
+    <%= form.hidden_field :scope, value: params[:scope] || 'lore', data: { live_search_target: "scopeInput" } %>
+
+    <div class="flex rounded-t-lg overflow-hidden border border-b-0 border-gray-300">
+      <button type="button"
+              data-scope="lore"
+              data-action="click->live-search#setScope"
+              data-live-search-target="loreTab"
+              class="search-tab">
+        Lore
+      </button>
+
+      <button type="button"
+              data-scope="dictionary"
+              data-action="click->live-search#setScope"
+              data-live-search-target="dictionaryTab"
+              class="search-tab">
+        Dictionary
+      </button>
+    </div>
+
+    <div class="relative">
+      <%= form.search_field :q,
+                            value: @query,
+                            class: "block w-full border border-gray-300 rounded-b-lg text-lg pr-10 focus:border-blue-500 focus:ring-blue-500 px-3 py-2",
+                            placeholder: (params[:scope] == 'dictionary' ? "Search in Dictionary..." : "Search in Lore..."),
+                            data: {
+                              live_search_target: "input",
+                              action: "input->live-search#search"
+                            } %>
+      <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+        <button type="submit" class="text-gray-400 hover:text-gray-600" title="Search">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd" /></svg>
+        </button>
+      </div>
+    </div>
+  <% end %>
+
+  <div id="live-search-results" data-live-search-target="resultsContainer" class="relative">
+  </div>
+</div>

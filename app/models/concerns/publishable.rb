@@ -8,6 +8,18 @@ module Publishable
     scope :drafts, -> { where(published_at: nil).or(where("published_at > ?", Time.current)) }
   end
 
+  def publish
+    published?
+  end
+
+  def publish=(value)
+    if %w[1 true].include?(value.to_s)
+      self.published_at ||= Time.current
+    else
+      self.published_at = nil
+    end
+  end
+
   def published?
     published_at.present? && published_at <= Time.current
   end
