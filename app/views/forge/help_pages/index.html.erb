@@ -1,0 +1,31 @@
+<div class="p-6">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold">Help Pages</h1>
+    <%= link_to 'New Help Page', new_forge_help_page_path, class: 'bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded' %>
+  </div>
+
+  <div class="flex flex-col gap-3">
+    <% @help_pages.each do |page| %>
+      <div class="bg-white shadow rounded-lg p-4 flex justify-between items-start gap-4">
+        <%= link_to forge_help_page_path(page), class: "flex-grow group" do %>
+          <h2 class="font-semibold text-lg text-blue-700 group-hover:text-blue-900 group-hover:underline">
+            <%= page.title %>
+          </h2>
+          <p class="text-sm text-gray-500 mt-1">
+            Parent: <%= page.parent&.title || "None" %>
+          </p>
+        <% end %>
+
+        <div class="flex-shrink-0 text-sm flex items-center gap-2">
+          <%= link_to 'Edit', edit_forge_help_page_path(page), class: 'text-xs inline-block px-3 py-1 border bg-blue-100 border-blue-600 hover:bg-blue-300 rounded' %>
+          <span class="mx-1 text-gray-600">|</span>
+          <%= link_to 'Delete', forge_help_page_path(page), data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: 'text-xs inline-block px-3 py-1 border bg-red-100 border-red-600 hover:bg-red-300 rounded' %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="my-4">
+    <%= render "shared/pagination_controls", pagy: @pagy %>
+  </div>
+</div>

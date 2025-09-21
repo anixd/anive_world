@@ -3,12 +3,15 @@
 class WikilinkResolver
   TYPE_ALIASES = {
     "w" => Lexeme, "word" => Lexeme,
+    "rt" => Root, "root" => Root,
+    "af" => Affix, "affix" => Affix,
     "a" => Article, "article" => Article,
     "h" => HistoryEntry, "history" => HistoryEntry,
     "c" => Character, "character" => Character,
     "l" => Location, "location" => Location,
     "g" => GrammarRule, "grammar" => GrammarRule,
-    "p" => PhonologyArticle, "phonology" => PhonologyArticle
+    "p" => PhonologyArticle, "phonology" => PhonologyArticle,
+    "hp" => HelpPage, "help" => HelpPage
   }.freeze
 
   LANGUAGE_ALIASES = {

@@ -1,0 +1,28 @@
+<% content_for :title, "Help" %>
+
+<%= render 'pub/shared/search_block' %>
+
+<div class="bg-white p-6 rounded-lg shadow-md">
+  <div class="mb-6">
+    <%= render 'pub/shared/breadcrumbs', crumbs: [{ title: "Help" }] %>
+  </div>
+
+  <div class="border-b pb-4 mb-6">
+    <h1 class="text-3xl font-bold">Help & Documentation</h1>
+    <p class="mt-1 text-gray-600">Find answers and learn how to use the site.</p>
+  </div>
+
+  <% if @help_pages.any? %>
+    <div class="flex flex-col gap-4">
+      <% @help_pages.each do |page| %>
+        <%= link_to pub_help_page_path(page), class: "block p-4 bg-white shadow rounded-lg border hover:border-blue-400 group" do %>
+          <h2 class="text-xl font-semibold text-blue-700 group-hover:underline">
+            <%= page.title %>
+          </h2>
+        <% end %>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="text-gray-500 italic">The help section is currently empty.</p>
+  <% end %>
+</div>

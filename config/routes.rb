@@ -40,6 +40,7 @@ Rails.application.routes.draw do
     resources :locations
     resources :grammar_rules
     resources :phonology_articles
+    resources :help_pages, path: "help"
 
     namespace :timeline do
       resources :calendars
@@ -63,6 +64,7 @@ Rails.application.routes.draw do
     resources :locations, only: [:index, :show]
     resources :history_entries, only: [:index, :show], path: "history"
     resources :tags, only: [:show], param: :name
+    resources :help_pages, path: "help", only: [:index, :show]
     resources :languages, only: [:index, :show] do
       resources :lexemes, only: [:index, :show], path: "dictionary"
       get "word-building", to: "word_building#index", as: :word_building
