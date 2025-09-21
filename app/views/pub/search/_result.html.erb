@@ -1,11 +1,24 @@
-<% path = case result
-          when Lexeme
-            pub_language_lexeme_path(result.language, result)
-          when Root, Affix
-            "#" # TODO: create show pages for root/affix
-          else
-            polymorphic_path([:pub, result])
-          end %>
+<%
+  path = case result
+         when Lexeme
+           pub_language_lexeme_path(result.language, result)
+         when Root, Affix
+           "#" # TODO: create show pages for root/affix
+         else
+           polymorphic_path([:pub, result])
+         end
+
+  summary_html = ""
+  if result.is_a?(ContentEntry)
+    summary_source = result.annotation.presence || result.body
+    if summary_source.present?
+      summary_html = truncate_html(render_markdown(summary_source), length: 250, omission: '...')
+    end
+  elsif result.is_a?(Lexeme) && result.words.first&.definition.present?
+    summary_source = result.words.first.definition
+    summary_html = truncate_html(render_markdown(summary_source), length: 250, omission: '...')
+  end
+%>
 
 <%= link_to path, class: "block p-4 bg-white shadow rounded-lg border hover:border-blue-400 group" do %>
   <div class="flex justify-between items-baseline">
@@ -16,9 +29,10 @@
       <%= result.is_a?(Lexeme) ? "Word" : result.class.name.underscore.humanize %>
     </span>
   </div>
-  <% if result.is_a?(ContentEntry) %>
-    <p class="text-sm text-gray-600 mt-2"><%= truncate(strip_tags(result.body.to_s), length: 250) %></p>
-  <% elsif result.is_a?(Lexeme) && result.words.first %>
-    <p class="text-sm text-gray-600 mt-2"><%= truncate(strip_tags(result.words.first.definition.to_s), length: 250) %></p>
+
+  <% if summary_html.present? %>
+    <div class="prose prose-sm max-w-none text-gray-600 mt-2" data-controller="wikilink-preview">
+      <%= summary_html %>
+    </div>
   <% end %>
 <% end %>

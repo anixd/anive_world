@@ -1,0 +1,33 @@
+<% content_for :title, "Entries tagged with '#{@tag.name}'" %>
+
+<%= render 'pub/shared/search_block' %>
+
+<div class="bg-white p-6 rounded-lg shadow-md">
+  <div class="mb-6">
+    <%= render 'pub/shared/breadcrumbs', crumbs: [
+      { title: "Tags" },
+      { title: "##{@tag.name}" }
+    ] %>
+  </div>
+
+  <div class="border-b pb-4 mb-6">
+    <h1 class="text-3xl font-bold">Entries tagged with ‘<span class="text-blue-600">#<%= @tag.name %></span>’</h1>
+    <p class="mt-1 text-gray-600">
+      Found <%= @pagy.count %> <%= 'entry'.pluralize(@pagy.count) %>.
+    </p>
+  </div>
+
+  <% if @results.any? %>
+    <div class="flex flex-col gap-3">
+      <% @results.each do |result| %>
+        <%= render 'pub/search/result', result: result %>
+      <% end %>
+    </div>
+
+    <div class="mt-8">
+      <%= render "shared/pagination_controls", pagy: @pagy %>
+    </div>
+  <% else %>
+    <p class="text-gray-500 italic">There are no published entries with this tag yet.</p>
+  <% end %>
+</div>

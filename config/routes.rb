@@ -14,6 +14,10 @@ Rails.application.routes.draw do
       get :search, on: :collection
     end
 
+    resources :tags do
+      get :search, on: :collection
+    end
+
     resources :languages do
       resources :parts_of_speech
       resources :roots
@@ -58,6 +62,7 @@ Rails.application.routes.draw do
     resources :characters, only: [:index, :show]
     resources :locations, only: [:index, :show]
     resources :history_entries, only: [:index, :show], path: "history"
+    resources :tags, only: [:show], param: :name
     resources :languages, only: [:index, :show] do
       resources :lexemes, only: [:index, :show], path: "dictionary"
       get "word-building", to: "word_building#index", as: :word_building
