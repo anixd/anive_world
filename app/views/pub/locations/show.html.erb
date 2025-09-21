@@ -3,7 +3,14 @@
 <%= render 'pub/shared/search_block' %>
 
 <div class="bg-white p-6 md:p-8 rounded-lg shadow-md space-y-6">
-  <%= render 'pub/shared/content_header', back_path: pub_locations_path, back_path_text: 'Back to all locations', record: @location %>
+  <div class="mb-6">
+    <%= render 'pub/shared/breadcrumbs', crumbs: [
+      { title: "Lore" },
+      { title: "Locations", path: pub_locations_path },
+      { title: @location.title }
+    ] %>
+  </div>
+  <%#= render 'pub/shared/content_header', back_path: pub_locations_path, back_path_text: 'Back to all locations', record: @location %>
 
   <header class="border-b pb-4">
     <h1 class="text-4xl font-bold text-gray-900"><%= @location.title %></h1>

@@ -1,1 +1,1 @@
-require 'pg_search'
+require "pg_search"

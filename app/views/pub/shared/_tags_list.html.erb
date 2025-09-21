@@ -1,0 +1,9 @@
+<% return unless local_assigns[:record]&.tags&.any? %>
+
+<div class="flex flex-wrap items-center gap-2">
+  <% record.tags.order(:name).each do |tag| %>
+    <span class="px-3 py-1 text-sm leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+      #<%= tag.name %>
+    </span>
+  <% end %>
+</div>

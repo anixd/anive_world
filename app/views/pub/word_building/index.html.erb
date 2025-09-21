@@ -16,20 +16,20 @@
     <p class="mt-1 text-gray-600">The basic components for constructing words.</p>
   </div>
 
-  <%# --- НАВИГАЦИЯ ПО ТАБАМ --- %>
+  <%# --- nav tabs --- %>
   <div class="mb-6">
     <div class="flex rounded-lg border overflow-hidden">
       <%# Таб для Корней %>
       <%= link_to "Roots", url_for(tab: 'roots'),
-                  class: "flex-1 py-2 px-4 text-center font-medium transition-colors #{ @active_tab == 'roots' ? 'bg-blue-600 text-white' : 'bg-gray-50 text-gray-700 hover:bg-gray-100' }" %>
+                  class: "flex-1 py-2 px-4 text-center font-medium transition-colors #{ @active_tab == 'roots' ? 'bg-blue-400 text-white' : 'bg-gray-50 text-gray-700 hover:bg-gray-100' }" %>
 
       <%# Таб для Аффиксов %>
       <%= link_to "Affixes", url_for(tab: 'affixes'),
-                  class: "flex-1 py-2 px-4 text-center font-medium transition-colors #{ @active_tab == 'affixes' ? 'bg-blue-600 text-white' : 'bg-gray-50 text-gray-700 hover:bg-gray-100' }" %>
+                  class: "flex-1 py-2 px-4 text-center font-medium transition-colors #{ @active_tab == 'affixes' ? 'bg-blue-400 text-white' : 'bg-gray-50 text-gray-700 hover:bg-gray-100' }" %>
     </div>
   </div>
 
-  <%# --- КОНТЕНТ ТАБОВ --- %>
+  <%# --- trabs content --- %>
   <div>
     <% if @active_tab == 'roots' %>
       <%# -- Содержимое для Корней -- %>
