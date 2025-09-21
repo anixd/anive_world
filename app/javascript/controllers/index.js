@@ -14,6 +14,8 @@ import LiveSearchController from "./live_search_controller"
 import ModalController from "./modal_controller"
 import AutocompleteController from "./autocomplete_controller"
 import DropdownController from "./dropdown_controller"
+import GoTopController from "./go_top_controller";
+
 
 application.register("dependent-select", DependentSelectController)
 application.register("autosubmit", AutosubmitController)
@@ -25,4 +27,5 @@ application.register("live-search", LiveSearchController)
 application.register("modal", ModalController)
 application.register("autocomplete", AutocompleteController)
 application.register("dropdown", DropdownController)
+application.register('go-top', GoTopController)
 
