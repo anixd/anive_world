@@ -2,8 +2,10 @@
   path = case result
          when Lexeme
            pub_language_lexeme_path(result.language, result)
-         when Root, Affix
-           "#" # TODO: create show pages for root/affix
+         when Root
+           pub_language_root_path(result.language, result)
+         when Affix
+           pub_language_affix_path(result.language, result)
          else
            polymorphic_path([:pub, result])
          end
@@ -17,6 +19,11 @@
   elsif result.is_a?(Lexeme) && result.words.first&.definition.present?
     summary_source = result.words.first.definition
     summary_html = truncate_html(render_markdown(summary_source), length: 250, omission: '...')
+  elsif result.is_a?(Root) || result.is_a?(Affix)
+    summary_source = result.meaning
+    if summary_source.present?
+      summary_html = truncate_html(render_markdown(summary_source), length: 250, omission: '...')
+    end
   end
 %>
 

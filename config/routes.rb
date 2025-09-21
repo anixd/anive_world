@@ -67,6 +67,8 @@ Rails.application.routes.draw do
       resources :lexemes, only: [:index, :show], path: "dictionary"
       get "word-building", to: "word_building#index", as: :word_building
       get "grammar", to: "grammar#index", as: :grammar
+      resources :roots, only: [:show]
+      resources :affixes, only: [:show]
     end
     resources :grammar_rules, only: [:show], path: "grammar/rules"
     resources :phonology_articles, only: [:show], path: "phonology/articles"
