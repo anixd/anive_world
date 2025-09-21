@@ -1,5 +1,7 @@
 <% content_for :title, @article.title %>
 
+<%= render 'pub/shared/search_block' %>
+
 <div class="bg-white p-6 md:p-8 rounded-lg shadow-md">
   <%= render 'pub/shared/content_header', back_path: pub_locations_path, back_path_text: 'Back to all articles', record: @article %>
 

@@ -1,5 +1,7 @@
 <% content_for :title, @lexeme.spelling %>
 
+<%= render 'pub/shared/search_block' %>
+
 <div class="bg-white p-6 rounded-lg shadow-md">
   <div class="mb-6">
     <%= render 'pub/shared/breadcrumbs', crumbs: [

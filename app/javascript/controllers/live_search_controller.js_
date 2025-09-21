@@ -60,7 +60,7 @@ export default class extends Controller {
         url.searchParams.set("scope", this.scopeValue)
 
         try {
-            // юзаем стандартный fetch
+            // Используем стандартный fetch
             const response = await fetch(url, {
                 headers: {
                     // заголовок для Rails, что мы хотим получить TurboStream
@@ -75,7 +75,7 @@ export default class extends Controller {
 
             // Получаем ответ сервера в виде текста
             const responseText = await response.text()
-            // И вручную скармливаем его Turbo для обработки
+            // И вручную "скармливаем" его Turbo для обработки
             Turbo.renderStreamMessage(responseText)
 
         } catch (error) {
@@ -105,18 +105,17 @@ export default class extends Controller {
     }
 
     updateTabStyles() {
-        const isLore = this.scopeValue === 'lore';
+        const isLore = this.scopeValue === 'lore'
 
-        const activeClasses = ['bg-blue-600', 'text-white'];
-        const inactiveClasses = ['bg-gray-100', 'text-gray-700', 'hover:bg-gray-200'];
+        // Update Lore tab
+        this.loreTabTarget.className = `flex-1 py-0.5 px-4 text-center font-medium transition-colors ${
+            isLore ? 'bg-blue-400 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+        }`
 
-        // Обновляем таб "Lore"
-        this.loreTabTarget.classList.remove(...(isLore ? inactiveClasses : activeClasses));
-        this.loreTabTarget.classList.add(...(isLore ? activeClasses : inactiveClasses));
-
-        // Обновляем таб "Dictionary"
-        this.dictionaryTabTarget.classList.remove(...(!isLore ? inactiveClasses : activeClasses));
-        this.dictionaryTabTarget.classList.add(...(!isLore ? activeClasses : inactiveClasses));
+        // Update Dictionary tab
+        this.dictionaryTabTarget.className = `flex-1 py-0.5 px-4 text-center font-medium transition-colors ${
+            !isLore ? 'bg-blue-400 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+        }`
     }
 
     updatePlaceholder() {

@@ -1,5 +1,7 @@
 <% content_for :title, @language.name %>
 
+<%= render 'pub/shared/search_block' %>
+
 <div class="bg-white p-6 md:p-8 rounded-lg shadow-md">
   <div class="mb-6">
     <%= render 'pub/shared/breadcrumbs', crumbs: [
@@ -9,7 +11,7 @@
   </div>
 
   <header class="border-b pb-6 mb-6">
-    <h1 class="text-4xl font-bold text-gray-900"><%= @language.name %></h1>
+    <h1 class="text-3xl font-bold text-gray-900"><%= @language.name %></h1>
     <div class="prose max-w-none mt-4" data-controller="wikilink-preview">
       <%= render_markdown(@language.description.to_s) %>
     </div>

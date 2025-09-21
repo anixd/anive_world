@@ -1,5 +1,7 @@
 <% content_for :title, "#{@language.name} Grammar & Phonology" %>
 
+<%= render 'pub/shared/search_block' %>
+
 <div class="bg-white p-6 rounded-lg shadow-md">
   <div class="mb-6">
     <%= render 'pub/shared/breadcrumbs', crumbs: [
@@ -17,10 +19,10 @@
   <div class="mb-6">
     <div class="flex rounded-lg border overflow-hidden">
       <%= link_to "Grammar", url_for(tab: 'grammar'),
-                  class: "flex-1 py-2 px-4 text-center font-medium transition-colors #{ @active_tab == 'grammar' ? 'bg-blue-600 text-white' : 'bg-gray-50 text-gray-700 hover:bg-gray-100' }" %>
+                  class: "flex-1 py-2 px-4 text-center font-medium transition-colors #{ @active_tab == 'grammar' ? 'bg-blue-400 text-white' : 'bg-gray-50 text-gray-700 hover:bg-gray-200' }" %>
 
       <%= link_to "Phonology", url_for(tab: 'phonology'),
-                  class: "flex-1 py-2 px-4 text-center font-medium transition-colors #{ @active_tab == 'phonology' ? 'bg-blue-600 text-white' : 'bg-gray-50 text-gray-700 hover:bg-gray-100' }" %>
+                  class: "flex-1 py-2 px-4 text-center font-medium transition-colors #{ @active_tab == 'phonology' ? 'bg-blue-400 text-white' : 'bg-gray-50 text-gray-700 hover:bg-gray-200' }" %>
     </div>
   </div>
 
