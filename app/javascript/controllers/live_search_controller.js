@@ -107,16 +107,8 @@ export default class extends Controller {
     updateTabStyles() {
         const isLore = this.scopeValue === 'lore';
 
-        const activeClasses = ['bg-blue-600', 'text-white'];
-        const inactiveClasses = ['bg-gray-100', 'text-gray-700', 'hover:bg-gray-200'];
-
-        // Обновляем таб "Lore"
-        this.loreTabTarget.classList.remove(...(isLore ? inactiveClasses : activeClasses));
-        this.loreTabTarget.classList.add(...(isLore ? activeClasses : inactiveClasses));
-
-        // Обновляем таб "Dictionary"
-        this.dictionaryTabTarget.classList.remove(...(!isLore ? inactiveClasses : activeClasses));
-        this.dictionaryTabTarget.classList.add(...(!isLore ? activeClasses : inactiveClasses));
+        this.loreTabTarget.classList.toggle('is-active', isLore);
+        this.dictionaryTabTarget.classList.toggle('is-active', !isLore);
     }
 
     updatePlaceholder() {

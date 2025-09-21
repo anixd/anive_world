@@ -37,7 +37,7 @@ class Word < ApplicationRecord
   include ApostropheNormalizer
   include IndexableLinks
 
-  enum origin_type, {
+  enum origin_type: {
     unspecified: 0,
     inherited: 1,
     neologism: 2,
