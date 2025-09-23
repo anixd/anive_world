@@ -47,7 +47,9 @@ class Affix < ApplicationRecord
   accepts_nested_attributes_for :etymology, allow_destroy: true
 
 
-  enum affix_type: { prefix: "prefix", suffix: "suffix", infix: "infix" }
+  enum :affix_type, { prefix: "prefix", suffix: "suffix", infix: "infix" }
+
+  validates :text, uniqueness: { scope: [:language_id, :affix_type], case_sensitive: false }
 
   scope :search_by_text, ->(query) {
     where("text ILIKE ? OR meaning ILIKE ?", "%#{query}%", "%#{query}%")

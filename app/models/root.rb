@@ -47,6 +47,8 @@ class Root < ApplicationRecord
   has_one :etymology, as: :etymologizable, dependent: :destroy
   accepts_nested_attributes_for :etymology, allow_destroy: true
 
+  validates :text, uniqueness: { scope: :language_id, case_sensitive: false }
+
   scope :search_by_text, ->(query) {
     where("text ILIKE ? OR meaning ILIKE ?", "%#{query}%", "%#{query}%")
   }

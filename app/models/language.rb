@@ -32,7 +32,7 @@ class Language < ApplicationRecord
   include Discard::Model
   include ApostropheNormalizer
 
-  DEFAULT_CODE = 'anike'.freeze
+  DEFAULT_CODE = "anike".freeze
 
   belongs_to :parent_language, class_name: "Language", optional: true
   has_many :child_languages, class_name: "Language", foreign_key: "parent_language_id"
@@ -41,6 +41,9 @@ class Language < ApplicationRecord
   has_many :lexemes
   has_many :roots
   has_many :affixes
+
+  validates :name, presence: true, uniqueness: { case_sensitive: false }
+  validates :code, presence: true, uniqueness: { case_sensitive: false }
 
   private
 

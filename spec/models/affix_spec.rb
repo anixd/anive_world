@@ -1,35 +1,57 @@
-# == Schema Information
-#
-# Table name: affixes
-#
-#  id           :bigint           not null, primary key
-#  affix_type   :string
-#  discarded_at :datetime
-#  meaning      :text
-#  published_at :datetime
-#  slug         :string
-#  text         :string
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
-#  author_id    :bigint           not null
-#  language_id  :bigint           not null
-#
-# Indexes
-#
-#  index_affixes_on_author_id                            (author_id)
-#  index_affixes_on_discarded_at                         (discarded_at)
-#  index_affixes_on_language_id                          (language_id)
-#  index_affixes_on_published_at                         (published_at)
-#  index_affixes_on_slug_and_language_id                 (slug,language_id) UNIQUE WHERE (discarded_at IS NULL)
-#  index_affixes_on_text_and_language_id_and_affix_type  (text,language_id,affix_type) UNIQUE
-#
-# Foreign Keys
-#
-#  fk_rails_...  (author_id => users.id)
-#  fk_rails_...  (language_id => languages.id)
-#
 require 'rails_helper'
 
 RSpec.describe Affix, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe 'validations' do
+    context 'uniqueness of text, language and affix_type' do
+      let(:language) { create(:language) }
+
+      before do
+        # Создаем суффикс "-or" для языка
+        create(:affix, text: '-or', language: language, affix_type: 'suffix')
+      end
+
+      it 'is invalid with a duplicate text, language and type' do
+        # Пытаемся создать такой же суффикс
+        expect(build(:affix, text: '-or', language: language, affix_type: 'suffix')).not_to be_valid
+      end
+
+      it 'is valid with the same text and language but different type' do
+        # А вот префикс "-or" создать можно
+        expect(build(:affix, text: '-or', language: language, affix_type: 'prefix')).to be_valid
+      end
+    end
+  end
+
+  describe 'associations' do
+    it { should belong_to(:language) }
+    it { should belong_to(:author) }
+    it { should have_one(:etymology) }
+  end
+
+  describe 'enums' do
+    # Указываем, что enum работает со строковой колонкой в БД
+    it do
+      should define_enum_for(:affix_type)
+               .with_values(prefix: "prefix", suffix: "suffix", infix: "infix")
+               .backed_by_column_of_type(:string)
+    end
+  end
+
+  describe 'scopes' do
+    # `let!` создает записи до выполнения теста
+    let!(:affix1) { create(:affix, text: '-ri', meaning: 'sun, star, light') }
+    let!(:affix2) { create(:affix, text: '-el', meaning: 'path, way') }
+
+    it '.search_by_text returns roots matching text' do
+      results = described_class.search_by_text('-ri')
+      expect(results).to include(affix1)
+      expect(results).not_to include(affix2)
+    end
+
+    it '.search_by_text returns roots matching meaning' do
+      results = described_class.search_by_text('light')
+      expect(results).to include(affix1)
+      expect(results).not_to include(affix2)
+    end
+  end
 end

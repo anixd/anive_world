@@ -8,7 +8,7 @@
 #  comment        :text
 #  definition     :text
 #  discarded_at   :datetime
-#  origin_type    :bigint           default(0)
+#  origin_type    :bigint           default("unspecified")
 #  transcription  :string
 #  type           :string
 #  created_at     :datetime         not null
