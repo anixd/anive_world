@@ -6,11 +6,27 @@
 
   <div class="bg-white rounded-lg shadow p-6 max-w-6xl mx-auto">
     <%= form_with url: dictionary_forge_export_path, method: :post, data: { turbo: false } do |form| %>
-      <div class="space-y-6">
+      <div class="space-y-6"
+           data-controller="dynamic-elements"
+           data-dynamic-elements-url-value="<%= parts_of_speech_forge_export_path %>">
 
         <div>
           <%= form.label :language_id, "Select Language to Export", class: "block font-bold mb-2 text-lg" %>
-          <%= form.collection_select :language_id, @languages, :id, :name, { prompt: "Select a language" }, { required: true, class: "border rounded w-full p-2" } %>
+          <%= form.collection_select :language_id, @languages, :id, :name,
+                                     { prompt: "Select a language" },
+                                     { required: true, class: "border rounded w-full p-2",
+                                       data: {
+                                         dynamic_elements_target: "source",
+                                         action: "change->dynamic-elements#fetch"
+                                       }
+                                     } %>
+        </div>
+
+        <div class="space-y-2 border rounded-md p-4 bg-gray-50">
+          <h4 class="font-semibold text-gray-700 border-b pb-2 mb-2">Filter by Part of Speech (optional)</h4>
+          <div data-dynamic-elements-target="target" id="pos-filter-container">
+            <p class="text-gray-500 text-sm italic">Select a language to see options...</p>
+          </div>
         </div>
 
         <hr>

@@ -15,6 +15,8 @@ import ModalController from "./modal_controller"
 import AutocompleteController from "./autocomplete_controller"
 import DropdownController from "./dropdown_controller"
 import GoTopController from "./go_top_controller";
+import DynamicElementsController from "./dynamic_elements_controller";
+
 
 
 application.register("dependent-select", DependentSelectController)
@@ -28,4 +30,4 @@ application.register("modal", ModalController)
 application.register("autocomplete", AutocompleteController)
 application.register("dropdown", DropdownController)
 application.register('go-top', GoTopController)
-
+application.register("dynamic-elements", DynamicElementsController)

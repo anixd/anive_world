@@ -44,6 +44,7 @@ Rails.application.routes.draw do
 
     resource :export, only: [:show] do
       post :dictionary, on: :collection
+      get :parts_of_speech, on: :collection
     end
 
     namespace :timeline do
