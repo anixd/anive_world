@@ -16,16 +16,7 @@
 
   <% if @locations.any? %>
     <div class="flex flex-col gap-3">
-      <% @locations.each do |location| %>
-        <%= link_to pub_location_path(location), class: "block p-4 bg-white shadow rounded-lg border hover:border-blue-400 group" do %>
-          <h2 class="text-xl font-semibold text-blue-700 group-hover:underline">
-            <%= location.title %>
-          </h2>
-          <div class="mt-3">
-            <%= render 'pub/shared/tags_list', record: location %>
-          </div>
-        <% end %>
-      <% end %>
+      <%= render partial: 'pub/shared/list_item', collection: @locations, as: :record %>
     </div>
 
     <% if @pagy.pages > 1 %>

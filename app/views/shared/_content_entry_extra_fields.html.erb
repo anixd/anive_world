@@ -1,0 +1,13 @@
+<div class="space-y-4 bg-gray-50 p-4 rounded-lg border">
+  <h3 class="font-semibold text-lg border-b pb-2 mb-4">Summary & Previews</h3>
+  <div>
+    <%= form.label :annotation, "Annotation", class: "block font-bold mb-1" %>
+    <%= form.text_area :annotation, rows: 3, class: "border rounded w-full p-2" %>
+    <p class="text-xs text-gray-600 mt-1">Short summary for lists (index pages). If blank, extract or body will be used.</p>
+  </div>
+  <div>
+    <%= form.label :extract, "Extract", class: "block font-bold mb-1" %>
+    <%= form.text_area :extract, rows: 5, class: "border rounded w-full p-2" %>
+    <p class="text-xs text-gray-600 mt-1">Text for the wikilink preview pop-up. Markdown is supported.</p>
+  </div>
+</div>

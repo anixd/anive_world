@@ -1,0 +1,28 @@
+<%= link_to [:pub, record], class: "block bg-white shadow rounded-lg border hover:border-blue-400 group" do %>
+  <%# Верхняя часть %>
+  <div class="p-4">
+    <h2 class="text-xl font-semibold text-blue-700 group-hover:underline">
+      <%= record.title %>
+    </h2>
+    <p class="text-sm text-gray-500 mt-1">
+      Published on <%= record.published_at.strftime("%B %d, %Y") %>
+    </p>
+
+    <% if record.tags.any? %>
+      <div class="flex flex-wrap items-center gap-2 mt-2">
+        <% record.tags.order(:name).each do |tag| %>
+          <span class="px-2 py-1 text-sm leading-5 font-semibold rounded bg-gray-100 text-blue-800">
+            #<%= tag.name %>
+          </span>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+
+  <% summary_partial = render 'shared/content_entry_summary', record: record %>
+  <% if summary_partial.present? %>
+    <div class="px-4 pt-1">
+      <%= summary_partial %>
+    </div>
+  <% end %>
+<% end %>

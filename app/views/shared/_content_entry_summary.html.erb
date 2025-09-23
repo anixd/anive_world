@@ -1,0 +1,8 @@
+<%
+  summary_text = record.annotation.presence || record.extract.presence || record.body.to_s.truncate(250)
+%>
+<% if summary_text.present? %>
+  <div class="prose prose-sm max-w-none text-gray-600 mt-1" data-controller="wikilink-preview">
+    <%= render_markdown(summary_text) %>
+  </div>
+<% end %>

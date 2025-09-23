@@ -56,6 +56,6 @@ class Forge::ArticlesController < Forge::BaseController
   end
 
   def article_params
-    params.require(:article).permit(:title, :body, :publish, :tags_string)
+    params.require(:article).permit(:title, :body, :publish, :tags_string, :annotation, :extract)
   end
 end
