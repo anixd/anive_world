@@ -8,7 +8,7 @@ class MarkdownPreprocessor
   # 4: display_text (опционально)
   WIKILINK_REGEX = /\[\[(\w+):(?:(\w+):)?([^\]|]+)(?:\|([^\]]+))?\]\]/
 
-  def self.call(text)
+  def self.call(text, context: :forge)
     return text.to_s if text.to_s.empty?
 
     text.gsub(WIKILINK_REGEX) do |match|
@@ -21,9 +21,12 @@ class MarkdownPreprocessor
 
       link_text = display_text.presence || identifier
       data_attributes = "data-type=\"#{section_alias}\" data-slug=\"#{identifier}\""
+      data_attributes << " data-lang=\"#{lang_alias}\"" if lang_alias.present?
+
 
       if record
-        href = WikilinkResolver.path_for(record)
+        # Передаем context в path_for
+        href = WikilinkResolver.path_for(record, context: context)
         %(<a href="#{href}" class="wikilink" #{data_attributes}>#{link_text}</a>)
       else
         %(<a href="#" class="wikilink missing" #{data_attributes}>#{link_text}</a>)

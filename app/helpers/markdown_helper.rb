@@ -2,9 +2,11 @@
 
 module MarkdownHelper
   def render_markdown(text)
-    return '' if text.blank?
+    return "" if text.blank?
 
-    processed_text = WikilinkPreprocessor.call(text)
+    context = controller.class.module_parent.name == "Pub" ? :pub : :forge
+
+    processed_text = WikilinkPreprocessor.call(text, context: context)
 
     markdown_renderer.render(processed_text).html_safe
   end
