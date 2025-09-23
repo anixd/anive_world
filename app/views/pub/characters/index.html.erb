@@ -16,16 +16,7 @@
 
   <% if @characters.any? %>
     <div class="flex flex-col gap-3">
-      <% @characters.each do |character| %>
-        <%= link_to pub_character_path(character), class: "block p-4 bg-white shadow rounded-lg border hover:border-blue-400 group" do %>
-          <h2 class="text-xl font-semibold text-blue-700 group-hover:underline">
-            <%= character.title %>
-          </h2>
-          <div class="mt-3">
-            <%= render 'pub/shared/tags_list', record: character %>
-          </div>
-        <% end %>
-      <% end %>
+      <%= render partial: 'pub/shared/list_item', collection: @characters, as: :record %>
     </div>
 
     <% if @pagy.pages > 1 %>

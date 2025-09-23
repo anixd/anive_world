@@ -61,6 +61,8 @@ class Forge::LocationsController < Forge::BaseController
   end
 
   def location_params
-    params.require(:location).permit(:title, :body, :parent_location_id, :tags_string, :publish)
+    params.require(:location).permit(
+      :title, :body, :parent_location_id, :tags_string, :publish, :annotation, :extract
+    )
   end
 end

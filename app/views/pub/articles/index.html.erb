@@ -15,20 +15,8 @@
   </div>
 
   <% if @articles.any? %>
-    <div class="flex flex-col gap-4">
-      <% @articles.each do |article| %>
-        <%= link_to pub_article_path(article), class: "block p-4 bg-white shadow rounded-lg border hover:border-blue-400 group" do %>
-          <h2 class="text-2xl font-semibold text-blue-700 group-hover:underline">
-            <%= article.title %>
-          </h2>
-          <p class="text-sm text-gray-500 mt-1">
-            Published on <%= article.published_at.strftime("%B %d, %Y") %>
-          </p>
-          <div class="mt-3">
-            <%= render 'pub/shared/tags_list', record: article %>
-          </div>
-        <% end %>
-      <% end %>
+    <div class="flex flex-col gap-3">
+      <%= render partial: 'pub/shared/list_item', collection: @articles, as: :record %>
     </div>
 
     <% if @pagy.pages > 1 %>

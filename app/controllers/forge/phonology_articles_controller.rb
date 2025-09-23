@@ -68,6 +68,8 @@ class Forge::PhonologyArticlesController < Forge::BaseController
   end
 
   def phonology_article_params
-    params.require(:phonology_article).permit(:title, :body, :language_id, :rule_code, :tags_string, :publish)
+    params.require(:phonology_article).permit(
+      :title, :body, :language_id, :rule_code, :tags_string, :publish, :annotation, :extract
+    )
   end
 end

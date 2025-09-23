@@ -68,6 +68,8 @@ class Forge::GrammarRulesController < Forge::BaseController
   end
 
   def grammar_rule_params
-    params.require(:grammar_rule).permit(:title, :body, :language_id, :rule_code, :tags_string, :publish)
+    params.require(:grammar_rule).permit(
+      :title, :body, :language_id, :rule_code, :tags_string, :publish, :annotation, :extract
+    )
   end
 end

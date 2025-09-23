@@ -60,6 +60,9 @@ class Forge::CharactersController < Forge::BaseController
   end
 
   def character_params
-    params.require(:character).permit(:title, :body, :life_status, :birth_date, :death_date, :publish, :tags_string)
+    params.require(:character).permit(
+      :title, :body, :life_status, :birth_date, :death_date,
+      :publish, :tags_string, :annotation, :extract
+    )
   end
 end

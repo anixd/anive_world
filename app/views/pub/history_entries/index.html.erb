@@ -16,19 +16,7 @@
 
   <% if @history_entries.any? %>
     <div class="flex flex-col gap-3">
-      <% @history_entries.each do |entry| %>
-        <%= link_to pub_history_entry_path(entry), class: "block p-4 bg-white shadow rounded-lg border hover:border-blue-400 group" do %>
-          <div class="flex items-baseline gap-4">
-            <span class="font-mono text-sm text-gray-500 w-24 flex-shrink-0"><%= entry.display_date.presence || "Undated" %></span>
-            <h2 class="text-xl font-semibold text-blue-700 group-hover:underline">
-              <%= entry.title %>
-            </h2>
-            <div class="mt-3">
-              <%= render 'pub/shared/tags_list', record: entry %>
-            </div>
-          </div>
-        <% end %>
-      <% end %>
+      <%= render partial: 'pub/shared/list_item', collection: @history_entries, as: :record %>
     </div>
 
     <% if @pagy.pages > 1 %>
