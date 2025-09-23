@@ -1,0 +1,12 @@
+<% if parts_of_speech.any? %>
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+    <% parts_of_speech.each do |pos| %>
+      <label class="flex items-center space-x-2">
+        <%= check_box_tag "part_of_speech_ids[]", pos.id, true, class: "h-4 w-4 rounded" %>
+        <span class="text-sm"><%= pos.name %> (<%= pos.code %>)</span>
+      </label>
+    <% end %>
+  </div>
+<% else %>
+  <p class="text-gray-500 text-sm italic">Для этого языка части речи не заданы.</p>
+<% end %>

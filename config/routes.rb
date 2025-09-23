@@ -42,6 +42,11 @@ Rails.application.routes.draw do
     resources :phonology_articles
     resources :help_pages, path: "help"
 
+    resource :export, only: [:show] do
+      post :dictionary, on: :collection
+      get :parts_of_speech, on: :collection
+    end
+
     namespace :timeline do
       resources :calendars
       resources :eras
