@@ -1,0 +1,50 @@
+<div class="p-6">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold">Export Dictionary</h1>
+    <%= link_to 'Back to Dashboard', forge_dashboard_path, class: 'text-blue-600' %>
+  </div>
+
+  <div class="bg-white rounded-lg shadow p-6 max-w-6xl mx-auto">
+    <%= form_with url: dictionary_forge_export_path, method: :post, data: { turbo: false } do |form| %>
+      <div class="space-y-6">
+
+        <div>
+          <%= form.label :language_id, "Select Language to Export", class: "block font-bold mb-2 text-lg" %>
+          <%= form.collection_select :language_id, @languages, :id, :name, { prompt: "Select a language" }, { required: true, class: "border rounded w-full p-2" } %>
+        </div>
+
+        <hr>
+
+        <div>
+          <h3 class="block font-bold mb-4 text-lg">Select Fields to Include</h3>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <% @field_groups.each do |group_name, fields| %>
+              <div class="space-y-2 border rounded-md p-4 bg-gray-50">
+                <h4 class="font-semibold text-gray-700 border-b pb-2 mb-2"><%= group_name %></h4>
+                <% fields.each do |label, value| %>
+                  <label class="flex items-center space-x-3">
+                    <%= check_box_tag 'fields[]', value, true, class: "h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500" %>
+                    <span class="text-gray-900 text-sm"><%= label %></span>
+                  </label>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+
+        <hr>
+
+        <div class="flex justify-center items-center">
+          <label class="flex items-center space-x-3 cursor-pointer">
+            <%= check_box_tag 'pretty_print', '1', true, class: "h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500" %>
+            <span class="text-gray-900 text-sm font-medium">Human-readable (pretty print)</span>
+          </label>
+        </div>
+
+        <div class="actions text-center">
+          <%= form.submit "Export to JSON", class: "bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded cursor-pointer text-lg" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
