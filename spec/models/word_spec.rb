@@ -1,36 +1,31 @@
-# == Schema Information
-#
-# Table name: words
-#
-#  id             :bigint           not null, primary key
-#  comment        :text
-#  definition     :text
-#  discarded_at   :datetime
-#  origin_type    :bigint           default(0)
-#  transcription  :string
-#  type           :string
-#  created_at     :datetime         not null
-#  updated_at     :datetime         not null
-#  author_id      :bigint           not null
-#  lexeme_id      :bigint           not null
-#  origin_word_id :bigint
-#
-# Indexes
-#
-#  index_words_on_author_id       (author_id)
-#  index_words_on_discarded_at    (discarded_at)
-#  index_words_on_lexeme_id       (lexeme_id)
-#  index_words_on_origin_word_id  (origin_word_id)
-#  index_words_on_type            (type)
-#
-# Foreign Keys
-#
-#  fk_rails_...  (author_id => users.id)
-#  fk_rails_...  (lexeme_id => lexemes.id)
-#  fk_rails_...  (origin_word_id => words.id)
-#
 require 'rails_helper'
 
 RSpec.describe Word, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe 'associations' do
+    it { should belong_to(:lexeme) }
+    it { should have_and_belong_to_many(:parts_of_speech) }
+    it { should have_one(:etymology).dependent(:destroy) }
+  end
+
+  describe 'callbacks' do
+    context 'before_validation #set_sti_type' do
+      it 'sets the correct STI type based on language code on create' do
+        # Создаем язык с предсказуемым кодом
+        language = create(:language, code: 'anike')
+        lexeme = create(:lexeme, language: language)
+
+        # `build` не вызывает коллбэки сохранения, только `create`
+        word = build(:word, lexeme: lexeme)
+
+        # Тип еще не должен быть установлен
+        expect(word.type).to be_nil
+
+        # Сохраняем, чтобы сработал коллбэк
+        word.save!
+
+        # Проверяем результат
+        expect(word.type).to eq('AnikeWord')
+      end
+    end
+  end
 end

@@ -1,33 +1,51 @@
-# == Schema Information
-#
-# Table name: lexemes
-#
-#  id           :bigint           not null, primary key
-#  discarded_at :datetime
-#  published_at :datetime
-#  slug         :string           not null
-#  spelling     :string
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
-#  author_id    :bigint           not null
-#  language_id  :bigint           not null
-#
-# Indexes
-#
-#  index_lexemes_on_author_id                 (author_id)
-#  index_lexemes_on_discarded_at              (discarded_at)
-#  index_lexemes_on_language_id               (language_id)
-#  index_lexemes_on_published_at              (published_at)
-#  index_lexemes_on_slug_and_language_id      (slug,language_id) UNIQUE WHERE (discarded_at IS NULL)
-#  index_lexemes_on_spelling_and_language_id  (spelling,language_id) UNIQUE WHERE (discarded_at IS NULL)
-#
-# Foreign Keys
-#
-#  fk_rails_...  (author_id => users.id)
-#  fk_rails_...  (language_id => languages.id)
-#
 require 'rails_helper'
 
 RSpec.describe Lexeme, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe 'validations' do
+    it 'is valid with valid attributes' do
+      expect(build(:lexeme)).to be_valid
+    end
+
+    it 'is invalid without spelling' do
+      expect(build(:lexeme, spelling: nil)).not_to be_valid
+    end
+
+    it 'is invalid without a language' do
+      expect(build(:lexeme, language: nil)).not_to be_valid
+    end
+
+    context 'uniqueness of spelling per language' do
+      let(:language1) { create(:language) }
+      let(:language2) { create(:language) }
+
+      before do
+        create(:lexeme, spelling: 'duil', language: language1)
+      end
+
+      it 'is invalid with a duplicate spelling in the same language' do
+        expect(build(:lexeme, spelling: 'duil', language: language1)).not_to be_valid
+      end
+
+      it 'is valid with the same spelling in a different language' do
+        expect(build(:lexeme, spelling: 'duil', language: language2)).to be_valid
+      end
+    end
+  end
+
+  describe 'associations' do
+    # Создаем язык, который реально существует в логике приложения
+    let(:language) { create(:language, code: 'anike') }
+    # `let!` с восклицательным знаком означает, что лексема будет создана
+    # до выполнения каждого теста в этом блоке (`it`)
+    let!(:lexeme) { create(:lexeme, :with_words, language: language) }
+
+    it 'destroys associated words when destroyed' do
+      # Убеждаемся, что для теста созданы правильные объекты
+      expect(Word.count).to be > 0
+      expect(lexeme.words.first.type).to eq('AnikeWord')
+
+      # Проверяем, что при удалении лексемы, связанные слова тоже удаляются.
+      expect { lexeme.destroy }.to change { Word.count }.by(-4)
+    end
+  end
 end

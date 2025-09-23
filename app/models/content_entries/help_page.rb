@@ -1,3 +1,50 @@
+# == Schema Information
+#
+# Table name: content_entries
+#
+#  id                 :bigint           not null, primary key
+#  absolute_year      :integer
+#  annotation         :text
+#  birth_date         :string
+#  body               :text
+#  death_date         :string
+#  discarded_at       :datetime
+#  display_date       :string
+#  extract            :text
+#  life_status        :string
+#  published_at       :datetime
+#  rule_code          :string
+#  searchable         :tsvector
+#  slug               :string           not null
+#  title              :string           not null
+#  type               :string           not null
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
+#  author_id          :bigint           not null
+#  era_id             :bigint
+#  language_id        :bigint
+#  parent_location_id :bigint
+#
+# Indexes
+#
+#  content_entries_searchable_idx                 (searchable) USING gin
+#  index_content_entries_on_absolute_year         (absolute_year)
+#  index_content_entries_on_author_id             (author_id)
+#  index_content_entries_on_discarded_at          (discarded_at)
+#  index_content_entries_on_era_id                (era_id)
+#  index_content_entries_on_language_id           (language_id)
+#  index_content_entries_on_parent_location_id    (parent_location_id)
+#  index_content_entries_on_slug                  (slug) UNIQUE WHERE (discarded_at IS NULL)
+#  index_content_entries_on_type                  (type)
+#  index_content_entries_on_type_and_lower_title  (type, lower((title)::text))
+#
+# Foreign Keys
+#
+#  fk_rails_...  (author_id => users.id)
+#  fk_rails_...  (era_id => timeline_eras.id)
+#  fk_rails_...  (language_id => languages.id)
+#  fk_rails_...  (parent_location_id => content_entries.id)
+#
 class HelpPage < ContentEntry
   # Связь для определения родительской страницы
   belongs_to :parent, class_name: "HelpPage", foreign_key: "parent_location_id", optional: true, inverse_of: :children
