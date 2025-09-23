@@ -29,7 +29,7 @@ export default class extends Controller {
         this.currentLink = link
 
         this.showTimer = setTimeout(() => {
-            this.fetchPreview(link.dataset.type, link.dataset.slug)
+            this.fetchPreview(link.dataset.type, link.dataset.slug, link.dataset.lang)
         }, 200)
     }
 
@@ -75,10 +75,14 @@ export default class extends Controller {
         this.popup.style.top = `${Math.max(10, y)}px`
     }
 
-    fetchPreview(type, slug) {
+    fetchPreview(type, slug, lang) {
         if (!type || !slug) return
 
-        const url = `/previews/${type}/${slug}`
+        let url = `/previews/${type}/${slug}`
+
+        if (lang) {
+            url += `?lang=${lang}`
+        }
 
         fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
             .then(response => {

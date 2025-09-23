@@ -52,9 +52,44 @@ class WikilinkResolver
     end
   end
 
-  def self.path_for(record)
-    Rails.application.routes.url_helpers.url_for([:forge, record, only_path: true])
-  rescue NoMethodError
+  def self.path_for(record, context: :forge)
+    url_parts = if context == :pub
+                  build_pub_path(record)
+                else
+                  build_forge_path(record)
+                end
+
+    Rails.application.routes.url_helpers.polymorphic_path(url_parts)
+  rescue ActionController::UrlGenerationError, NoMethodError
     "#"
+  end
+
+  private
+
+  def self.build_pub_path(record)
+    case record
+    when Lexeme, Root, Affix
+      # Для этих моделей в pub-части URL вложен в язык
+      # => /languages/:language_id/dictionary/:id
+      [:pub, record.language, record]
+    else
+      # Для остальных (Article, Character, etc.) URL прямой
+      # => /articles/:id
+      [:pub, record]
+    end
+  end
+
+  def self.build_forge_path(record)
+    case record
+    when Root, Affix, PartOfSpeech
+      # В админке эти модели тоже вложены в язык
+      [:forge, record.language, record]
+    when Word
+      # У Word нет своей страницы, ссылаемся на родительскую лексему
+      [:forge, record.lexeme]
+    else
+      # Для остальных URL прямой
+      [:forge, record]
+    end
   end
 end

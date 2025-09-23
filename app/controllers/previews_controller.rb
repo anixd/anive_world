@@ -7,7 +7,7 @@ class PreviewsController < ApplicationController
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
   def show
-    record = WikilinkResolver.resolve(params[:type], nil, params[:slug])
+    record = WikilinkResolver.resolve(params[:type], params[:lang], params[:slug])
 
     if record.nil?
       render json: { error: "Not found" }, status: :not_found
