@@ -97,6 +97,41 @@
         @apply bg-gray-100 text-gray-700 hover:bg-gray-200;
     }
 
+    .morpheme-pill {
+        @apply flex items-center justify-center px-3 py-1 rounded-full text-sm font-medium cursor-move;
+    }
+
+    .morpheme-pill.is-root {
+        @apply bg-blue-100 text-black border border-blue-500;
+    }
+
+    .morpheme-pill.is-affix {
+        @apply bg-green-100 text-black border border-green-500;
+    }
+
+    .results-list .is-root {
+        @apply border-l-4 border-red-300;
+    }
+
+    .results-list .is-affix {
+        @apply border-l-4 border-green-300;
+    }
+
+    .sortable-ghost {
+        @apply opacity-40 bg-blue-300;
+    }
+
+    .morpheme-pill.non-interactive {
+        @apply cursor-pointer;
+    }
+
+    .morpheme-pill.non-interactive:hover {
+        @apply ring-2 ring-offset-1;
+    }
+
+    .morpheme-pill.is-root:hover { @apply ring-blue-300; }
+    .morpheme-pill.is-affix:hover { @apply ring-green-300; }
+
     @layer utilities {
         .overflow-hidden {
             overflow: hidden;

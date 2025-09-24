@@ -51,20 +51,18 @@ class Word < ApplicationRecord
 
   belongs_to :lexeme
   belongs_to :origin_word, class_name: "Word", optional: true
+
   has_and_belongs_to_many :parts_of_speech, class_name: "PartOfSpeech"
   has_one :etymology, as: :etymologizable, dependent: :destroy
-  accepts_nested_attributes_for :etymology, allow_destroy: true
 
   has_many :synonym_relations, dependent: :destroy
   has_many :synonyms, through: :synonym_relations, source: :synonym
   has_many :descendant_words, class_name: "Word", foreign_key: "origin_word_id"
-  has_many :word_roots, -> { order(position: :asc) }, dependent: :destroy
-  has_many :roots, through: :word_roots
+
   has_many :inverse_synonym_relations, class_name: "SynonymRelation", foreign_key: "synonym_id", dependent: :destroy
   has_many :inverse_synonyms, through: :inverse_synonym_relations, source: :word
   has_many :word_translations, dependent: :destroy
   has_many :translations, through: :word_translations
-
 
   delegate :language, :spelling, to: :lexeme
 

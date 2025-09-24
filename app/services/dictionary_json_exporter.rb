@@ -46,6 +46,14 @@ class DictionaryJsonExporter
     scope.map do |lexeme|
       data = {}
       data[:spelling] = lexeme.spelling if field_selected?("lexeme.spelling")
+      if field_selected?("lexeme.morphemes")
+        data[:morphemes] = lexeme.morphemes.map do |morpheme|
+          {
+            type: morpheme.morphemable_type,
+            text: morpheme.morphemable.text
+          }
+        end
+      end
       data[:words] = lexeme.words.map { |word| serialize_word(word) }
       data
     end

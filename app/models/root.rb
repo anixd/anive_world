@@ -42,8 +42,11 @@ class Root < ApplicationRecord
   sluggable_from :text
 
   belongs_to :language
-  has_many :word_roots, dependent: :destroy
-  has_many :words, through: :word_roots
+
+  has_many :morphemes, as: :morphemable, dependent: :destroy
+  has_many :lexemes, through: :morphemes
+
+
   has_one :etymology, as: :etymologizable, dependent: :destroy
   accepts_nested_attributes_for :etymology, allow_destroy: true
 

@@ -42,6 +42,11 @@ class Lexeme < ApplicationRecord
   belongs_to :language
 
   has_many :words, dependent: :destroy
+  has_many :morphemes, -> { order(position: :asc) }, dependent: :destroy
+  has_many :roots, through: :morphemes, source: :morphemable, source_type: "Root"
+  has_many :affixes, through: :morphemes, source: :morphemable, source_type: "Affix"
+
+
   accepts_nested_attributes_for :words
 
   validates :spelling, presence: true, uniqueness: { scope: :language }

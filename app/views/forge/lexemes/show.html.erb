@@ -1,14 +1,17 @@
-<div class="p-6">
+<h2 class="text-xl font-semibold mb-4">Meanings:</h2><div class="p-6">
   <div class="flex justify-between items-center mb-6">
     <div>
       <h1 class="text-3xl font-bold">Lexeme: <%= @lexeme.spelling %></h1>
       <p class="text-xl text-gray-500 font-normal">Lang: <%= @lexeme.language.name.downcase %></p>
     </div>
     <div>
+      <%= link_to 'Edit Lexeme', edit_forge_lexeme_path(@lexeme), class: 'text-xs font-bold inline-block border bg-yellow-300 border-yellow-500 hover:bg-yellow-200 rounded py-2 px-4' %>
       <%= link_to 'Add Meaning (Homonym)', new_forge_lexeme_word_path(@lexeme), class: 'text-xs font-bold inline-block border bg-green-400 border-green-600 hover:bg-green-300 rounded py-2 px-4' %>
       <%= link_to 'Back to List', forge_lexemes_path, class: 'text-xs font-bold inline-block border bg-blue-400 border-blue-600 hover:bg-blue-300 rounded py-2 px-4' %>
     </div>
   </div>
+
+  <%= render 'morphemic_structure', lexeme: @lexeme %>
 
   <h2 class="text-xl font-semibold mb-4">Meanings:</h2>
 

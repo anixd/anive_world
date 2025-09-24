@@ -43,7 +43,11 @@ class Affix < ApplicationRecord
   sluggable_from :text
 
   belongs_to :language
+
   has_one :etymology, as: :etymologizable, dependent: :destroy
+  has_many :morphemes, as: :morphemable, dependent: :destroy
+  has_many :lexemes, through: :morphemes
+
   accepts_nested_attributes_for :etymology, allow_destroy: true
 
 
