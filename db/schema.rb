@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_09_23_235118) do
+ActiveRecord::Schema[7.2].define(version: 2025_09_24_172059) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -312,21 +312,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_23_235118) do
     t.index ["target_type", "target_slug"], name: "index_wikilinks_on_target_type_and_target_slug"
   end
 
-  create_table "word_roots", force: :cascade do |t|
-    t.bigint "word_id", null: false
-    t.bigint "root_id", null: false
-    t.integer "position"
-    t.datetime "discarded_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "author_id", null: false
-    t.index ["author_id"], name: "index_word_roots_on_author_id"
-    t.index ["discarded_at"], name: "index_word_roots_on_discarded_at"
-    t.index ["root_id"], name: "index_word_roots_on_root_id"
-    t.index ["word_id", "root_id"], name: "index_word_roots_on_word_id_and_root_id", unique: true
-    t.index ["word_id"], name: "index_word_roots_on_word_id"
-  end
-
   create_table "word_translations", force: :cascade do |t|
     t.bigint "word_id", null: false
     t.bigint "translation_id", null: false
@@ -380,9 +365,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_23_235118) do
   add_foreign_key "timeline_eras", "timeline_calendars", column: "calendar_id"
   add_foreign_key "timeline_participations", "content_entries", column: "history_entry_id"
   add_foreign_key "translations", "users", column: "author_id"
-  add_foreign_key "word_roots", "roots"
-  add_foreign_key "word_roots", "users", column: "author_id"
-  add_foreign_key "word_roots", "words"
   add_foreign_key "word_translations", "translations"
   add_foreign_key "word_translations", "words"
   add_foreign_key "words", "lexemes"

@@ -56,18 +56,32 @@
       <% @lexemes.each do |lexeme| %>
         <% first_word = lexeme.words.first %>
         <%= link_to pub_language_lexeme_path(@language, lexeme), class: "block p-4 bg-white shadow rounded-lg border hover:border-blue-400 group" do %>
-          <h2 class="text-2xl font-semibold text-blue-700 group-hover:underline">
-            <%= lexeme.spelling %>
-          </h2>
+
+          <div class="flex flex-wrap items-center gap-x-3 gap-y-2">
+            <h2 class="text-2xl font-semibold text-blue-700 group-hover:underline">
+              <%= lexeme.spelling %>
+            </h2>
+            <% if first_word&.transcription.present? %>
+              <p class="text-gray-500">[<%= first_word.transcription %>]</p>
+            <% end %>
+
+            <% if lexeme.morphemes.any? %>
+              <div class="flex items-center gap-x-1.5">
+                <% lexeme.morphemes.each do |morpheme| %>
+                  <% morphemable = morpheme.morphemable %>
+                  <% color_classes = morphemable.is_a?(Root) ? 'bg-blue-100 text-black  border border-blue-500' : 'bg-green-100 text-black  border border-green-500' %>
+                  <span class="inline-block px-2 py-0.5 rounded-full text-xs font-medium <%= color_classes %>">
+                    <%= morphemable.text %>
+                  </span>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+
           <% if first_word %>
-            <div class="flex items-baseline gap-4 mt-1 text-sm">
-              <% if first_word.transcription.present? %>
-                <p class="text-gray-500">[<%= first_word.transcription %>]</p>
-              <% end %>
-              <% if first_word.parts_of_speech.any? %>
-                <p class="font-semibold text-gray-600"><%= first_word.parts_of_speech.map(&:name).join(', ') %></p>
-              <% end %>
-            </div>
+            <% if first_word.parts_of_speech.any? %>
+              <p class="font-semibold text-gray-600 text-sm mt-1"><%= first_word.parts_of_speech.map(&:name).join(', ') %></p>
+            <% end %>
             <div class="prose prose-sm max-w-none text-gray-800 mt-2">
               <%= render_markdown(first_word.definition) %>
             </div>

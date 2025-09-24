@@ -43,10 +43,6 @@ class Root < ApplicationRecord
 
   belongs_to :language
 
-  # DELETE
-  has_many :word_roots, dependent: :destroy
-  has_many :words, through: :word_roots
-
   has_many :morphemes, as: :morphemable, dependent: :destroy
   has_many :lexemes, through: :morphemes
 

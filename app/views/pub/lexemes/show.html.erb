@@ -17,6 +17,8 @@
     <p class="mt-1 text-gray-600">A word in <%= @language.name %></p>
   </header>
 
+  <%= render 'morphemic_structure', lexeme: @lexeme %>
+
   <div class="space-y-6">
     <% if @words.any? %>
       <% @words.each_with_index do |word, index| %>

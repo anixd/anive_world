@@ -10,8 +10,10 @@ class Forge::ExportsController < Forge::BaseController
       "Transcription" => "word.transcription",
       "Comment" => "word.comment",
       "Parts of Speech" => "word.parts_of_speech",
-      "Etymology" => "word.etymology"
-    },
+      "Etymology" => "word.etymology",
+      "Morphemic Structure" => "lexeme.morphemes"
+
+  },
     "Root" => {
       "Text" => "root.text",
       "Meaning" => "root.meaning",
