@@ -62,6 +62,16 @@
           </div>
         </div>
       </div>
+
+      <div class="mt-4 pt-4 border-t">
+        <h4 class="font-semibold text-gray-700 mb-2">Etymology (for first meaning)</h4>
+        <%= word_form.fields_for :etymology do |etymology_form| %>
+          <div>
+            <%= etymology_form.label :explanation, "Explanation", class: "block font-bold mb-1 text-sm" %>
+            <%= etymology_form.text_area :explanation, rows: 8, class: "border rounded w-full p-2" %>
+          </div>
+        <% end %>
+      </div>
     <% end %>
 
     <hr class="my-6 border-gray-300" />

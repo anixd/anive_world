@@ -36,7 +36,8 @@ class Forge::LexemesController < Forge::BaseController
       @lexeme.language_id = params.dig(:lexeme, :language_id)
     end
 
-    @lexeme.words.build
+    @lexeme.words.build.build_etymology
+
     authorize @lexeme
   end
 
@@ -138,7 +139,8 @@ class Forge::LexemesController < Forge::BaseController
       :language_id,
       :publish,
       :morphemes_list,
-      words_attributes: [:id, :definition, :transcription, :comment, :_destroy, part_of_speech_ids: []]
+      words_attributes: [:id, :definition, :transcription, :comment, :_destroy, part_of_speech_ids: []],
+      etymology_attributes: [:id, :explanation, :comment, :_destroy]
     )
   end
 end
