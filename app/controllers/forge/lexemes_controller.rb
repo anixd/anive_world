@@ -42,18 +42,21 @@ class Forge::LexemesController < Forge::BaseController
 
   def create
     attrs = lexeme_params.to_h
-    publish_flag = attrs.delete(:publish)
+    morphemes_data = attrs.delete(:morphemes_list)
+    morphemes_list = morphemes_data.present? ? JSON.parse(morphemes_data, symbolize_names: true) : []
 
     @lexeme = Lexeme.new(attrs)
     @lexeme.author = current_user
     @lexeme.words.first&.author = current_user
     authorize @lexeme
 
-    @lexeme.published_at = Time.current if publish_flag == '1'
-
-    if @lexeme.save
-      redirect_to forge_lexeme_path(@lexeme), notice: "Слово '#{@lexeme.spelling}' создано."
-    else
+    begin
+      ActiveRecord::Base.transaction do
+        @lexeme.save!
+        update_morphemes(morphemes_list)
+      end
+      redirect_to forge_lexeme_path(@lexeme), notice: "Lexeme '#{@lexeme.spelling}' was successfully created."
+    rescue ActiveRecord::RecordInvalid
       set_form_options
       render :new, status: :unprocessable_content
     end
@@ -67,14 +70,18 @@ class Forge::LexemesController < Forge::BaseController
     authorize @lexeme
 
     attrs = lexeme_params.to_h
-    publish_flag = attrs.delete(:publish)
+    morphemes_data = attrs.delete(:morphemes_list)
+    morphemes_list = morphemes_data.present? ? JSON.parse(morphemes_data, symbolize_names: true) : []
 
     @lexeme.assign_attributes(attrs)
-    @lexeme.published_at = (publish_flag == '1') ? Time.current : nil
 
-    if @lexeme.save
-      redirect_to forge_lexeme_path(@lexeme), notice: "Лексема обновлена."
-    else
+    begin
+      ActiveRecord::Base.transaction do
+        @lexeme.save!
+        update_morphemes(morphemes_list)
+      end
+      redirect_to forge_lexeme_path(@lexeme), notice: "Lexeme was successfully updated."
+    rescue ActiveRecord::RecordInvalid
       set_form_options
       render :edit, status: :unprocessable_content
     end
@@ -83,7 +90,7 @@ class Forge::LexemesController < Forge::BaseController
   def destroy
     authorize @lexeme
     @lexeme.discard
-    redirect_to forge_lexemes_path, notice: "Слово '#{@lexeme.spelling}' удалено."
+    redirect_to forge_lexemes_path, notice: "Lexeme '#{@lexeme.spelling}' was successfully archived."
   end
 
   def parts_of_speech
@@ -101,7 +108,7 @@ class Forge::LexemesController < Forge::BaseController
   private
 
   def set_lexeme
-    @lexeme = Lexeme.includes(:language).find_by!(slug: params[:id])
+    @lexeme = Lexeme.includes(:language, morphemes: :morphemable).find_by!(slug: params[:id])
   end
 
   def set_form_options
@@ -109,9 +116,28 @@ class Forge::LexemesController < Forge::BaseController
     @parts_of_speech = PartOfSpeech.order(:name)
   end
 
+  def update_morphemes(list)
+    @lexeme.morphemes.destroy_all
+    return if list.blank?
+
+    morphemes_to_create = list.map do |m_data|
+      {
+        lexeme_id: @lexeme.id,
+        morphemable_id: m_data[:id],
+        morphemable_type: m_data[:type],
+        position: m_data[:position]
+      }
+    end
+
+    Morpheme.insert_all(morphemes_to_create) if morphemes_to_create.any?
+  end
+
   def lexeme_params
     params.require(:lexeme).permit(
-      :spelling, :language_id, :publish,
+      :spelling,
+      :language_id,
+      :publish,
+      :morphemes_list,
       words_attributes: [:id, :definition, :transcription, :comment, :_destroy, part_of_speech_ids: []]
     )
   end

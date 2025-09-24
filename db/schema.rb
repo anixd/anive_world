@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_09_18_234252) do
+ActiveRecord::Schema[7.2].define(version: 2025_09_23_235118) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -111,6 +111,20 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_18_234252) do
     t.index ["published_at"], name: "index_lexemes_on_published_at"
     t.index ["slug", "language_id"], name: "index_lexemes_on_slug_and_language_id", unique: true, where: "(discarded_at IS NULL)"
     t.index ["spelling", "language_id"], name: "index_lexemes_on_spelling_and_language_id", unique: true, where: "(discarded_at IS NULL)"
+  end
+
+  create_table "morphemes", force: :cascade do |t|
+    t.bigint "lexeme_id", null: false
+    t.string "morphemable_type", null: false
+    t.bigint "morphemable_id", null: false
+    t.integer "position", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["lexeme_id", "morphemable_id", "morphemable_type"], name: "index_morphemes_on_lexeme_and_morphemable", unique: true
+    t.index ["lexeme_id", "position"], name: "index_morphemes_on_lexeme_id_and_position"
+    t.index ["lexeme_id"], name: "index_morphemes_on_lexeme_id"
+    t.index ["morphemable_type", "morphemable_id"], name: "index_morphemes_on_morphemable"
+    t.index ["morphemable_type", "morphemable_id"], name: "index_morphemes_on_morphemable_type_and_morphemable_id"
   end
 
   create_table "notes", force: :cascade do |t|
@@ -353,6 +367,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_18_234252) do
   add_foreign_key "languages", "users", column: "author_id"
   add_foreign_key "lexemes", "languages"
   add_foreign_key "lexemes", "users", column: "author_id"
+  add_foreign_key "morphemes", "lexemes"
   add_foreign_key "notes", "users", column: "author_id"
   add_foreign_key "parts_of_speech", "languages"
   add_foreign_key "parts_of_speech", "users", column: "author_id"

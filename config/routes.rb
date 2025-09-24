@@ -30,6 +30,10 @@ Rails.application.routes.draw do
       resources :words, only: [:new, :create]
     end
 
+    namespace :morphemes do
+      get :search
+    end
+
     resources :words, only: [:show, :edit, :update, :destroy] do
       get :search, on: :collection
     end

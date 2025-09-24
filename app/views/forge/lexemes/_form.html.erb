@@ -10,15 +10,24 @@
     </div>
   <% end %>
 
-  <div data-controller="dependent-select">
+  <%
+    initial_morphemes_data = @lexeme.morphemes.map do |m|
+      { id: m.morphemable_id, type: m.morphemable_type, text: m.morphemable.text }
+    end
+  %>
+  <div data-controller="dependent-select morpheme-constructor"
+       data-morpheme-constructor-search-url-value="<%= forge_morphemes_search_path %>"
+       data-morpheme-constructor-initial-morphemes-value="<%= initial_morphemes_data.to_json %>">
+
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div>
-        <%= form.label :language_id, "Язык", class: "block font-bold mb-1" %>
+        <%= form.label :language_id, "Language", class: "block font-bold mb-1" %>
         <%= form.collection_select :language_id, @languages, :id, :name,
                                    { prompt: "Select language" },
                                    { class: "border rounded w-full p-2",
                                      data: {
                                        dependent_select_target: "source",
+                                       morpheme_constructor_target: "languageSelect",
                                        action: "change->dependent-select#update"
                                      }
                                    } %>
@@ -32,7 +41,7 @@
     <hr class="my-6 border-gray-300" />
     <h3 class="text-xl font-semibold mb-3">First meaning (Word)</h3>
 
-    <%# Вложенная форма для первого Word %>
+    <%# nested form for first Word %>
     <%= form.fields_for :words, lexeme.words.first || lexeme.words.build do |word_form| %>
       <div class="space-y-4 bg-gray-50 p-4 rounded-lg">
         <div>
@@ -47,7 +56,6 @@
 
           <div>
             <%= word_form.label :part_of_speech_ids, "Parts of speech", class: "block font-bold mb-1" %>
-            <%# Этот div будет целью для обновления через Turbo Stream %>
             <div id="parts-of-speech-container" data-dependent-select-target="target">
               <%= render 'forge/lexemes/parts_of_speech_checkboxes', form: word_form, lexeme: lexeme %>
             </div>
@@ -55,12 +63,28 @@
         </div>
       </div>
     <% end %>
+
+    <hr class="my-6 border-gray-300" />
+
+    <div class="space-y-4">
+      <h3 class="text-xl font-semibold">Morphemic Structure</h3>
+      <%= form.hidden_field :morphemes_list, data: { morpheme_constructor_target: "hiddenInput" }, id: nil %>
+      <div class="relative">
+        <%= label_tag :morpheme_search, "Search for Roots or Affixes (use '-' prefix for affixes)", class: "block font-bold mb-1" %>
+        <input type="text" id="morpheme_search" data-morpheme-constructor-target="searchInput" data-action="input->morpheme-constructor#debouncedSearch" class="border rounded w-full p-2" placeholder="e.g., lar or -ion">
+        <div data-morpheme-constructor-target="resultsContainer" class="absolute z-10 w-full bg-white border rounded mt-1 shadow-lg hidden"></div>
+      </div>
+      <div>
+        <label class="block font-bold mb-1">Structure (drag to reorder)</label>
+        <div data-morpheme-constructor-target="pillsContainer" class="min-h-[60px] bg-gray-50 border-2 border-dashed rounded-lg p-2 flex flex-wrap gap-2 items-center">
+        </div>
+      </div>
+    </div>
   </div>
 
   <hr class="my-6 border-gray-300" />
 
   <%= render 'shared/publication_fields', form: form %>
-
 
   <div class="actions mt-6 mb-6">
     <%= form.submit "Save", class: "bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded cursor-pointer" %>

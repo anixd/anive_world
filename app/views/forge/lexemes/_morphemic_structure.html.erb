@@ -1,0 +1,14 @@
+<% if lexeme.morphemes.any? %>
+  <div class="mb-6 pb-6 border-b">
+    <h3 class="text-lg font-semibold text-gray-700 mb-3">Morphemic Structure</h3>
+    <div class="flex flex-wrap items-center gap-x-2 gap-y-2 morpheme-display-container">
+      <% lexeme.morphemes.each do |morpheme| %>
+        <% morphemable = morpheme.morphemable %>
+        <% pill_class = morphemable.is_a?(Root) ? 'is-root' : 'is-affix' %>
+        <%= link_to morphemable.text, [:forge, morphemable.language, morphemable],
+                    class: "morpheme-pill non-interactive #{pill_class}",
+                    title: morphemable.class.name %>
+      <% end %>
+    </div>
+  </div>
+<% end %>
