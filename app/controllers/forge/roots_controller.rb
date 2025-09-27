@@ -10,7 +10,7 @@ class Forge::RootsController < Forge::BaseController
     @current_language = @languages.find { |l| l.code == target_code } || Language.order(:name).first
 
     scope = if @current_language
-              @current_language.roots.includes(:author).order(:text)
+              @current_language.roots.kept.includes(:author, :etymology).order(:text)
             else
               Root.none
             end
@@ -29,10 +29,7 @@ class Forge::RootsController < Forge::BaseController
   end
 
   def create
-    attrs = root_params.to_h
-    publish_flag = attrs.delete(:publish)
-
-    @root = @language.roots.build(attrs)
+    @root = @language.roots.build(root_params.except(:publish))
     @root.author = current_user
     authorize @root
 
@@ -40,12 +37,20 @@ class Forge::RootsController < Forge::BaseController
       @root.etymology.author = current_user
     end
 
-    @root.published_at = Time.current if publish_flag == '1'
-
-    if @root.save
-      redirect_to forge_language_roots_path(@language, lang: @language.code), notice: "Root was created."
+    if request.format.json?
+      @root.published_at = Time.current
     else
-      render :new, status: :unprocessable_content
+      @root.publish = root_params[:publish]
+    end
+
+    respond_to do |format|
+      if @root.save
+        format.html { redirect_to forge_language_roots_path(@language, lang: @language.code), notice: "Root was created." }
+        format.json { render json: { id: @root.id, text: @root.text, type: 'Root' }, status: :created }
+      else
+        format.html { render :new, status: :unprocessable_content }
+        format.json { render json: { errors: @root.errors.full_messages }, status: :unprocessable_content }
+      end
     end
   end
 
@@ -61,7 +66,7 @@ class Forge::RootsController < Forge::BaseController
     publish_flag = attrs.delete(:publish)
 
     @root.assign_attributes(attrs)
-    @root.published_at = (publish_flag == '1') ? Time.current : nil
+    @root.published_at = (publish_flag == "1") ? Time.current : nil
 
     if @root.etymology.present? && @root.etymology.new_record?
       @root.etymology.author = current_user
@@ -77,7 +82,12 @@ class Forge::RootsController < Forge::BaseController
   def destroy
     authorize @root
     @root.discard
-    redirect_to forge_language_roots_path(@language, lang: @language.code), notice: "Root was archived."
+
+    # redirect_to forge_language_roots_path(@language, lang: @language.code), notice: "Root was archived."
+    respond_to do |format|
+      format.html { redirect_to forge_language_roots_path(@language, lang: @language.code), notice: "Root was archived." }
+      format.turbo_stream
+    end
   end
 
   private
@@ -91,7 +101,7 @@ class Forge::RootsController < Forge::BaseController
   end
 
   def handle_publication(record)
-    if params.dig(:lexeme, :publish) == '1'
+    if params.dig(:lexeme, :publish) == "1"
       record.published_at = Time.current
     else
       record.published_at = nil

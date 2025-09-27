@@ -34,7 +34,7 @@
       </div>
       <div>
         <%= form.label :spelling, "Spelling", class: "block font-bold mb-1" %>
-        <%= form.text_field :spelling, class: "border rounded w-full p-2" %>
+        <%= form.text_field :spelling, class: "border rounded w-full p-2", data: { morpheme_constructor_target: "spellingInput" } %>
       </div>
     </div>
 
@@ -78,6 +78,12 @@
 
     <div class="space-y-4">
       <h3 class="text-xl font-semibold">Morphemic Structure</h3>
+      <button type="button"
+              data-action="click->morpheme-constructor#createRootFromSpelling"
+              class="text-xs font-medium text-blue-600 hover:text-blue-800 border border-blue-500 rounded-full px-3 py-1 hover:bg-blue-50">
+        Create Root from Spelling
+      </button>
+
       <%= form.hidden_field :morphemes_list, data: { morpheme_constructor_target: "hiddenInput" }, id: nil %>
       <div class="relative">
         <%= label_tag :morpheme_search, "Search for Roots or Affixes (use '-' prefix for affixes)", class: "block font-bold mb-1" %>
