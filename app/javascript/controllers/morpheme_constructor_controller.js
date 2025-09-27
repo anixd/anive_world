@@ -11,7 +11,8 @@ function debounce(func, wait) {
 }
 
 export default class extends Controller {
-    static targets = ["searchInput", "resultsContainer", "pillsContainer", "hiddenInput", "languageSelect"]
+    static targets = ["searchInput", "resultsContainer", "pillsContainer", "hiddenInput", "languageSelect", "spellingInput"]
+
     static values = {
         searchUrl: String,
         initialMorphemes: Array
@@ -153,6 +154,48 @@ export default class extends Controller {
     hideResultsOnClickOutside(event) {
         if (!this.element.contains(event.target)) {
             this.clearResults();
+        }
+    }
+
+    async createRootFromSpelling(event) {
+        event.preventDefault()
+        const spelling = this.spellingInputTarget.value.trim()
+        const languageId = this.languageSelectTarget.value
+
+        if (!spelling || !languageId) {
+            alert("Please enter a spelling and select a language first.")
+            return
+        }
+
+        const url = `/forge/languages/${languageId}/roots`
+        const csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
+
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-CSRF-Token': csrfToken
+            },
+            body: JSON.stringify({
+                root: {
+                    text: spelling,
+                    language_id: languageId
+                }
+            })
+        })
+
+        const data = await response.json()
+
+        if (response.ok) {
+            // Если корень успешно создан, добавляем его как "таблетку"
+            if (!this.isDuplicate(data.id, data.type)) {
+                this.createPill(data.id, data.text, data.type)
+                this.updateHiddenInput()
+            }
+        } else {
+            // Если корень уже существует или другая ошибка
+            alert(`Error: ${data.errors.join(', ')}`)
         }
     }
 }
