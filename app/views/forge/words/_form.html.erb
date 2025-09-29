@@ -32,49 +32,6 @@
   </div>
 
   <div class="space-y-4 bg-gray-50 p-4 rounded-lg border">
-    <h3 class="font-semibold text-lg border-b pb-2 mb-4">Origin Details</h3>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div>
-        <%= form.label :origin_type, "Origin Type", class: "block font-bold mb-1" %>
-        <%= form.select :origin_type, Word.origin_types.keys.map { |ot| [ot.humanize, ot] }, { include_blank: 'Not specified' }, { class: "border rounded w-full p-2" } %>
-      </div>
-
-      <div data-controller="autocomplete"
-           data-autocomplete-url-value="<%= search_forge_words_path(format: :json) %>"
-           data-autocomplete-except-id-value="<%= @word.id if @word.persisted? %>">
-        <%= form.label :origin_word_id, "Origin Word (Ancestor)", class: "block font-bold mb-1" %>
-
-        <%= form.hidden_field :origin_word_id, data: { autocomplete_target: "hiddenInput" } %>
-
-        <div class="relative">
-          <%= text_field_tag :origin_word_search,
-                             @word.origin_word&.spelling_with_language,
-                             class: "border rounded w-full p-2",
-                             placeholder: "Start typing a word...",
-                             data: {
-                               autocomplete_target: "input",
-                               action: "input->autocomplete#debouncedSearch"
-                             } %>
-
-          <button type="button" class="absolute inset-y-0 right-0 px-3 text-gray-500 hover:text-gray-800 hidden"
-                  data-autocomplete-target="clearButton"
-                  data-action="click->autocomplete#clear"
-                  title="Clear selection">
-            &times;
-          </button>
-        </div>
-
-        <div class="relative">
-          <div data-autocomplete-target="results"
-               class="absolute top-0 left-0 right-0 z-10 bg-white border rounded-b-lg shadow-lg hidden max-h-60 overflow-y-auto">
-            <%# Результаты будут вставлены сюда JavaScript'ом %>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="space-y-4 bg-gray-50 p-4 rounded-lg border">
     <h3 class="font-semibold text-lg border-b pb-2 mb-4">Etymology</h3>
     <%= form.fields_for :etymology do |etymology_form| %>
       <div>

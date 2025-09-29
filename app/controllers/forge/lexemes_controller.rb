@@ -139,6 +139,8 @@ class Forge::LexemesController < Forge::BaseController
       :language_id,
       :publish,
       :morphemes_list,
+      :origin_type,
+      :origin_language_id,
       words_attributes: [:id, :definition, :transcription, :comment, :_destroy, part_of_speech_ids: []],
       etymology_attributes: [:id, :explanation, :comment, :_destroy]
     )
