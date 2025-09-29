@@ -1,0 +1,26 @@
+<%= form_with(model: [:forge, @language, @affix_category], class: "space-y-6") do |form| %>
+  <% if @affix_category.errors.any? %>
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+      <h2 class="font-bold mb-2"><%= pluralize(@affix_category.errors.count, "error") %> prohibited this from being saved:</h2>
+      <ul class="list-disc list-inside">
+        <% @affix_category.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :name, "Name", class: "block font-bold mb-1" %>
+    <%= form.text_field :name, class: "border rounded w-full p-2" %>
+  </div>
+
+  <div>
+    <%= form.label :description, "Description", class: "block font-bold mb-1" %>
+    <%= form.text_area :description, rows: 4, class: "border rounded w-full p-2" %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit "Save Category", class: "bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer" %>
+  </div>
+<% end %>

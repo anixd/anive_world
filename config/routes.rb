@@ -22,6 +22,7 @@ Rails.application.routes.draw do
       resources :parts_of_speech
       resources :roots
       resources :affixes
+      resources :affix_categories
     end
     resources :translations, only: [:index, :show]
 

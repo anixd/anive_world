@@ -4,20 +4,22 @@
 #
 # Table name: affixes
 #
-#  id           :bigint           not null, primary key
-#  affix_type   :string
-#  discarded_at :datetime
-#  meaning      :text
-#  published_at :datetime
-#  slug         :string
-#  text         :string
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
-#  author_id    :bigint           not null
-#  language_id  :bigint           not null
+#  id                :bigint           not null, primary key
+#  affix_type        :string
+#  discarded_at      :datetime
+#  meaning           :text
+#  published_at      :datetime
+#  slug              :string
+#  text              :string
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#  affix_category_id :bigint
+#  author_id         :bigint           not null
+#  language_id       :bigint           not null
 #
 # Indexes
 #
+#  index_affixes_on_affix_category_id                    (affix_category_id)
 #  index_affixes_on_author_id                            (author_id)
 #  index_affixes_on_discarded_at                         (discarded_at)
 #  index_affixes_on_language_id                          (language_id)
@@ -27,6 +29,7 @@
 #
 # Foreign Keys
 #
+#  fk_rails_...  (affix_category_id => affix_categories.id)
 #  fk_rails_...  (author_id => users.id)
 #  fk_rails_...  (language_id => languages.id)
 #
@@ -43,12 +46,16 @@ class Affix < ApplicationRecord
   sluggable_from :text
 
   belongs_to :language
+  belongs_to :affix_category, optional: true
 
   has_one :etymology, as: :etymologizable, dependent: :destroy
   has_many :morphemes, as: :morphemable, dependent: :destroy
   has_many :lexemes, through: :morphemes
 
-  accepts_nested_attributes_for :etymology, allow_destroy: true
+  accepts_nested_attributes_for :etymology,
+                                allow_destroy: true,
+                                reject_if: ->(attributes) { attributes['explanation'].blank? }
+
 
 
   enum :affix_type, { prefix: "prefix", suffix: "suffix", infix: "infix" }

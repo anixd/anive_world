@@ -1,5 +1,16 @@
 <%= form_with(model: [:forge, @language, @root], data: { turbo: false }, class: "space-y-6") do |form| %>
-  <%# ... errors ... %>
+  <% if @root.errors.any? %>
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4" role="alert">
+      <strong class="font-bold">
+        <%= pluralize(@root.errors.count, "error") %> prohibited this root from being saved:
+      </strong>
+      <ul class="list-disc list-inside mt-2">
+        <% @root.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
 
   <div>
     <%= form.label :text, "Root Text", class: "block font-bold mb-1" %>

@@ -41,6 +41,7 @@ class Language < ApplicationRecord
   has_many :lexemes
   has_many :roots
   has_many :affixes
+  has_many :affix_categories, dependent: :destroy
 
   validates :name, presence: true, uniqueness: { case_sensitive: false }
   validates :code, presence: true, uniqueness: { case_sensitive: false }

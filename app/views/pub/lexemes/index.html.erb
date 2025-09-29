@@ -12,8 +12,9 @@
   </div>
 
   <div class="border-b pb-4 mb-6">
-    <h1 class="text-3xl font-bold"><%= @language.name %> Dictionary</h1>
-    <p class="mt-1 text-gray-600"><%= link_to "← Back to all languages", pub_languages_path, class: "text-blue-600 hover:underline" %></p>
+    <h1 class="text-3xl font-bold mb-2"><%= @language.name %> Dictionary</h1>
+    <span class="font-mono text-base bg-blue-100 text-blue-800 px-2 py-1 rounded-md"><%= @pagy.count %> total</span>
+    <p class="mt-2 text-gray-600"><%= link_to "← Back to all languages", pub_languages_path, class: "text-blue-600 hover:underline" %></p>
   </div>
 
   <div class="mb-6 p-4 bg-gray-50 border rounded-lg">
