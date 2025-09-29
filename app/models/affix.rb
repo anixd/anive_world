@@ -11,6 +11,7 @@
 #  published_at      :datetime
 #  slug              :string
 #  text              :string
+#  transcription     :string
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  affix_category_id :bigint
@@ -61,6 +62,11 @@ class Affix < ApplicationRecord
   enum :affix_type, { prefix: "prefix", suffix: "suffix", infix: "infix" }
 
   validates :text, uniqueness: { scope: [:language_id, :affix_type], case_sensitive: false }
+
+  validates :transcription, allow_blank: true, format: {
+    with: /\A[\p{L}\s.'-]*\z/u,
+    message: "can only contain Latin letters, spaces, and the characters .'-"
+  }
 
   scope :search_by_text, ->(query) {
     where("text ILIKE ? OR meaning ILIKE ?", "%#{query}%", "%#{query}%")

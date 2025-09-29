@@ -54,7 +54,12 @@
           <% if @roots.any? %>
             <% @roots.each do |root| %>
               <%= link_to pub_language_root_path(@language, root), class: "block py-3 border-b hover:bg-gray-50 group" do %>
-                <h3 class="font-bold text-lg font-mono text-blue-800 group-hover:underline"><%= root.text %></h3>
+                <h3 class="font-bold text-lg font-mono text-blue-800 group-hover:underline">
+                  <%= root.text %>
+                  <% if root.transcription.present? %>
+                    <span class="ml-1 mr-2 font-normal text-base text-gray-500">[<%= root.transcription %>]</span>
+                  <% end %>
+                </h3>
                 <div class="prose prose-sm max-w-none text-gray-700 mt-1" data-controller="wikilink-preview">
                   <%= render_markdown(root.meaning.to_s) %>
                 </div>
@@ -75,7 +80,12 @@
             <% @affixes.each do |affix| %>
               <%= link_to pub_language_affix_path(@language, affix), class: "block py-3 border-b hover:bg-gray-50 group" do %>
                 <div class="flex items-baseline gap-2">
-                  <h3 class="font-bold text-lg font-mono text-green-800 group-hover:underline"><%= affix.text %></h3>
+                  <h3 class="font-bold text-lg font-mono text-green-800 group-hover:underline">
+                    <%= affix.text %>
+                    <% if affix.transcription.present? %>
+                      <span class="ml-1 mr-2 font-normal text-base text-gray-500">[<%= affix.transcription %>]</span>
+                    <% end %>
+                  </h3>
 
                   <span class="bg-gray-200 text-gray-700 text-xs font-medium px-2 py-0.5 rounded-full"><%= affix.affix_type %></span>
 

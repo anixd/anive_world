@@ -4,16 +4,17 @@
 #
 # Table name: roots
 #
-#  id           :bigint           not null, primary key
-#  discarded_at :datetime
-#  meaning      :text
-#  published_at :datetime
-#  slug         :string
-#  text         :string
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
-#  author_id    :bigint           not null
-#  language_id  :bigint           not null
+#  id            :bigint           not null, primary key
+#  discarded_at  :datetime
+#  meaning       :text
+#  published_at  :datetime
+#  slug          :string
+#  text          :string
+#  transcription :string
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  author_id     :bigint           not null
+#  language_id   :bigint           not null
 #
 # Indexes
 #
@@ -54,6 +55,11 @@ class Root < ApplicationRecord
     scope: :language_id,
     case_sensitive: false,
     conditions: -> { kept }
+  }
+
+  validates :transcription, allow_blank: true, format: {
+    with: /\A[\p{L}\s.'-]*\z/u,
+    message: "can only contain Latin letters, spaces, and the characters .'-"
   }
 
   scope :search_by_text, ->(query) {

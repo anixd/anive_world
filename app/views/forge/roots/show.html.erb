@@ -1,7 +1,12 @@
 <div class="p-6">
   <div class="flex justify-between items-center mb-6">
     <div>
-      <h1 class="text-3xl font-bold font-mono">"<%= @root.text %>"</h1>
+      <h1 class="text-3xl font-bold font-mono">
+        "<%= @root.text %>"
+        <% if @root.transcription.present? %>
+          <span class="ml-2 font-normal text-gray-500">[<%= @root.transcription %>]</span>
+        <% end %>
+      </h1>
       <p class="text-lg text-gray-500">Root in <%= @root.language.name.downcase %></p>
     </div>
     <div>

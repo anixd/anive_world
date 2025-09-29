@@ -108,7 +108,7 @@ end
 
   def affix_params
     params.require(:affix).permit(
-      :text, :affix_type, :meaning, :publish, :affix_category_id, :destroy,
+      :text, :affix_type, :meaning, :publish, :affix_category_id, :destroy, :transcription,
       etymology_attributes: [:id, :explanation, :comment]
     )
   end

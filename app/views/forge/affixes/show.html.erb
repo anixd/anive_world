@@ -2,7 +2,12 @@
   <div class="flex justify-between items-center mb-6">
     <div>
       <div class="flex items-baseline gap-4">
-        <h1 class="text-3xl font-bold font-mono">"<%= @affix.text %>"</h1>
+        <h1 class="text-3xl font-bold font-mono">
+          "<%= @affix.text %>"
+          <% if @affix.transcription.present? %>
+            <span class="ml-2 font-normal text-gray-500">[<%= @affix.transcription %>]</span>
+          <% end %>
+        </h1>
         <span class="px-3 py-1 text-sm leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
           <%= @affix.affix_type %>
         </span>

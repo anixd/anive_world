@@ -110,7 +110,7 @@ class Forge::RootsController < Forge::BaseController
 
   def root_params
     params.require(:root).permit(
-      :text, :meaning, :publish,
+      :text, :meaning, :publish, :transcription,
       etymology_attributes: [:id, :explanation, :comment]
     )
   end

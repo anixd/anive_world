@@ -14,7 +14,12 @@
 
   <header class="border-b pb-4 mb-6">
     <div class="flex items-baseline gap-4">
-      <h1 class="text-4xl font-bold font-mono text-gray-900"><%= @affix.text %></h1>
+      <h1 class="text-4xl font-bold font-mono text-gray-900">
+        <%= @affix.text %>
+        <% if @affix.transcription.present? %>
+          <span class="ml-4 font-normal text-2xl text-gray-500">[<%= @affix.transcription %>]</span>
+        <% end %>
+      </h1>
       <span class="px-3 py-1 text-sm leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
         <%= @affix.affix_type %>
       </span>
