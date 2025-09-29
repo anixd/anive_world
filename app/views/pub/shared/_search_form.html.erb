@@ -1,9 +1,11 @@
+<% default_scope = params[:scope] || current_search_scope %>
+
 <div data-controller="live-search"
-     data-live-search-scope-value="<%= params[:scope] || 'lore' %>"
+     data-live-search-scope-value="<%= default_scope %>"
      data-live-search-search-url-value="<%= pub_search_path %>">
 
   <%= form_with(url: pub_search_path, method: :get, class: "relative", data: { live_search_target: "form" }) do |form| %>
-    <%= form.hidden_field :scope, value: params[:scope] || 'lore', data: { live_search_target: "scopeInput" } %>
+    <%= form.hidden_field :scope, value: default_scope, data: { live_search_target: "scopeInput" } %>
 
     <div class="flex rounded-t-lg overflow-hidden border border-b-0 border-gray-300">
       <button type="button"
@@ -27,7 +29,7 @@
       <%= form.search_field :q,
                             value: @query,
                             class: "block w-full border border-gray-300 rounded-b-lg text-lg pr-10 focus:border-blue-500 focus:ring-blue-500 px-3 py-2",
-                            placeholder: (params[:scope] == 'dictionary' ? "Search in Dictionary..." : "Search in Lore..."),
+                            placeholder: "Search...",
                             data: {
                               live_search_target: "input",
                               action: "input->live-search#search"

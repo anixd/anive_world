@@ -6,4 +6,8 @@ class LanguagePolicy < LinguisticPolicy
       scope.all
     end
   end
+
+  def show?
+    user.present?
+  end
 end

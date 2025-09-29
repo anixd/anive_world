@@ -10,9 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_09_24_172059) do
+ActiveRecord::Schema[7.2].define(version: 2025_09_27_202944) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "affix_categories", force: :cascade do |t|
+    t.bigint "language_id", null: false
+    t.bigint "author_id", null: false
+    t.string "name", null: false
+    t.string "code", null: false
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["author_id"], name: "index_affix_categories_on_author_id"
+    t.index ["language_id", "code"], name: "index_affix_categories_on_language_id_and_code", unique: true
+    t.index ["language_id", "name"], name: "index_affix_categories_on_language_id_and_name", unique: true
+    t.index ["language_id"], name: "index_affix_categories_on_language_id"
+  end
 
   create_table "affixes", force: :cascade do |t|
     t.string "text"
@@ -25,6 +39,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_24_172059) do
     t.datetime "updated_at", null: false
     t.datetime "published_at"
     t.string "slug"
+    t.bigint "affix_category_id"
+    t.index ["affix_category_id"], name: "index_affixes_on_affix_category_id"
     t.index ["author_id"], name: "index_affixes_on_author_id"
     t.index ["discarded_at"], name: "index_affixes_on_discarded_at"
     t.index ["language_id"], name: "index_affixes_on_language_id"
@@ -341,6 +357,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_24_172059) do
     t.index ["type"], name: "index_words_on_type"
   end
 
+  add_foreign_key "affix_categories", "languages"
+  add_foreign_key "affix_categories", "users", column: "author_id"
+  add_foreign_key "affixes", "affix_categories"
   add_foreign_key "affixes", "languages"
   add_foreign_key "affixes", "users", column: "author_id"
   add_foreign_key "content_entries", "content_entries", column: "parent_location_id"

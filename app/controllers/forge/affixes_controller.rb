@@ -3,20 +3,24 @@
 class Forge::AffixesController < Forge::BaseController
   before_action :set_language_from_id, except: [:index]
   before_action :set_affix, only: %i[show edit update destroy]
+  before_action :set_form_options, only: %i[new create edit update]
 
   def index
-    @languages = Language.order(:name)
-    target_code = params.fetch(:lang, Language::DEFAULT_CODE)
-    @current_language = @languages.find { |l| l.code == target_code } || Language.order(:name).first
+  @languages = Language.order(:name)
+  target_code = params.fetch(:lang, Language::DEFAULT_CODE)
+  @current_language = @languages.find { |l| l.code == target_code } || Language.order(:name).first
 
-    scope = if @current_language
-              @current_language.affixes.includes(:author).order(:text)
-            else
-              Affix.none
-            end
+  scope = if @current_language
+            @affix_categories = @current_language.affix_categories.order(:name)
+            @current_language.affixes.includes(:author, :affix_category, :etymology).order(:text)
+          else
+            Affix.none
+          end
 
-    @pagy, @affixes = pagy(policy_scope(scope))
-  end
+  scope = scope.where(affix_category_id: params[:category_id]) if params[:category_id].present?
+
+  @pagy, @affixes = pagy(policy_scope(scope))
+end
 
   def new
     @affix = @language.affixes.build
@@ -82,6 +86,10 @@ class Forge::AffixesController < Forge::BaseController
 
   private
 
+  def set_form_options
+    @affix_categories = @language.affix_categories.order(:name)
+  end
+
   def set_language_from_id
     @language = Language.find(params[:language_id])
   end
@@ -100,7 +108,7 @@ class Forge::AffixesController < Forge::BaseController
 
   def affix_params
     params.require(:affix).permit(
-      :text, :affix_type, :meaning, :publish,
+      :text, :affix_type, :meaning, :publish, :affix_category_id, :destroy,
       etymology_attributes: [:id, :explanation, :comment]
     )
   end

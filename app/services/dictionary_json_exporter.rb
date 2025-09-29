@@ -15,6 +15,7 @@ class DictionaryJsonExporter
   def call
     data = {
       meta: build_meta,
+      affix_categories: serialize_affix_categories,
       lexemes: serialize_lexemes,
       roots: serialize_roots,
       affixes: serialize_affixes
@@ -24,6 +25,13 @@ class DictionaryJsonExporter
   end
 
   private
+
+  def serialize_affix_categories
+    categories = @language.affix_categories.order(:name)
+    categories.index_by(&:code).transform_values do |category|
+      { name: category.name, description: category.description }
+    end
+  end
 
   def build_meta
     {
@@ -91,11 +99,16 @@ class DictionaryJsonExporter
   end
 
   def serialize_affixes
-    @language.affixes.preload(:etymology).map do |affix|
+    @language.affixes.includes(:etymology, :affix_category).map do |affix|
       data = {}
       data[:text] = affix.text if field_selected?("affix.text")
       data[:meaning] = affix.meaning if field_selected?("affix.meaning")
       data[:affix_type] = affix.affix_type if field_selected?("affix.affix_type")
+
+      if affix.affix_category.present?
+        data[:category_key] = affix.affix_category.code
+      end
+
       if field_selected?("affix.etymology") && affix.etymology.present?
         data[:etymology] = { explanation: affix.etymology.explanation }
       end

@@ -14,6 +14,10 @@
       </div>
     </div>
     <div>
+      <%= form.label :affix_category_id, "Functional Category", class: "block font-bold mb-1" %>
+      <%= form.collection_select :affix_category_id, @affix_categories, :id, :name, { include_blank: 'Not specified' }, { class: "border rounded w-full p-2" } %>
+    </div>
+    <div>
       <%= form.label :meaning, "Meaning", class: "block font-bold mb-1" %>
       <%= form.text_area :meaning, rows: 5, class: "border rounded w-full p-2" %>
     </div>
