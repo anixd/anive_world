@@ -12,9 +12,9 @@ module ApplicationHelper
     ]
 
     if linguistic_controllers.include?(controller_name)
-      'dictionary'
+      "dictionary"
     else
-      'lore'
+      "lore"
     end
   end
 end

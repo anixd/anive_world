@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_09_27_202944) do
+ActiveRecord::Schema[7.2].define(version: 2025_09_29_150056) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -40,6 +40,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_27_202944) do
     t.datetime "published_at"
     t.string "slug"
     t.bigint "affix_category_id"
+    t.string "transcription"
     t.index ["affix_category_id"], name: "index_affixes_on_affix_category_id"
     t.index ["author_id"], name: "index_affixes_on_author_id"
     t.index ["discarded_at"], name: "index_affixes_on_discarded_at"
@@ -187,6 +188,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_27_202944) do
     t.datetime "updated_at", null: false
     t.datetime "published_at"
     t.string "slug"
+    t.string "transcription"
     t.index ["author_id"], name: "index_roots_on_author_id"
     t.index ["discarded_at"], name: "index_roots_on_discarded_at"
     t.index ["language_id"], name: "index_roots_on_language_id"

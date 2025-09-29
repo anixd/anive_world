@@ -19,6 +19,12 @@
   </div>
 
   <div>
+    <%= form.label :transcription, "Transcription", class: "block font-bold mb-1" %>
+    <%= form.text_field :transcription, class: "border rounded w-full p-2 font-mono" %>
+    <p class="text-xs text-gray-600 mt-1">Optional phonetic transcription.</p>
+  </div>
+
+  <div>
     <%= form.label :meaning, "Meaning", class: "block font-bold mb-1" %>
     <%= form.text_area :meaning, rows: 5, class: "border rounded w-full p-2" %>
     <p class="text-xs text-gray-600 mt-1">Description of the root's meaning. Markdown is supported.</p>
