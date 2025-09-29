@@ -13,6 +13,20 @@
 
   <%= render 'morphemic_structure', lexeme: @lexeme %>
 
+  <div class="mb-6 pb-6 border-b">
+    <p class="text-gray-800">
+      <span class="text-lg font-semibold text-gray-700">Origin:</span>
+      <% unless @lexeme.origin_unspecified? %>
+        <span class="ml-2 font-semibold capitalize"><%= @lexeme.origin_type %></span>
+        <% if (@lexeme.origin_inherited? || @lexeme.origin_borrowed?) && @lexeme.origin_language %>
+          from <%= link_to @lexeme.origin_language.name, forge_language_path(@lexeme.origin_language), class: "text-blue-600 hover:underline" %>
+        <% end %>
+      <% else %>
+        <span class="ml-2 text-gray-500 italic">Not specified.</span>
+      <% end %>
+    </p>
+  </div>
+
   <h2 class="text-xl font-semibold mb-4">Meanings:</h2>
 
   <% if @words.any? %>

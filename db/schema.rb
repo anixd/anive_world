@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_09_29_150056) do
+ActiveRecord::Schema[7.2].define(version: 2025_09_29_200248) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -122,9 +122,12 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_29_150056) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "published_at"
+    t.integer "origin_type"
+    t.bigint "origin_language_id"
     t.index ["author_id"], name: "index_lexemes_on_author_id"
     t.index ["discarded_at"], name: "index_lexemes_on_discarded_at"
     t.index ["language_id"], name: "index_lexemes_on_language_id"
+    t.index ["origin_language_id"], name: "index_lexemes_on_origin_language_id"
     t.index ["published_at"], name: "index_lexemes_on_published_at"
     t.index ["slug", "language_id"], name: "index_lexemes_on_slug_and_language_id", unique: true, where: "(discarded_at IS NULL)"
     t.index ["spelling", "language_id"], name: "index_lexemes_on_spelling_and_language_id", unique: true, where: "(discarded_at IS NULL)"
@@ -346,8 +349,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_29_150056) do
     t.text "definition"
     t.string "transcription"
     t.text "comment"
-    t.bigint "origin_type", default: 0
-    t.bigint "origin_word_id"
     t.bigint "author_id", null: false
     t.datetime "discarded_at"
     t.datetime "created_at", null: false
@@ -355,7 +356,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_29_150056) do
     t.index ["author_id"], name: "index_words_on_author_id"
     t.index ["discarded_at"], name: "index_words_on_discarded_at"
     t.index ["lexeme_id"], name: "index_words_on_lexeme_id"
-    t.index ["origin_word_id"], name: "index_words_on_origin_word_id"
     t.index ["type"], name: "index_words_on_type"
   end
 
@@ -372,6 +372,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_29_150056) do
   add_foreign_key "languages", "languages", column: "parent_language_id"
   add_foreign_key "languages", "users", column: "author_id"
   add_foreign_key "lexemes", "languages"
+  add_foreign_key "lexemes", "languages", column: "origin_language_id"
   add_foreign_key "lexemes", "users", column: "author_id"
   add_foreign_key "morphemes", "lexemes"
   add_foreign_key "notes", "users", column: "author_id"
@@ -390,5 +391,4 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_29_150056) do
   add_foreign_key "word_translations", "words"
   add_foreign_key "words", "lexemes"
   add_foreign_key "words", "users", column: "author_id"
-  add_foreign_key "words", "words", column: "origin_word_id"
 end

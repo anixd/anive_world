@@ -16,9 +16,8 @@ import AutocompleteController from "./autocomplete_controller"
 import DropdownController from "./dropdown_controller"
 import GoTopController from "./go_top_controller";
 import DynamicElementsController from "./dynamic_elements_controller";
-import MorphemeConstructorController from "./morpheme_constructor_controller"; // <-- Добавь эту строку
-
-
+import MorphemeConstructorController from "./morpheme_constructor_controller";
+import ToggleVisibilityController from "./toggle_visibility_controller"
 
 application.register("dependent-select", DependentSelectController)
 application.register("autosubmit", AutosubmitController)
@@ -32,4 +31,5 @@ application.register("autocomplete", AutocompleteController)
 application.register("dropdown", DropdownController)
 application.register('go-top', GoTopController)
 application.register("dynamic-elements", DynamicElementsController)
-application.register("morpheme-constructor", MorphemeConstructorController) // <-- и эту
+application.register("morpheme-constructor", MorphemeConstructorController)
+application.register("toggle-visibility", ToggleVisibilityController)

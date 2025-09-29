@@ -37,27 +37,17 @@ class Word < ApplicationRecord
   include ApostropheNormalizer
   include IndexableLinks
 
-  enum origin_type: {
-    unspecified: 0,
-    inherited: 1,
-    neologism: 2,
-    borrowed: 3,
-    derived: 4
-  }, _prefix: :origin
-
   has_paper_trail
 
   before_validation :set_sti_type, on: :create
 
   belongs_to :lexeme
-  belongs_to :origin_word, class_name: "Word", optional: true
 
   has_and_belongs_to_many :parts_of_speech, class_name: "PartOfSpeech"
   has_one :etymology, as: :etymologizable, dependent: :destroy
 
   has_many :synonym_relations, dependent: :destroy
   has_many :synonyms, through: :synonym_relations, source: :synonym
-  has_many :descendant_words, class_name: "Word", foreign_key: "origin_word_id"
 
   has_many :inverse_synonym_relations, class_name: "SynonymRelation", foreign_key: "synonym_id", dependent: :destroy
   has_many :inverse_synonyms, through: :inverse_synonym_relations, source: :word

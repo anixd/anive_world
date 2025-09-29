@@ -14,7 +14,20 @@
 
   <header class="border-b pb-4 mb-6">
     <h1 class="text-4xl font-bold text-gray-900"><%= @lexeme.spelling %></h1>
-    <p class="mt-1 text-gray-600">A word in <%= @language.name %></p>
+
+    <div class="mt-2 text-gray-600">
+      <span>A word in <%= @language.name %></span>
+      <% unless @lexeme.origin_unspecified? %>
+        <span class="mx-2">&middot;</span>
+        <span>
+          <strong class="font-medium">Origin:</strong>
+      <span class="capitalize ml-1"><%= @lexeme.origin_type %></span>
+          <% if (@lexeme.origin_inherited? || @lexeme.origin_borrowed?) && @lexeme.origin_language %>
+            <span>from <%= link_to @lexeme.origin_language.name, pub_language_path(@lexeme.origin_language), class: "hover:underline" %></span>
+          <% end %>
+        </span>
+      <% end %>
+    </div>
   </header>
 
   <%= render 'morphemic_structure', lexeme: @lexeme %>

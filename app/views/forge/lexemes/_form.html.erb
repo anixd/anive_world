@@ -39,6 +39,34 @@
     </div>
 
     <hr class="my-6 border-gray-300" />
+    <div class="space-y-4 bg-gray-50 p-4 rounded-lg border"
+         data-controller="toggle-visibility"
+         data-toggle-visibility-trigger-value="inherited borrowed">
+
+      <h3 class="font-semibold text-lg border-b pb-2 mb-4">Origin</h3>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <%= form.label :origin_type, class: "block font-bold mb-1" %>
+          <%= form.select :origin_type,
+                          Lexeme.origin_types.keys.map { |k| [k.humanize, k] },
+                          {},
+                          { class: "border rounded w-full p-2",
+                            data: { action: "change->toggle-visibility#toggle" } } %>
+        </div>
+
+        <div data-toggle-visibility-target="toggleable" class="hidden">
+          <%= form.label :origin_language_id, "Origin Language", class: "block font-bold mb-1" %>
+          <%= form.collection_select :origin_language_id,
+                                     @languages, :id, :name,
+                                     { include_blank: 'Select language' },
+                                     { class: "border rounded w-full p-2" } %>
+          <p class="text-xs text-gray-600 mt-1">Select an ancestor or a source language.</p>
+        </div>
+      </div>
+    </div>
+
+    <hr class="my-6 border-gray-300" />
     <h3 class="text-xl font-semibold mb-3">First meaning (Word)</h3>
 
     <%# nested form for first Word %>
