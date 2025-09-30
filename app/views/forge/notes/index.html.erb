@@ -1,0 +1,47 @@
+<div class="p-6">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold">My Notes</h1>
+    <%= link_to 'New Note', new_forge_note_path, class: 'bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded' %>
+  </div>
+
+  <div class="flex flex-col gap-4">
+    <% if @notes.any? %>
+      <% @notes.each do |note| %>
+        <div class="bg-white shadow rounded-lg p-4">
+          <div class="flex justify-between items-start">
+            <div class="flex-grow">
+              <h2 class="font-semibold text-lg">
+                <%= link_to note.title, forge_note_path(note), class: "text-blue-700 hover:underline" %>
+              </h2>
+              <p class="text-sm text-gray-500 mt-1">
+                Created: <%= note.created_at.strftime("%B %d, %Y") %>
+              </p>
+              <% if note.note_tags.any? %>
+                <div class="mt-2 flex flex-wrap gap-2">
+                  <% note.note_tags.order(:name).each do |tag| %>
+                    <span class="px-2 py-1 text-xs leading-4 font-semibold rounded-full bg-gray-100 text-gray-800">
+                      #<%= tag.name %>
+                    </span>
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+            <div class="flex-shrink-0 text-sm flex items-center gap-2">
+              <%= link_to 'Edit', edit_forge_note_path(note), class: 'text-xs inline-block px-3 py-1 border bg-blue-100 border-blue-600 hover:bg-blue-300 rounded' %>
+              <span class="mx-1 text-gray-600">|</span>
+              <%= link_to 'Archive', forge_note_path(note), data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: 'text-xs inline-block px-3 py-1 border bg-red-100 border-red-600 hover:bg-red-300 rounded' %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    <% else %>
+      <p class="text-center text-gray-500 py-8">You don't have any notes yet.</p>
+    <% end %>
+  </div>
+
+  <% if @pagy.pages > 1 %>
+    <div class="mt-8">
+      <%== pagy_nav(@pagy) %>
+    </div>
+  <% end %>
+</div>

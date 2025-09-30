@@ -11,6 +11,10 @@ Rails.application.routes.draw do
   forge_routes = -> do
     root "dashboard#index", as: :dashboard
 
+    resources :notes do
+      get :search, on: :collection
+    end
+
     get "search", to: "search#index"
 
     resources :tags do
@@ -58,8 +62,6 @@ Rails.application.routes.draw do
       resources :calendars
       resources :eras
     end
-
-    resources :notes
   end
 
   namespace :forge, &forge_routes

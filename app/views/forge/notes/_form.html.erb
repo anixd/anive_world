@@ -1,0 +1,41 @@
+<%= form_with(model: [:forge, note], class: "space-y-6") do |form| %>
+  <% if note.errors.any? %>
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+      <h2 class="font-bold mb-2"><%= pluralize(note.errors.count, "error") %> prohibited this note from being saved:</h2>
+      <ul class="list-disc list-inside">
+        <% note.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :title, class: "block font-bold mb-1" %>
+    <%= form.text_field :title, class: "border rounded w-full p-2" %>
+  </div>
+
+  <div>
+    <%= form.label :body, "Content (Markdown supported)", class: "block font-bold mb-1" %>
+    <%= form.text_area :body, rows: 20, class: "border rounded w-full p-2 font-mono" %>
+  </div>
+
+  <div data-controller="tag-autocomplete"
+       data-tag-autocomplete-url-value="<%= search_forge_notes_path %>">
+    <%= form.label :tags_string, "Tags", class: "block font-bold mb-1" %>
+    <%= form.text_field :tags_string,
+                        class: "border rounded w-full p-2",
+                        placeholder: "personal, work, ideas",
+                        data: {
+                          action: "keyup->tag-autocomplete#search",
+                          "tag-autocomplete-target": "input"
+                        } %>
+    <div class="relative" data-tag-autocomplete-target="results"></div>
+    <p class="text-xs text-gray-600 mt-1">Enter tags separated by commas or spaces. These tags are private to you.</p>
+  </div>
+
+  <div class="actions">
+    <%= form.submit "Save Note", class: "bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded cursor-pointer" %>
+    <%= link_to "Cancel", forge_notes_path, class: "ml-4 text-gray-600" %>
+  </div>
+<% end %>

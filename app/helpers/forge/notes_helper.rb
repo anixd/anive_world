@@ -1,0 +1,2 @@
+module Forge::NotesHelper
+end
