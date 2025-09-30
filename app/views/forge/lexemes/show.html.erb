@@ -6,8 +6,8 @@
       <p class="text-xl text-gray-500 font-normal">Lang: <%= @lexeme.language.name.downcase %></p>
     </div>
     <div>
-      <%= link_to 'Edit Lexeme', edit_forge_lexeme_path(@lexeme), class: 'text-xs font-bold inline-block border bg-yellow-300 border-yellow-500 hover:bg-yellow-200 rounded py-2 px-4' %>
-      <%= link_to 'Add Meaning (Homonym)', new_forge_lexeme_word_path(@lexeme), class: 'text-xs font-bold inline-block border bg-green-400 border-green-600 hover:bg-green-300 rounded py-2 px-4' %>
+      <%= link_to 'Edit Lexeme', edit_forge_language_lexeme_path(@language, @lexeme), class: 'text-xs font-bold inline-block border bg-yellow-300 border-yellow-500 hover:bg-yellow-200 rounded py-2 px-4' %>
+      <%= link_to 'Add Meaning (Homonym)', new_forge_language_lexeme_word_path(@language, @lexeme), class: 'text-xs font-bold inline-block border bg-green-400 border-green-600 hover:bg-green-300 rounded py-2 px-4' %>
       <%= link_to 'Back to List', forge_lexemes_path, class: 'text-xs font-bold inline-block border bg-blue-400 border-blue-600 hover:bg-blue-300 rounded py-2 px-4' %>
     </div>
   </div>
@@ -34,7 +34,7 @@
       <div class="flex flex-wrap items-center gap-2">
         <span class="text-lg font-semibold text-gray-700">Synonyms:</span>
         <% synonyms.each do |synonym| %>
-          <%= link_to "#{synonym.spelling} (#{synonym.language.code})", forge_lexeme_path(synonym),
+          <%= link_to "#{synonym.spelling} (#{synonym.language.code})", forge_language_lexeme_path(synonym.language, synonym),
                       class: "wikilink bg-blue-100 hover:bg-blue-200 text-blue-800 font-medium px-3 py-1 rounded-full",
                       target: "_blank",
                       data: {

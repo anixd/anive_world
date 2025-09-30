@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Forge::LexemesController < Forge::BaseController
+  before_action :set_language, only: [:show, :edit, :update, :destroy]
   before_action :set_lexeme, only: [:show, :edit, :update, :destroy]
   before_action :set_form_options, only: [:new, :create, :edit, :update]
 
@@ -56,7 +57,7 @@ class Forge::LexemesController < Forge::BaseController
         @lexeme.save!
         update_morphemes(morphemes_list)
       end
-      redirect_to forge_lexeme_path(@lexeme), notice: "Lexeme '#{@lexeme.spelling}' was successfully created."
+      redirect_to forge_language_lexeme_path(@lexeme.language, @lexeme), notice: "Lexeme '#{@lexeme.spelling}' was successfully created."
     rescue ActiveRecord::RecordInvalid
       set_form_options
       render :new, status: :unprocessable_content
@@ -83,7 +84,7 @@ class Forge::LexemesController < Forge::BaseController
         @lexeme.save!
         update_morphemes(morphemes_list)
       end
-      redirect_to forge_lexeme_path(@lexeme), notice: "Lexeme was successfully updated."
+      redirect_to forge_language_lexeme_path(@lexeme.language, @lexeme), notice: "Lexeme was successfully updated."
     rescue ActiveRecord::RecordInvalid
       @synonyms = @lexeme.all_synonyms
       set_form_options
@@ -123,7 +124,8 @@ class Forge::LexemesController < Forge::BaseController
         id: lexeme.id,
         text: "#{lexeme.spelling} (#{lexeme.language.code})",
         slug: lexeme.slug,
-        lang_code: lexeme.language.code
+        lang_code: lexeme.language.code,
+        language_id: lexeme.language_id
       }
     end
 
@@ -132,13 +134,19 @@ class Forge::LexemesController < Forge::BaseController
 
   private
 
+  def set_language
+    @language = Language.find(params[:language_id])
+  end
+
   def set_lexeme
-    @lexeme = Lexeme.includes(:language, morphemes: :morphemable).find_by!(slug: params[:id])
+    @lexeme = @language.lexemes.includes(morphemes: :morphemable).find_by!(slug: params[:id])
   end
 
   def set_form_options
     @languages = Language.order(:name)
-    @parts_of_speech = PartOfSpeech.order(:name)
+    current_language = @lexeme&.language || Language.find_by(id: params.dig(:lexeme, :language_id))
+
+    @parts_of_speech = current_language ? current_language.parts_of_speech.order(:name) : PartOfSpeech.order(:name)
   end
 
   def update_morphemes(list)

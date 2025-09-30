@@ -4,6 +4,6 @@
     <p class="text-gray-500"><%= @lexeme.language.name %></p>
   </div>
   <div class="bg-white rounded-lg shadow p-6">
-    <%= render 'form', object: [:forge, @lexeme, @word] %>
+    <%= render 'form', object: [:forge, @lexeme.language, @lexeme, @word] %>
   </div>
 </div>

@@ -1,4 +1,4 @@
-<%= form_with(model: [:forge, lexeme], data: { turbo: false }, class: "space-y-6") do |form| %>
+<%= form_with(model: [:forge, language, lexeme], data: { turbo: false }, class: "space-y-6") do |form| %>
   <% if lexeme.errors.any? %>
     <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
       <h2 class="font-bold mb-2"><%= pluralize(lexeme.errors.count, "error") %> prohibited this from being saved:</h2>
@@ -16,7 +16,9 @@
     end
   %>
   <div data-controller="dependent-select morpheme-constructor"
+       data-dependent-select-url-value="<%= parts_of_speech_forge_lexemes_path %>"
        data-morpheme-constructor-search-url-value="<%= forge_morphemes_search_path %>"
+       data-morpheme-constructor-create-root-url-template-value="<%= forge_language_roots_path(':lang_id') %>"
        data-morpheme-constructor-initial-morphemes-value="<%= initial_morphemes_data.to_json %>">
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -132,7 +134,8 @@
         { id: syn.id,
           text: "#{syn.spelling} (#{syn.language.code})",
           slug: syn.slug,
-          lang_code: syn.language.code
+          lang_code: syn.language.code,
+          language_id: syn.language_id
         }
       end
     %>
@@ -140,6 +143,7 @@
          data-controller="synonym-editor"
          data-synonym-editor-search-url-value="<%= search_forge_lexemes_path(format: :json) %>"
          data-synonym-editor-initial-synonyms-value="<%= initial_synonyms_data.to_json %>"
+         data-synonym-editor-url-template-value="<%= forge_language_lexeme_path(':lang_id', ':slug') %>"
          data-except-id="<%= @lexeme.id %>">
 
       <h3 class="text-xl font-semibold">Synonyms</h3>
