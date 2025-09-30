@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Rails.application.routes.draw do
   get "/login", to: "auth#new", as: :login
   post "/auth", to: "auth#create", as: :auth
@@ -29,6 +31,7 @@ Rails.application.routes.draw do
     resources :lexemes do
       get :parts_of_speech, on: :collection
       resources :words, only: [:new, :create]
+      get :search, on: :collection
     end
 
     namespace :morphemes do

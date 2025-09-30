@@ -4,32 +4,28 @@
 #
 # Table name: words
 #
-#  id             :bigint           not null, primary key
-#  comment        :text
-#  definition     :text
-#  discarded_at   :datetime
-#  origin_type    :bigint           default("unspecified")
-#  transcription  :string
-#  type           :string
-#  created_at     :datetime         not null
-#  updated_at     :datetime         not null
-#  author_id      :bigint           not null
-#  lexeme_id      :bigint           not null
-#  origin_word_id :bigint
+#  id            :bigint           not null, primary key
+#  comment       :text
+#  definition    :text
+#  discarded_at  :datetime
+#  transcription :string
+#  type          :string
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  author_id     :bigint           not null
+#  lexeme_id     :bigint           not null
 #
 # Indexes
 #
-#  index_words_on_author_id       (author_id)
-#  index_words_on_discarded_at    (discarded_at)
-#  index_words_on_lexeme_id       (lexeme_id)
-#  index_words_on_origin_word_id  (origin_word_id)
-#  index_words_on_type            (type)
+#  index_words_on_author_id     (author_id)
+#  index_words_on_discarded_at  (discarded_at)
+#  index_words_on_lexeme_id     (lexeme_id)
+#  index_words_on_type          (type)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (author_id => users.id)
 #  fk_rails_...  (lexeme_id => lexemes.id)
-#  fk_rails_...  (origin_word_id => words.id)
 #
 class Word < ApplicationRecord
   include Discard::Model
@@ -46,21 +42,12 @@ class Word < ApplicationRecord
   has_and_belongs_to_many :parts_of_speech, class_name: "PartOfSpeech"
   has_one :etymology, as: :etymologizable, dependent: :destroy
 
-  has_many :synonym_relations, dependent: :destroy
-  has_many :synonyms, through: :synonym_relations, source: :synonym
-
-  has_many :inverse_synonym_relations, class_name: "SynonymRelation", foreign_key: "synonym_id", dependent: :destroy
-  has_many :inverse_synonyms, through: :inverse_synonym_relations, source: :word
   has_many :word_translations, dependent: :destroy
   has_many :translations, through: :word_translations
 
   delegate :language, :spelling, to: :lexeme
 
   accepts_nested_attributes_for :etymology, allow_destroy: true
-
-  def all_synonyms
-    synonyms + inverse_synonyms
-  end
 
   def spelling_with_language
     "#{spelling} (#{language.code})"

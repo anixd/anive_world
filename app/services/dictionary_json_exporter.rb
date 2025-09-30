@@ -62,6 +62,18 @@ class DictionaryJsonExporter
           }
         end
       end
+
+      unless lexeme.origin_unspecified?
+        origin_data = { type: lexeme.origin_type }
+        if lexeme.origin_language
+          origin_data[:language] = {
+            name: lexeme.origin_language.name,
+            code: lexeme.origin_language.code
+          }
+        end
+        data[:origin] = origin_data
+      end
+
       data[:words] = lexeme.words.map { |word| serialize_word(word) }
       data
     end

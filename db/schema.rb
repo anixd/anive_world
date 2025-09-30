@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_09_29_200248) do
+ActiveRecord::Schema[7.2].define(version: 2025_09_29_232016) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -223,13 +223,14 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_29_200248) do
   end
 
   create_table "synonym_relations", force: :cascade do |t|
-    t.bigint "word_id", null: false
-    t.bigint "synonym_id", null: false
+    t.bigint "lexeme_1_id", null: false
+    t.bigint "lexeme_2_id", null: false
+    t.string "comment"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["synonym_id"], name: "index_synonym_relations_on_synonym_id"
-    t.index ["word_id", "synonym_id"], name: "index_synonym_relations_on_word_id_and_synonym_id", unique: true
-    t.index ["word_id"], name: "index_synonym_relations_on_word_id"
+    t.index ["lexeme_1_id", "lexeme_2_id"], name: "index_synonym_relations_on_lexeme_1_id_and_lexeme_2_id", unique: true
+    t.index ["lexeme_1_id"], name: "index_synonym_relations_on_lexeme_1_id"
+    t.index ["lexeme_2_id"], name: "index_synonym_relations_on_lexeme_2_id"
   end
 
   create_table "taggings", force: :cascade do |t|
@@ -381,8 +382,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_29_200248) do
   add_foreign_key "roots", "languages"
   add_foreign_key "roots", "users", column: "author_id"
   add_foreign_key "shares", "users"
-  add_foreign_key "synonym_relations", "words"
-  add_foreign_key "synonym_relations", "words", column: "synonym_id"
+  add_foreign_key "synonym_relations", "lexemes", column: "lexeme_1_id"
+  add_foreign_key "synonym_relations", "lexemes", column: "lexeme_2_id"
   add_foreign_key "taggings", "tags"
   add_foreign_key "timeline_eras", "timeline_calendars", column: "calendar_id"
   add_foreign_key "timeline_participations", "content_entries", column: "history_entry_id"
