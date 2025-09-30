@@ -81,14 +81,17 @@ class WikilinkResolver
 
   def self.build_forge_path(record)
     case record
-    when Root, Affix, PartOfSpeech
-      # В админке эти модели тоже вложены в язык
+    when Lexeme
+      # For a Lexeme, the path is nested under its language
       [:forge, record.language, record]
     when Word
-      # У Word нет своей страницы, ссылаемся на родительскую лексему
-      [:forge, record.lexeme]
+      # A Word's page is its lexeme's page, which is also nested
+      [:forge, record.language, record.lexeme]
+    when Root, Affix, PartOfSpeech
+      # These are also nested under their language
+      [:forge, record.language, record]
     else
-      # Для остальных URL прямой
+      # For all other models (Note, Article, etc.), the path is top-level
       [:forge, record]
     end
   end

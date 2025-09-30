@@ -28,6 +28,9 @@ class User < ApplicationRecord
 
   has_secure_password
 
+  has_many :notes, foreign_key: "author_id", dependent: :destroy
+  has_many :note_tags, dependent: :destroy
+
   validates :username, presence: true, uniqueness: true, length: { minimum: 3, maximum: 16 }
   validates :email, presence: true, uniqueness: true, length: { minimum: 9, maximum: 42 }
   validates :firstname, presence: true, length: { minimum: 2, maximum: 16 }

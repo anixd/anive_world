@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_09_29_232016) do
+ActiveRecord::Schema[7.2].define(version: 2025_09_30_033101) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -147,6 +147,25 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_29_232016) do
     t.index ["morphemable_type", "morphemable_id"], name: "index_morphemes_on_morphemable_type_and_morphemable_id"
   end
 
+  create_table "note_taggings", force: :cascade do |t|
+    t.bigint "note_id", null: false
+    t.bigint "note_tag_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["note_id", "note_tag_id"], name: "index_note_taggings_on_note_id_and_note_tag_id", unique: true
+    t.index ["note_id"], name: "index_note_taggings_on_note_id"
+    t.index ["note_tag_id"], name: "index_note_taggings_on_note_tag_id"
+  end
+
+  create_table "note_tags", force: :cascade do |t|
+    t.string "name", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id", "name"], name: "index_note_tags_on_user_id_and_name", unique: true
+    t.index ["user_id"], name: "index_note_tags_on_user_id"
+  end
+
   create_table "notes", force: :cascade do |t|
     t.string "title", null: false
     t.text "body"
@@ -155,7 +174,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_29_232016) do
     t.datetime "discarded_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["author_id"], name: "index_notes_on_author_id"
+    t.string "slug"
+    t.index ["author_id", "slug"], name: "index_notes_on_author_id_and_slug", unique: true, where: "(discarded_at IS NULL)"
     t.index ["discarded_at"], name: "index_notes_on_discarded_at"
   end
 
@@ -376,6 +396,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_09_29_232016) do
   add_foreign_key "lexemes", "languages", column: "origin_language_id"
   add_foreign_key "lexemes", "users", column: "author_id"
   add_foreign_key "morphemes", "lexemes"
+  add_foreign_key "note_taggings", "note_tags"
+  add_foreign_key "note_taggings", "notes"
+  add_foreign_key "note_tags", "users"
   add_foreign_key "notes", "users", column: "author_id"
   add_foreign_key "parts_of_speech", "languages"
   add_foreign_key "parts_of_speech", "users", column: "author_id"

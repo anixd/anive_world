@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
 class NotePolicy < ApplicationPolicy
+  class Scope < ApplicationPolicy::Scope
+    def resolve
+      # This ensures that on the index page, a user sees ONLY their own notes.
+      scope.where(author: user)
+    end
+  end
   # Pundit передаёт в `user` текущего пользователя (current_user),
   # а в `record` — объект, к которому мы проверяем доступ (в данном случае, @note).
 
