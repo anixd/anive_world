@@ -2,6 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
     static targets = ["source", "target"]
+    static values = { url: String }
 
     update() {
         const selectedLanguageId = this.sourceTarget.value
@@ -11,7 +12,8 @@ export default class extends Controller {
             return
         }
 
-        const url = `/forge/lexemes/parts_of_speech?language_id=${selectedLanguageId}`
+        const url = new URL(this.urlValue, window.location.origin)
+        url.searchParams.set("language_id", selectedLanguageId)
 
         fetch(url, {
             headers: {

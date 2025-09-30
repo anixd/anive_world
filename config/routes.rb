@@ -7,14 +7,11 @@ Rails.application.routes.draw do
 
   get "previews/:type/:slug", to: "previews#show", as: :preview
 
+  # Forge area
   forge_routes = -> do
     root "dashboard#index", as: :dashboard
 
     get "search", to: "search#index"
-
-    resources :tags do
-      get :search, on: :collection
-    end
 
     resources :tags do
       get :search, on: :collection
@@ -25,12 +22,14 @@ Rails.application.routes.draw do
       resources :roots
       resources :affixes
       resources :affix_categories
+      resources :lexemes, only: [:show, :edit, :update, :destroy] do
+        resources :words, only: [:new, :create]
+      end
     end
     resources :translations, only: [:index, :show]
 
-    resources :lexemes do
+    resources :lexemes, except: [:show, :edit, :update, :destroy] do
       get :parts_of_speech, on: :collection
-      resources :words, only: [:new, :create]
       get :search, on: :collection
     end
 

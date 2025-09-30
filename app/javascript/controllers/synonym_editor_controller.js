@@ -13,7 +13,8 @@ export default class extends Controller {
 
     static values = {
         searchUrl: String,
-        initialSynonyms: Array
+        initialSynonyms: Array,
+        urlTemplate: String
     }
 
     connect() {
@@ -52,21 +53,25 @@ export default class extends Controller {
             this.resultsContainerTarget.innerHTML = `<div class="px-4 py-2 text-gray-500">No matches found.</div>`;
         } else {
             this.resultsContainerTarget.innerHTML = data.map(item => `
-                <div class="px-4 py-2 cursor-pointer hover:bg-gray-100"
-                     data-action="click->synonym-editor#add"
-                     data-id="${item.id}" data-text="${item.text}">
-                    ${item.text}
-                </div>`
+        <div class="px-4 py-2 cursor-pointer hover:bg-gray-100"
+             data-action="click->synonym-editor#add"
+             data-id="${item.id}" 
+             data-text="${item.text}"
+             data-slug="${item.slug}"
+             data-lang-code="${item.lang_code}"
+             data-language-id="${item.language_id}">
+            ${item.text}
+        </div>`
             ).join("");
         }
         this.resultsContainerTarget.classList.remove("hidden");
     }
 
     add(event) {
-        const { id, text } = event.currentTarget.dataset;
+        const { id, text, slug, langCode, languageId } = event.currentTarget.dataset;
         if (this.isDuplicate(id)) return;
 
-        this.createPillAndInput(id, text, slug, langCode);
+        this.createPillAndInput(id, text, slug, langCode, languageId);
         this.searchInputTarget.value = '';
         this.clearResults();
         this.searchInputTarget.focus();
@@ -76,12 +81,15 @@ export default class extends Controller {
         event.currentTarget.closest('.synonym-pill').remove();
     }
 
-    createPillAndInput(id, text, slug, langCode) {
+    createPillAndInput(id, text, slug, langCode, languageId) {
         const pill = document.createElement('div');
         pill.className = 'synonym-pill bg-blue-100 text-blue-800 px-3 py-1 rounded-full flex items-center gap-2';
 
         const pillLink = document.createElement('a');
-        pillLink.href = `/forge/lexemes/${slug}`;
+        const href = this.urlTemplateValue
+            .replace('%3Alang_id', languageId)
+            .replace('%3Aslug', slug);
+        pillLink.href = href;
         pillLink.className = 'wikilink hover:underline';
         pillLink.target = '_blank';
         pillLink.innerText = text;
@@ -110,7 +118,7 @@ export default class extends Controller {
     loadInitialSynonyms() {
         if (this.hasInitialSynonymsValue) {
             this.initialSynonymsValue.forEach(synonym => {
-                this.createPillAndInput(synonym.id, synonym.text, synonym.slug, synonym.lang_code);
+                this.createPillAndInput(synonym.id, synonym.text, synonym.slug, synonym.lang_code, synonym.language_id);
             });
         }
     }

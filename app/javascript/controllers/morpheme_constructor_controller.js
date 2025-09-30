@@ -15,7 +15,8 @@ export default class extends Controller {
 
     static values = {
         searchUrl: String,
-        initialMorphemes: Array
+        initialMorphemes: Array,
+        createRootUrlTemplate: String
     }
 
     connect() {
@@ -167,7 +168,7 @@ export default class extends Controller {
             return
         }
 
-        const url = `/forge/languages/${languageId}/roots`
+        const url = this.createRootUrlTemplateValue.replace('%3Alang_id', languageId);
         const csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 
         const response = await fetch(url, {
