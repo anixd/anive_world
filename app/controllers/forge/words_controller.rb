@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 class Forge::WordsController < Forge::BaseController
-  before_action :set_lexeme, only: [:new, :create]
+  before_action :set_language
+  before_action :set_lexeme
   before_action :set_word, only: [:edit, :update, :destroy]
   before_action :set_form_options, only: [:new, :create, :edit, :update]
 
@@ -22,7 +23,7 @@ class Forge::WordsController < Forge::BaseController
     authorize @word
 
     if @word.save
-      redirect_to forge_lexeme_path(@lexeme), notice: "Meaning was created."
+      redirect_to forge_language_lexeme_path(@language, @lexeme), notice: "Meaning was created."
     else
       render :new, status: :unprocessable_content
     end
@@ -36,14 +37,12 @@ class Forge::WordsController < Forge::BaseController
   def update
     authorize @word
     attributes = word_params
-
-    etymology_attrs = attributes[:etymology_attributes]
-    if etymology_attrs.present? && etymology_attrs[:id].blank?
-      etymology_attrs.merge!(author: current_user)
+    if attributes.dig(:etymology_attributes, :id).blank?
+      attributes.deep_merge!(etymology_attributes: { author: current_user })
     end
 
     if @word.update(attributes)
-      redirect_to forge_lexeme_path(@word.lexeme), notice: "Meaning was updated."
+      redirect_to forge_language_lexeme_path(@language, @lexeme), notice: "Meaning was updated."
     else
       render :edit, status: :unprocessable_content
     end
@@ -51,9 +50,8 @@ class Forge::WordsController < Forge::BaseController
 
   def destroy
     authorize @word
-    lexeme = @word.lexeme
     @word.discard
-    redirect_to forge_lexeme_path(lexeme), notice: "Meaning was deleted."
+    redirect_to forge_language_lexeme_path(@language, @lexeme), notice: "Meaning was deleted."
   end
 
   def search
@@ -76,17 +74,21 @@ class Forge::WordsController < Forge::BaseController
 
   private
 
+  def set_language
+    @language = Language.find(params[:language_id])
+  end
+
   def set_lexeme
-    @lexeme = Lexeme.find_by!(slug: params[:lexeme_id])
+    @lexeme = @language.lexemes.find_by!(slug: params[:lexeme_id])
   end
 
   def set_word
-    @word = Word.includes(:lexeme).find(params[:id])
+    @word = @lexeme.words.find(params[:id])
   end
 
   def set_form_options
     language = @word&.language || @lexeme.language
-    @parts_of_speech = PartOfSpeech.where(language: language).order(:name)
+    @parts_of_speech = @language.parts_of_speech.order(:name)
   end
 
   def word_params
@@ -94,8 +96,6 @@ class Forge::WordsController < Forge::BaseController
       :definition,
       :transcription,
       :comment,
-      :origin_type,
-      :origin_word_id,
       part_of_speech_ids: [],
       etymology_attributes: [:id, :explanation, :comment, :_destroy])
   end

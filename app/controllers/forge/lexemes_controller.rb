@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Forge::LexemesController < Forge::BaseController
-  before_action :set_language, only: [:show, :edit, :update, :destroy]
+  before_action :set_language, only: [:show, :edit, :update, :destroy, :new, :create]
   before_action :set_lexeme, only: [:show, :edit, :update, :destroy]
   before_action :set_form_options, only: [:new, :create, :edit, :update]
 
@@ -31,14 +31,8 @@ class Forge::LexemesController < Forge::BaseController
   end
 
   def new
-    @lexeme = Lexeme.new
-
-    if params.dig(:lexeme, :language_id).present?
-      @lexeme.language_id = params.dig(:lexeme, :language_id)
-    end
-
+    @lexeme = @language.lexemes.build
     @lexeme.words.build.build_etymology
-
     authorize @lexeme
   end
 
@@ -47,7 +41,7 @@ class Forge::LexemesController < Forge::BaseController
     morphemes_data = attrs.delete(:morphemes_list)
     morphemes_list = morphemes_data.present? ? JSON.parse(morphemes_data, symbolize_names: true) : []
 
-    @lexeme = Lexeme.new(attrs)
+    @lexeme = @language.lexemes.build(attrs) # Build from the language association
     @lexeme.author = current_user
     @lexeme.words.first&.author = current_user
     authorize @lexeme

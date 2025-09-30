@@ -7,7 +7,7 @@
   case result
   when Lexeme
     display_text = result.spelling
-    destination_url = forge_lexeme_path(result)
+    destination_url = forge_language_lexeme_path(result.language, result)
     summary_text = result.words.first&.definition.to_s
   when Root
     display_text = result.text
