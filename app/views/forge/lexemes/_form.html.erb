@@ -124,6 +124,45 @@
         </div>
       </div>
     </div>
+
+    <hr class="my-6 border-gray-300" />
+
+    <%
+      initial_synonyms_data = (@synonyms || []).map do |syn|
+        { id: syn.id,
+          text: "#{syn.spelling} (#{syn.language.code})",
+          slug: syn.slug,
+          lang_code: syn.language.code
+        }
+      end
+    %>
+    <div class="space-y-4"
+         data-controller="synonym-editor"
+         data-synonym-editor-search-url-value="<%= search_forge_lexemes_path(format: :json) %>"
+         data-synonym-editor-initial-synonyms-value="<%= initial_synonyms_data.to_json %>"
+         data-except-id="<%= @lexeme.id %>">
+
+      <h3 class="text-xl font-semibold">Synonyms</h3>
+
+      <div class="relative">
+        <%= label_tag :synonym_search, "Search for a lexeme to add", class: "block font-bold mb-1" %>
+        <input type="text" id="synonym_search"
+               data-synonym-editor-target="searchInput"
+               data-action="input->synonym-editor#debouncedSearch"
+               class="border rounded w-full p-2"
+               placeholder="Start typing a spelling...">
+        <div data-synonym-editor-target="resultsContainer"
+             class="absolute z-10 w-full bg-white border rounded mt-1 shadow-lg hidden"></div>
+      </div>
+
+      <div>
+        <label class="block font-bold mb-1">Current Synonyms</label>
+        <div data-synonym-editor-target="pillsContainer"
+             class="min-h-[60px] bg-gray-50 border-2 border-dashed rounded-lg p-2 flex flex-wrap gap-2 items-center">
+          <%# Pills will be added here by Stimulus %>
+        </div>
+      </div>
+    </div>
   </div>
 
   <hr class="my-6 border-gray-300" />

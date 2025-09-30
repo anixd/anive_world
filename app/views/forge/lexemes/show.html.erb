@@ -1,4 +1,5 @@
-<h2 class="text-xl font-semibold mb-4">Meanings:</h2><div class="p-6">
+<h2 class="text-xl font-semibold mb-4">Meanings:</h2>
+<div class="p-6" data-controller="wikilink-preview">
   <div class="flex justify-between items-center mb-6">
     <div>
       <h1 class="text-3xl font-bold">Lexeme: <%= @lexeme.spelling %></h1>
@@ -26,6 +27,25 @@
       <% end %>
     </p>
   </div>
+
+  <% synonyms = @lexeme.all_synonyms %>
+  <% if synonyms.any? %>
+    <div class="mb-6 pb-6 border-b">
+      <div class="flex flex-wrap items-center gap-2">
+        <span class="text-lg font-semibold text-gray-700">Synonyms:</span>
+        <% synonyms.each do |synonym| %>
+          <%= link_to "#{synonym.spelling} (#{synonym.language.code})", forge_lexeme_path(synonym),
+                      class: "wikilink bg-blue-100 hover:bg-blue-200 text-blue-800 font-medium px-3 py-1 rounded-full",
+                      target: "_blank",
+                      data: {
+                        type: 'w',
+                        slug: synonym.slug,
+                        lang: synonym.language.code
+                      } %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
 
   <h2 class="text-xl font-semibold mb-4">Meanings:</h2>
 
@@ -57,7 +77,7 @@
                   </span>
                 </summary>
 
-                <div class="prose max-w-none text-gray-800 p-3 mt-1" data-controller="wikilink-preview">
+                <div class="prose max-w-none text-gray-800 p-3 mt-1">
                   <%= render_markdown(word.etymology.explanation) %>
                   <hr>
                   <% if word.etymology.comment.present? %>

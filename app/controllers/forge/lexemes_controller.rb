@@ -65,6 +65,8 @@ class Forge::LexemesController < Forge::BaseController
 
   def edit
     authorize @lexeme
+
+    @synonyms = @lexeme.all_synonyms
   end
 
   def update
@@ -83,6 +85,7 @@ class Forge::LexemesController < Forge::BaseController
       end
       redirect_to forge_lexeme_path(@lexeme), notice: "Lexeme was successfully updated."
     rescue ActiveRecord::RecordInvalid
+      @synonyms = @lexeme.all_synonyms
       set_form_options
       render :edit, status: :unprocessable_content
     end
@@ -104,6 +107,27 @@ class Forge::LexemesController < Forge::BaseController
     respond_to do |format|
       format.turbo_stream
     end
+  end
+
+  def search
+    query = params[:query].to_s.strip
+    scope = Lexeme.search_by_spelling(query).limit(10)
+
+    # Exclude the current lexeme from its own synonym search results
+    if params[:except_id].present?
+      scope = scope.where.not(id: params[:except_id])
+    end
+
+    results = scope.map do |lexeme|
+      {
+        id: lexeme.id,
+        text: "#{lexeme.spelling} (#{lexeme.language.code})",
+        slug: lexeme.slug,
+        lang_code: lexeme.language.code
+      }
+    end
+
+    render json: results
   end
 
   private
@@ -141,6 +165,7 @@ class Forge::LexemesController < Forge::BaseController
       :morphemes_list,
       :origin_type,
       :origin_language_id,
+      synonym_ids: [],
       words_attributes: [:id, :definition, :transcription, :comment, :_destroy, part_of_speech_ids: []],
       etymology_attributes: [:id, :explanation, :comment, :_destroy]
     )

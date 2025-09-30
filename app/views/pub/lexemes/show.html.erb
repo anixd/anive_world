@@ -2,7 +2,7 @@
 
 <%= render 'pub/shared/search_block' %>
 
-<div class="bg-white p-6 rounded-lg shadow-md">
+<div class="bg-white p-6 rounded-lg shadow-md" data-controller="wikilink-preview">
   <div class="mb-6">
     <%= render 'pub/shared/breadcrumbs', crumbs: [
       { title: "Languages", path: pub_languages_path },
@@ -32,6 +32,25 @@
 
   <%= render 'morphemic_structure', lexeme: @lexeme %>
 
+  <% synonyms = @lexeme.all_synonyms %>
+  <% if synonyms.any? %>
+    <div class="my-6 py-4 border-b">
+      <div class="flex flex-wrap items-center gap-x-3 gap-y-2">
+        <h3 class="text-lg font-semibold text-gray-800">Synonyms:</h3>
+        <% synonyms.each do |synonym| %>
+          <%= link_to "#{synonym.spelling} (#{synonym.language.code})", pub_language_lexeme_path(synonym.language, synonym),
+                      class: "wikilink bg-blue-100 hover:bg-blue-200 text-blue-800 font-medium px-3 py-1 rounded-full",
+                      data: {
+                        turbo: "false",
+                        type: 'w',
+                        slug: synonym.slug,
+                        lang: synonym.language.code
+                      } %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
   <div class="space-y-6">
     <% if @words.any? %>
       <% @words.each_with_index do |word, index| %>
@@ -49,7 +68,7 @@
             <% end %>
           </div>
 
-          <div class="prose max-w-none text-gray-800 mt-2" data-controller="wikilink-preview">
+          <div class="prose max-w-none text-gray-800 mt-2">
             <%= render_markdown(word.definition) %>
           </div>
 
