@@ -11,10 +11,6 @@ Rails.application.routes.draw do
   forge_routes = -> do
     root "dashboard#index", as: :dashboard
 
-    resources :notes do
-      get :search, on: :collection
-    end
-
     get "search", to: "search#index"
 
     resources :tags do
@@ -26,26 +22,24 @@ Rails.application.routes.draw do
       resources :roots
       resources :affixes
       resources :affix_categories
-      resources :lexemes, only: [:show, :edit, :update, :destroy] do
-        resources :words, only: [:new, :create]
+
+      resources :lexemes, except: [:index] do
+        get :parts_of_speech, on: :collection
+        get :search, on: :collection
+
+        resources :words, except: [:index, :show]
       end
     end
-    resources :translations, only: [:index, :show]
 
-    resources :lexemes, except: [:show, :edit, :update, :destroy] do
-      get :parts_of_speech, on: :collection
-      get :search, on: :collection
-    end
+    resources :lexemes, only: [:index]
+
+    resources :translations, only: [:index, :show]
 
     namespace :morphemes do
       get :search
     end
 
-    resources :words, only: [:show, :edit, :update, :destroy] do
-      get :search, on: :collection
-    end
-
-      resources :articles
+    resources :articles
     resources :history_entries
     resources :characters
     resources :locations
@@ -61,6 +55,10 @@ Rails.application.routes.draw do
     namespace :timeline do
       resources :calendars
       resources :eras
+    end
+
+    resources :notes do
+      get :search, on: :collection
     end
   end
 

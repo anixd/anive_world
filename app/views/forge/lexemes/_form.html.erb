@@ -16,7 +16,7 @@
     end
   %>
   <div data-controller="dependent-select morpheme-constructor"
-       data-dependent-select-url-value="<%= parts_of_speech_forge_lexemes_path %>"
+       data-dependent-select-url-template-value="<%= parts_of_speech_forge_language_lexemes_path(':lang_id') %>"
        data-morpheme-constructor-search-url-value="<%= forge_morphemes_search_path %>"
        data-morpheme-constructor-create-root-url-template-value="<%= forge_language_roots_path(':lang_id') %>"
        data-morpheme-constructor-initial-morphemes-value="<%= initial_morphemes_data.to_json %>">
@@ -141,7 +141,7 @@
     %>
     <div class="space-y-4"
          data-controller="synonym-editor"
-         data-synonym-editor-search-url-value="<%= search_forge_lexemes_path(format: :json) %>"
+         data-synonym-editor-search-url-value="<%= search_forge_language_lexemes_path(@language, format: :json) %>"
          data-synonym-editor-initial-synonyms-value="<%= initial_synonyms_data.to_json %>"
          data-synonym-editor-url-template-value="<%= forge_language_lexeme_path(':lang_id', ':slug') %>"
          data-except-id="<%= @lexeme.id %>">
@@ -163,7 +163,6 @@
         <label class="block font-bold mb-1">Current Synonyms</label>
         <div data-synonym-editor-target="pillsContainer"
              class="min-h-[60px] bg-gray-50 border-2 border-dashed rounded-lg p-2 flex flex-wrap gap-2 items-center">
-          <%# Pills will be added here by Stimulus %>
         </div>
       </div>
     </div>
